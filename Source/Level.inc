@@ -60,3 +60,80 @@ Sectors:
 	Sector6: .db 2, 21, 19
 	Sector7: .db 2, 18, 20
 
+NodeType.Leaf = 0
+NodeType.VerticalPartition = 1
+NodeType.HorizontalPartition = 2
+
+Tree:
+.db NodeType.VerticalPartition
+.dw 8*256
+.dw Tree.F
+.dw Tree.B
+
+Tree.B:
+.db NodeType.Leaf
+.db 0
+
+Tree.F:
+.db NodeType.HorizontalPartition
+.dw 11*256
+.dw Tree.F.F
+.dw Tree.F.B
+
+Tree.F.F:
+.db NodeType.HorizontalPartition
+.dw 18*256
+.dw Tree.F.F.F
+.dw Tree.F.F.B
+
+Tree.F.F.B:
+.db NodeType.Leaf
+.db 4
+
+Tree.F.F.F:
+.db NodeType.HorizontalPartition
+.dw 21*256
+.dw Tree.F.F.F.F
+.dw Tree.F.F.F.B
+
+Tree.F.F.F.F:
+.db NodeType.Leaf
+.db 5
+
+Tree.F.F.F.B:
+.db NodeType.VerticalPartition
+.dw 16.5*256
+.dw Tree.F.F.F.B.F
+.dw Tree.F.F.F.B.B
+
+Tree.F.F.F.B.F:
+.db NodeType.Leaf
+.db 7
+
+Tree.F.F.F.B.B:
+.db NodeType.Leaf
+.db 6
+
+Tree.F.B:
+.db NodeType.HorizontalPartition
+.dw 5*256
+.dw Tree.F.B.F
+.dw Tree.F.B.B
+
+Tree.F.B.F:
+.db NodeType.Leaf
+.db 3
+
+Tree.F.B.B:
+.db NodeType.VerticalPartition
+.dw 4*256
+.dw Tree.F.B.B.F
+.dw Tree.F.B.B.B
+
+Tree.F.B.B.F:
+.db NodeType.Leaf
+.db 2
+	
+Tree.F.B.B.B:
+.db NodeType.Leaf
+.db 1
