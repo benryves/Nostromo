@@ -60,36 +60,37 @@ NegCameraY = $+1
 	ld (OriginalY),hl
 
 	ld de,(SinA)
-	OriginalX = $+1 \ ld bc,0
+	OriginalY = $+1 \ ld bc,0
 	call Parent.Maths.Mul.S16S16
 		
 	ld l,h \ ld h,e ; (>>= 8)
 
-	push hl ; Ox*sin(a)	
-		ld de,(OriginalY)
+	push hl ; Oy*sin(a)	
+		ld de,(OriginalX)
 		ld bc,(CosA)
 		call Parent.Maths.Mul.S16S16
-		ld l,h \ ld h,e ; (>>= 8)
-	pop de
-	add hl,de
+		; (>>= 8)
+		ld d,e
+		ld e,h
+	pop hl
+	
+	or a
+	sbc hl,de
 	
 	push hl
 
-		OriginalY = $+1 \ ld de,0
+		OriginalX = $+1 \ ld de,0
 		ld bc,(SinA)
 		call Parent.Maths.Mul.S16S16
 		ld l,h \ ld h,e
 		push hl
-			ld de,(OriginalX)
+			ld de,(OriginalY)
 			ld bc,(CosA)
 			call Parent.Maths.Mul.S16S16
 			ld l,h \ ld h,e
 		pop de
-		or a
-		sbc hl,de
-		ld d,h
-		ld e,l
-			
+		add hl,de
+		ex de,hl	
 	pop bc
 	
 WriteDataPointer = $+1

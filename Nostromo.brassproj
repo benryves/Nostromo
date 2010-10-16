@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<brassproject version="3">
+	<template source="TI/Program.brassproj" />
+	<input source="Source/Program.asm">	
+		<label name="Program.Description" type="string" value="Nostromo" />
+		<label name="Program.Name" type="string" value="NOSTROMO" />
+	</input>
+</brassproject>

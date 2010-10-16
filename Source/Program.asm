@@ -24,6 +24,7 @@ Loop:
 	ld a,(hl)
 	inc hl
 	
+	neg
 	add a,32
 	ld e,a
 	
@@ -69,24 +70,24 @@ Loop:
 	
 	bit 1,c
 	jr nz,+
-	dec (hl)
+	inc (hl)
 +:
 
 	bit 2,c
 	jr nz,+
-	inc (hl)
+	dec (hl)
 +:
 
 	push bc
 	
 	ld a,(Nostromo.Camera.Angle)
-	call Nostromo.Maths.Trig.Cos
+	call Nostromo.Maths.Trig.Sin
 	sra b \ rr c
 	sra b \ rr c
 	ld (Forwards.X),bc
 	
 	ld a,(Nostromo.Camera.Angle)
-	call Nostromo.Maths.Trig.Sin
+	call Nostromo.Maths.Trig.Cos
 	sra b \ rr c
 	sra b \ rr c
 	ld (Forwards.Y),bc
