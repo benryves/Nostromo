@@ -14,5 +14,6 @@ Camera.Angle: .db 0
 
 #include "Maths.asm"
 #include "Vertices.asm"
+#include "Wall.asm"
 
 .endmodule
