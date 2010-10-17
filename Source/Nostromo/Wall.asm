@@ -1,16 +1,37 @@
 .module Wall
 
+; ==========================================================================
+; ClipFlags
+; --------------------------------------------------------------------------
+; Provide flags describing the clipping operation.
+; ==========================================================================
+ClipFlags = asm_Flag1
+ClipFlag.StartOutsideLeft = 0
+ClipFlag.StartOutsideRight = 1
+ClipFlag.EndOutsideLeft = 2
+ClipFlag.EndOutsideRight = 3
+ClipFlag.Steep = 4
+
 
 Start.X: .dw 0
 Start.Y: .dw 0
+
 End.X: .dw 0
 End.Y: .dw 0
+
 Delta.X: .dw 0
 Delta.AbsX: .dw 0
+
 Delta.Y: .dw 0
 Delta.AbsY: .dw 0
+
 Gradient: .dw 0
 
+; ==========================================================================
+; ClipAndDraw
+; --------------------------------------------------------------------------
+; Clips the wall to the view and draws it on the screen.
+; ==========================================================================
 ClipAndDraw:
 ; --------------------------------------------------------------------------
 ; Is the wall entirely behind the camera?
@@ -58,7 +79,7 @@ ClipAndDraw:
 ; Clear the clipping flags.
 ; --------------------------------------------------------------------------
 
-	ld (iy+PlotWalls.ClipFlags),0
+	ld (iy+ClipFlags),0
 
 ; --------------------------------------------------------------------------
 ; Clip to Y=0.
@@ -129,7 +150,7 @@ ClippedToY:
 	
 	jr c,+
 	dec b
-	set PlotWalls.ClipFlag.StartOutsideRight,(iy+PlotWalls.ClipFlags)
+	set ClipFlag.StartOutsideRight,(iy+ClipFlags)
 +:
 
 	; Check the start against Y=-X.
@@ -144,7 +165,7 @@ ClippedToY:
 	
 	jr nc,+
 	dec c
-	set PlotWalls.ClipFlag.StartOutsideLeft,(iy+PlotWalls.ClipFlags)
+	set ClipFlag.StartOutsideLeft,(iy+ClipFlags)
 +:
 
 	; Check the end against Y=+X.
@@ -160,7 +181,7 @@ ClippedToY:
 	jr c,+
 	dec b
 	jp z,SkipWall ; Both ends are outside the right - bail out.
-	set PlotWalls.ClipFlag.EndOutsideRight,(iy+PlotWalls.ClipFlags)
+	set ClipFlag.EndOutsideRight,(iy+ClipFlags)
 +:
 
 	; Check the end against Y=-X.
@@ -176,14 +197,14 @@ ClippedToY:
 	jr nc,+
 	dec c
 	jp z,SkipWall ; Both ends are outside the left - bail out.
-	set PlotWalls.ClipFlag.EndOutsideLeft,(iy+PlotWalls.ClipFlags)
+	set ClipFlag.EndOutsideLeft,(iy+ClipFlags)
 +:
 
 ; --------------------------------------------------------------------------
 ; Do we need to do any clipping?
 ; --------------------------------------------------------------------------
 	
-	ld a,(iy+PlotWalls.ClipFlags)
+	ld a,(iy+ClipFlags)
 	and $0F
 	jp z,NoViewClippingRequired
 
@@ -207,7 +228,7 @@ ClippedToY:
 	jr c,IsShallow
 
 IsSteep:
-	set PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	set ClipFlag.Steep,(iy+ClipFlags)
 	ex de,hl
 
 IsShallow:
@@ -223,7 +244,7 @@ IsShallow:
 ; Clip the start to Y=+X.
 ; --------------------------------------------------------------------------
 
-	bit PlotWalls.ClipFlag.StartOutsideRight,(iy+PlotWalls.ClipFlags)
+	bit ClipFlag.StartOutsideRight,(iy+ClipFlags)
 	jr z,ClippedStartRight
 	
 	; If dY == 0, Start.X = Start.Y.
@@ -247,19 +268,19 @@ IsShallow:
 	+:
 	
 	; We can't take a shortcut, so perform a slow clip.
-	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
-	jr z,PlotWalls.ClipStartRight.Shallow
+	bit ClipFlag.Steep,(iy+ClipFlags)
+	jr z,ClipStartRight.Shallow
 
-PlotWalls.ClipStartRight.Steep:
+ClipStartRight.Steep:
 
 	call GetYIntercept
-	jr PlotWalls.ClipStartRight.Clip
+	jr ClipStartRight.Clip
 	
-PlotWalls.ClipStartRight.Shallow:
+ClipStartRight.Shallow:
 
 	call GetXIntercept
 
-PlotWalls.ClipStartRight.Clip:
+ClipStartRight.Clip:
 
 	; X = -c * 256 / m - 256
 	ld de,(Gradient)
@@ -276,7 +297,7 @@ ClippedStartRight:
 ; Clip the end to Y=+X.
 ; --------------------------------------------------------------------------
 
-	bit PlotWalls.ClipFlag.EndOutsideRight,(iy+PlotWalls.ClipFlags)
+	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
 	jr z,ClippedEndRight
 	
 	; If dY == 0, End.X = End.Y.
@@ -300,19 +321,19 @@ ClippedStartRight:
 	+:
 	
 	; We can't take a shortcut, so perform a slow clip.
-	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
-	jr z,PlotWalls.ClipEndRight.Shallow
+	bit ClipFlag.Steep,(iy+ClipFlags)
+	jr z,ClipEndRight.Shallow
 
-PlotWalls.ClipEndRight.Steep:
+ClipEndRight.Steep:
 
 	call GetYIntercept
-	jr PlotWalls.ClipEndRight.Clip
+	jr ClipEndRight.Clip
 	
-PlotWalls.ClipEndRight.Shallow:
+ClipEndRight.Shallow:
 
 	call GetXIntercept
 
-PlotWalls.ClipEndRight.Clip:
+ClipEndRight.Clip:
 
 	; X = -c * 256 / m - 256
 	ld de,(Gradient)
@@ -329,7 +350,7 @@ ClippedEndRight:
 ; Clip the start to Y=-X.
 ; --------------------------------------------------------------------------
 
-	bit PlotWalls.ClipFlag.StartOutsideLeft,(iy+PlotWalls.ClipFlags)
+	bit ClipFlag.StartOutsideLeft,(iy+ClipFlags)
 	jr z,ClippedStartLeft
 	
 	; If dY == 0, Start.X = -Start.Y.
@@ -355,26 +376,26 @@ ClippedEndRight:
 	+:
 	
 	; We can't take a shortcut, so perform a slow clip.
-	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
-	jr z,PlotWalls.ClipStartLeft.Shallow
+	bit ClipFlag.Steep,(iy+ClipFlags)
+	jr z,ClipStartLeft.Shallow
 
-PlotWalls.ClipStartLeft.Steep:
+ClipStartLeft.Steep:
 
 	call GetYIntercept
-	jr PlotWalls.ClipStartLeft.Clip
+	jr ClipStartLeft.Clip
 	
-PlotWalls.ClipStartLeft.Shallow:
+ClipStartLeft.Shallow:
 
 	call GetXIntercept
 
-PlotWalls.ClipStartLeft.Clip:
+ClipStartLeft.Clip:
 
 	; X = c * 256 / m + 256
 	ld de,(Gradient)
 	inc d
 	call Nostromo.Maths.Div.S16S16
 	
-	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	bit ClipFlag.Steep,(iy+ClipFlags)
 	jr nz,+
 	ld (Start.Y),bc
 	neg_bc()
@@ -391,7 +412,7 @@ ClippedStartLeft:
 ; Clip the end to Y=-X.
 ; --------------------------------------------------------------------------
 
-	bit PlotWalls.ClipFlag.EndOutsideLeft,(iy+PlotWalls.ClipFlags)
+	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
 	jr z,ClippedEndLeft
 	
 	; If dY == 0, End.X = -End.Y.
@@ -417,26 +438,26 @@ ClippedStartLeft:
 	+:
 	
 	; We can't take a shortcut, so perform a slow clip.
-	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
-	jr z,PlotWalls.ClipEndLeft.Shallow
+	bit ClipFlag.Steep,(iy+ClipFlags)
+	jr z,ClipEndLeft.Shallow
 
-PlotWalls.ClipEndLeft.Steep:
+ClipEndLeft.Steep:
 
 	call GetYIntercept
-	jr PlotWalls.ClipEndLeft.Clip
+	jr ClipEndLeft.Clip
 	
-PlotWalls.ClipEndLeft.Shallow:
+ClipEndLeft.Shallow:
 
 	call GetXIntercept
 
-PlotWalls.ClipEndLeft.Clip:
+ClipEndLeft.Clip:
 
 	; X = c * 256 / m + 256
 	ld de,(Gradient)
 	inc d
 	call Nostromo.Maths.Div.S16S16
 	
-	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	bit ClipFlag.Steep,(iy+ClipFlags)
 	jr nz,+
 	ld (End.Y),bc
 	neg_bc()

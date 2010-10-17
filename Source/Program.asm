@@ -158,13 +158,6 @@ PlotVertices:
 	djnz -
 	ret
 
-PlotWalls.ClipFlags = asm_Flag1
-PlotWalls.ClipFlag.StartOutsideLeft = 0
-PlotWalls.ClipFlag.StartOutsideRight = 1
-PlotWalls.ClipFlag.EndOutsideLeft = 2
-PlotWalls.ClipFlag.EndOutsideRight = 3
-PlotWalls.ClipFlag.Steep = 4
-
 PlotWalls:
 	ld hl,Walls
 	ld b,Walls.Count
