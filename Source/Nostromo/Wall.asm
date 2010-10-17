@@ -27,6 +27,9 @@ Delta.AbsY: .dw 0
 
 Gradient: .dw 0
 
+Projected.Start.X: .db 0
+Projected.End.X: .db 0
+
 ; ==========================================================================
 ; ClipAndDraw
 ; --------------------------------------------------------------------------
@@ -471,7 +474,117 @@ ClipEndLeft.Clip:
 ClippedEndLeft:
 
 NoViewClippingRequired:
+
+; --------------------------------------------------------------------------
+; The wall is now clipped to the view.
+; --------------------------------------------------------------------------
+
+
+; --------------------------------------------------------------------------
+; If the wall starts on Y=0, skip it.
+; --------------------------------------------------------------------------
+
+	ld hl,(Start.Y)
+	ld a,h
+	or l
+	jp z,SkipWall
+
+; --------------------------------------------------------------------------
+; If the wall ends on Y=0, skip it.
+; --------------------------------------------------------------------------
+
+	ld hl,(End.Y)
+	ld a,h
+	or l
+	jp z,SkipWall
+
+; --------------------------------------------------------------------------
+; Project the start X of the wall.
+; --------------------------------------------------------------------------
+
+	; If we clipped to the left, project to the left.
+	xor a
+	bit ClipFlag.StartOutsideLeft,(iy+ClipFlags)
+	jr nz,Project.Start.X
 	
+	; If we clipped to the right , project to the right.
+	ld a,95
+	bit ClipFlag.StartOutsideRight,(iy+ClipFlags)
+	jr nz,Project.Start.X
+
+	; 48 * X / Y
+	ld de,(Start.X)
+	ld bc,48
+	call Maths.Mul.S16S16
+	ld a,e
+	ld b,h
+	ld c,l
+	ld de,(Start.Y)
+	call Maths.Div.S24S16
+	
+	; Offset by the centre of the screen.
+	ld a,c
+	add a,48
+	
+	; Clip to the bounds of the screen.
+	jp p,+
+	xor a
++:	cp 96
+	jr c,+
+	ld a,95
++:
+
+Project.Start.X:
+	ld (Projected.Start.X),a
+
+; --------------------------------------------------------------------------
+; Project the end X of the wall.
+; --------------------------------------------------------------------------
+
+	; If we clipped to the left, project to the left.
+	xor a
+	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
+	jr nz,Project.End.X
+	
+	; If we clipped to the right , project to the right.
+	ld a,95
+	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
+	jr nz,Project.End.X
+
+	; 48 * X / Y
+	ld de,(End.X)
+	ld bc,48
+	call Maths.Mul.S16S16
+	ld a,e
+	ld b,h
+	ld c,l
+	ld de,(End.Y)
+	call Maths.Div.S24S16
+	
+	; Offset by the centre of the screen.
+	ld a,c
+	add a,48
+	
+	; Clip to the bounds of the screen.
+	jp p,+
+	xor a
++:	cp 96
+	jr c,+
+	ld a,95
++:
+
+Project.End.X:
+	ld (Projected.End.X),a
+	
+; --------------------------------------------------------------------------
+; Are we looking at the back of the wall?
+; --------------------------------------------------------------------------
+
+	ld b,a
+	ld a,(Projected.Start.X)
+	cp b
+	jp c,SkipWall
+
 	ld a,(Start.X+1)
 	add a,48
 	ld d,a
