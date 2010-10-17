@@ -637,11 +637,15 @@ Project.End.X:
 	push bc
 	pop hl
 
-	call lineClipAndDrawLong
+	call nc,lineClipAndDrawLong
 
 ; --------------------------------------------------------------------------
 ; Draw the top edge of the wall.
 ; --------------------------------------------------------------------------
+	
+	xor a
+	ld (Clip.g_line16X1+1),a
+	ld (Clip.g_line16X2+1),a
 	
 	ld a,(Projected.Start.X)
 	ld (Clip.g_line16X1),a
@@ -659,14 +663,13 @@ Project.End.X:
 	ld de,(Projected.End.Y)
 	or a
 	sbc hl,de
-	ld (Clip.g_line16Y2),hl
+	ld (Clip.g_line16Y2),hl	
 	
 	call Clip.Clip2DLine16Ex
 	
 	push bc
 	pop hl
-
-	call lineClipAndDrawLong
+	call nc,lineClipAndDrawLong
 
 SkipWall:
 
@@ -689,7 +692,6 @@ Clip24To16.SmallPositive:
 	bit 7,b
 	ret z
 	ld bc,32767
-	.breakpoint "+"
 	ret
 
 Clip24To16.SmallNegative:
@@ -697,7 +699,6 @@ Clip24To16.SmallNegative:
 	bit 7,b
 	ret nz
 	ld bc,-32768
-	.breakpoint "-"
 	ret
 
 

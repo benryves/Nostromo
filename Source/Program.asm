@@ -13,16 +13,7 @@ Loop:
 
 	.bcall _GrBufClr
 	
-	ld hl,48*256+32
-	ld de,16*256
-	;call lineClipAndDraw
-	
-	ld hl,48*256+32
-	ld de,80*256
-	;call lineClipAndDraw
-
 	call TransformVertices
-	;call PlotVertices
 	call PlotWalls
 	
 	; Walk the tree.
