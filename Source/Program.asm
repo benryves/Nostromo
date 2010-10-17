@@ -14,8 +14,24 @@ Loop:
 
 	.bcall _GrBufClr
 	
-	call TransformVertices
-	call PlotWalls
+	call TransformVertices	
+
+	ld ix,Sector0
+	call Nostromo.Sector.Draw
+	ld ix,Sector1
+	call Nostromo.Sector.Draw
+	ld ix,Sector2
+	call Nostromo.Sector.Draw
+	ld ix,Sector3
+	call Nostromo.Sector.Draw
+	ld ix,Sector4
+	call Nostromo.Sector.Draw
+	ld ix,Sector5
+	call Nostromo.Sector.Draw
+	ld ix,Sector6
+	call Nostromo.Sector.Draw
+	ld ix,Sector7
+	call Nostromo.Sector.Draw
 	
 	; Walk the tree.
 	xor a
@@ -215,66 +231,6 @@ PlotVertices:
 	pop bc
 	
 	djnz -
-	ret
-
-PlotWalls:
-	ld hl,Walls
-	ld b,Walls.Count
-
-PlotWalls.Loop:
-	push hl
-	
-	ld l,(hl)
-	ld h,0
-	add hl,hl
-	add hl,hl
-	ld de,saveSScreen
-	add hl,de
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (Nostromo.Wall.Start.X),de
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (Nostromo.Wall.Start.Y),de
-	
-	pop hl
-	inc hl
-	push hl
-	
-	ld l,(hl)
-	ld h,0
-	add hl,hl
-	add hl,hl
-	ld de,saveSScreen
-	add hl,de
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (Nostromo.Wall.End.X),de
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (Nostromo.Wall.End.Y),de
-	
-	pop hl
-	inc hl
-
-	push hl
-	push bc
-
-	call Nostromo.Wall.ClipAndDraw
-
-	pop bc
-	pop hl
-	djnz PlotWalls.Loop
 	ret
 
 WalkTree:

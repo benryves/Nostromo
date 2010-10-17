@@ -51,16 +51,14 @@ Walls:
 	.db 11, 21
 Walls.Count = ($ - Walls) / 2
 
-Sectors:
-	.dw Sector0, Sector1, Sector2, Sector3, Sector4, Sector5, Sector6, Sector7
-	Sector0: .db 5, 0, 1, 14, 15, 16
-	Sector1: .db 2, 2, 13
-	Sector2: .db 1, 3
-	Sector3: .db 2, 4, 12
-	Sector4: .db 5, 5, 22, 23, 11, 17
-	Sector5: .db 3, 7, 8, 9
-	Sector6: .db 2, 21, 19
-	Sector7: .db 2, 18, 20
+Sector0: .db 5, 0, 1, 14, 15, 16
+Sector1: .db 2, 2, 13
+Sector2: .db 1, 3
+Sector3: .db 2, 4, 12
+Sector4: .db 5, 5, 22, 23, 11, 17
+Sector5: .db 3, 7, 8, 9
+Sector6: .db 2, 21, 19
+Sector7: .db 2, 18, 20
 
 NodeType.Leaf = 0
 NodeType.VerticalPartition = 1
@@ -74,7 +72,7 @@ Tree:
 
 Tree.B:
 .db NodeType.Leaf
-.db 0
+.dw Sector0
 
 Tree.F:
 .db NodeType.HorizontalPartition
@@ -90,7 +88,7 @@ Tree.F.F:
 
 Tree.F.F.B:
 .db NodeType.Leaf
-.db 4
+.dw Sector4
 
 Tree.F.F.F:
 .db NodeType.HorizontalPartition
@@ -100,7 +98,7 @@ Tree.F.F.F:
 
 Tree.F.F.F.F:
 .db NodeType.Leaf
-.db 5
+.dw Sector5
 
 Tree.F.F.F.B:
 .db NodeType.VerticalPartition
@@ -110,11 +108,11 @@ Tree.F.F.F.B:
 
 Tree.F.F.F.B.F:
 .db NodeType.Leaf
-.db 7
+.dw Sector7
 
 Tree.F.F.F.B.B:
 .db NodeType.Leaf
-.db 6
+.dw Sector6
 
 Tree.F.B:
 .db NodeType.HorizontalPartition
@@ -124,7 +122,7 @@ Tree.F.B:
 
 Tree.F.B.F:
 .db NodeType.Leaf
-.db 3
+.dw Sector3
 
 Tree.F.B.B:
 .db NodeType.VerticalPartition
@@ -134,8 +132,8 @@ Tree.F.B.B:
 
 Tree.F.B.B.F:
 .db NodeType.Leaf
-.db 2
+.dw Sector2
 	
 Tree.F.B.B.B:
 .db NodeType.Leaf
-.db 1
+.dw Sector1
