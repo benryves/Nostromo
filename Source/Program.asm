@@ -531,6 +531,130 @@ PlotWalls.ClipEndRight.Clip:
 
 Wall.ClippedEndRight:
 
+; --------------------------------------------------------------------------
+; Clip the start to Y=-X.
+; --------------------------------------------------------------------------
+
+	bit PlotWalls.ClipFlag.StartOutsideLeft,(iy+PlotWalls.ClipFlags)
+	jr z,Wall.ClippedStartLeft
+	
+	; If dY == 0, Start.X = -Start.Y.
+	ld hl,(Wall.Delta.Y)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.Start.Y)
+		neg_hl()
+		ld (Wall.Start.X),hl
+		jp Wall.ClippedStartLeft
+	+:
+	
+	; If dX == 0, Start.Y = -Start.X.
+	ld hl,(Wall.Delta.X)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.Start.X)
+		neg_hl()
+		ld (Wall.Start.Y),hl
+		jp Wall.ClippedStartLeft
+	+:
+	
+	; We can't take a shortcut, so perform a slow clip.
+	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	jr z,PlotWalls.ClipStartLeft.Shallow
+
+PlotWalls.ClipStartLeft.Steep:
+
+	call Wall.GetYIntercept
+	jr PlotWalls.ClipStartLeft.Clip
+	
+PlotWalls.ClipStartLeft.Shallow:
+
+	call Wall.GetXIntercept
+
+PlotWalls.ClipStartLeft.Clip:
+
+	; X = c * 256 / m + 256
+	ld de,(Wall.Gradient)
+	inc d
+	call Nostromo.Maths.Div.S16S16
+	
+	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	jr nz,+
+	ld (Wall.Start.Y),bc
+	neg_bc()
+	ld (Wall.Start.X),bc
+	jr Wall.ClippedStartLeft
++:
+	ld (Wall.Start.X),bc
+	neg_bc()
+	ld (Wall.Start.Y),bc
+
+Wall.ClippedStartLeft:
+
+; --------------------------------------------------------------------------
+; Clip the end to Y=-X.
+; --------------------------------------------------------------------------
+
+	bit PlotWalls.ClipFlag.EndOutsideLeft,(iy+PlotWalls.ClipFlags)
+	jr z,Wall.ClippedEndLeft
+	
+	; If dY == 0, End.X = -End.Y.
+	ld hl,(Wall.Delta.Y)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.End.Y)
+		neg_hl()
+		ld (Wall.End.X),hl
+		jp Wall.ClippedEndLeft
+	+:
+	
+	; If dX == 0, End.Y = -End.X.
+	ld hl,(Wall.Delta.X)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.End.X)
+		neg_hl()
+		ld (Wall.End.Y),hl
+		jp Wall.ClippedEndLeft
+	+:
+	
+	; We can't take a shortcut, so perform a slow clip.
+	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	jr z,PlotWalls.ClipEndLeft.Shallow
+
+PlotWalls.ClipEndLeft.Steep:
+
+	call Wall.GetYIntercept
+	jr PlotWalls.ClipEndLeft.Clip
+	
+PlotWalls.ClipEndLeft.Shallow:
+
+	call Wall.GetXIntercept
+
+PlotWalls.ClipEndLeft.Clip:
+
+	; X = c * 256 / m + 256
+	ld de,(Wall.Gradient)
+	inc d
+	call Nostromo.Maths.Div.S16S16
+	
+	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	jr nz,+
+	ld (Wall.End.Y),bc
+	neg_bc()
+	ld (Wall.End.X),bc
+	jr Wall.ClippedEndLeft
++:
+	ld (Wall.End.X),bc
+	neg_bc()
+	ld (Wall.End.Y),bc
+
+Wall.ClippedEndLeft:
+
 Wall.NoViewClippingRequired:
 	
 	ld a,(Wall.Start.X+1)
