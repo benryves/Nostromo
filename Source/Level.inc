@@ -48,6 +48,7 @@ Walls:
 	.db 21, 10
 	.db 20, 6
 	.db 11, 21
+Walls.Count = ($ - Walls) / 2
 
 Sectors:
 	.dw Sector0, Sector1, Sector2, Sector3, Sector4, Sector5, Sector6, Sector7
