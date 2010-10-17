@@ -30,6 +30,9 @@ Gradient: .dw 0
 Projected.Start.X: .db 0
 Projected.End.X: .db 0
 
+Projected.Start.Y: .dw 0
+Projected.End.Y: .dw 0
+
 ; ==========================================================================
 ; ClipAndDraw
 ; --------------------------------------------------------------------------
@@ -585,27 +588,118 @@ Project.End.X:
 	cp b
 	jp c,SkipWall
 
-	ld a,(Start.X+1)
-	add a,48
-	ld d,a
-	ld a,(Start.Y+1)
-	neg
-	add a,32
-	ld e,a
+; --------------------------------------------------------------------------
+; Calculate the height of the start of the wall.
+; --------------------------------------------------------------------------
+
+	ld hl,128
+	ld de,(Start.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld (Projected.Start.Y),bc
+
+; --------------------------------------------------------------------------
+; Calculate the height of the end of the wall.
+; --------------------------------------------------------------------------
+
+	ld hl,128
+	ld de,(End.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld (Projected.End.Y),bc
 	
-	ld a,(End.X+1)
-	add a,48
-	ld h,a
-	ld a,(End.Y+1)
-	neg
-	add a,32
-	ld l,a
+; --------------------------------------------------------------------------
+; Draw the bottom edge of the wall.
+; --------------------------------------------------------------------------
+	
+	ld a,(Projected.Start.X)
+	ld (Clip.g_line16X1),a
+	
+	ld hl,(Projected.Start.Y)
+	sra h
+	rr l
+	ld de,32
+	add hl,de
+	ld (Clip.g_line16Y1),hl
+	
+	ld a,(Projected.End.X)
+	ld (Clip.g_line16X2),a
+	
+	ld hl,(Projected.End.Y)
+	sra h
+	rr l
+	ld de,32
+	add hl,de
+	ld (Clip.g_line16Y2),hl
+	
+	call Clip.Clip2DLine16Ex
+	
+	push bc
+	pop hl
+
+	call lineClipAndDrawLong
+
+; --------------------------------------------------------------------------
+; Draw the top edge of the wall.
+; --------------------------------------------------------------------------
+	
+	ld a,(Projected.Start.X)
+	ld (Clip.g_line16X1),a
+	
+	ld hl,32
+	ld de,(Projected.Start.Y)
+	or a
+	sbc hl,de
+	ld (Clip.g_line16Y1),hl
+	
+	ld a,(Projected.End.X)
+	ld (Clip.g_line16X2),a
+	
+	ld hl,32
+	ld de,(Projected.End.Y)
+	or a
+	sbc hl,de
+	ld (Clip.g_line16Y2),hl
+	
+	call Clip.Clip2DLine16Ex
+	
+	push bc
+	pop hl
 
 	call lineClipAndDrawLong
 
 SkipWall:
 
 	ret
+
+
+Clip24To16:
+	or a
+	jr z,Clip24To16.SmallPositive
+	inc a
+	jr z,Clip24To16.SmallNegative
+	dec a
+	ld bc,32767
+	ret p
+	ld bc,-32768
+	ret
+
+Clip24To16.SmallPositive:
+	; BC is in the range 0..65535
+	bit 7,b
+	ret z
+	ld bc,32767
+	.breakpoint "+"
+	ret
+
+Clip24To16.SmallNegative:
+	; BC is in the range -1..-65536
+	bit 7,b
+	ret nz
+	ld bc,-32768
+	.breakpoint "-"
+	ret
+
 
 ; ==========================================================================
 ; GetYIntercept
