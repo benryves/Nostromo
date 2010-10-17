@@ -39,19 +39,24 @@ Loop:
 	in a,(1)
 	ld c,a
 	
-	ld hl,Nostromo.Camera.Angle
+	; Check for Left/Right.
 	
+	ld hl,Nostromo.Camera.Angle	
 	
 	bit 1,c
 	jr nz,+
+	inc (hl)
 	inc (hl)
 +:
 
 	bit 2,c
 	jr nz,+
 	dec (hl)
+	dec (hl)
 +:
 
+	; Check for Up/Down.
+	
 	push bc
 	
 	ld a,(Nostromo.Camera.Angle)
@@ -99,6 +104,68 @@ Loop:
 	ld (Nostromo.Camera.Y),hl
 	
 +:
+
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$BF
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	ld c,a
+
+	; Check for Trace/Graph.
+
+	push bc
+	
+	ld a,(Nostromo.Camera.Angle)
+	call Nostromo.Maths.Trig.Cos
+	sra b \ rr c
+	sra b \ rr c
+	ld (Forwards.X),bc
+	
+	ld a,(Nostromo.Camera.Angle)
+	call Nostromo.Maths.Trig.Sin
+	sra b \ rr c
+	sra b \ rr c
+	neg_bc()
+	ld (Forwards.Y),bc
+	
+	pop bc
+
+	bit 1,c
+	jr nz,+
+	
+	ld hl,(Nostromo.Camera.X)
+	ld de,(Forwards.X)
+	add hl,de
+	ld (Nostromo.Camera.X),hl
+	
+	ld hl,(Nostromo.Camera.Y)
+	ld de,(Forwards.Y)
+	add hl,de
+	ld (Nostromo.Camera.Y),hl
+	
++:
+
+	bit 0,c
+	jr nz,+
+	
+	ld hl,(Nostromo.Camera.X)
+	ld de,(Forwards.X)
+	or a
+	sbc hl,de
+	ld (Nostromo.Camera.X),hl
+	
+	ld hl,(Nostromo.Camera.Y)
+	ld de,(Forwards.Y)
+	or a
+	sbc hl,de
+	ld (Nostromo.Camera.Y),hl
+	
++:
+
 	jp Loop
 
 
