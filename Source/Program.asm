@@ -163,6 +163,7 @@ PlotWalls.ClipFlag.StartOutsideLeft = 0
 PlotWalls.ClipFlag.StartOutsideRight = 1
 PlotWalls.ClipFlag.EndOutsideLeft = 2
 PlotWalls.ClipFlag.EndOutsideRight = 3
+PlotWalls.ClipFlag.Steep = 4
 
 PlotWalls:
 	ld hl,Walls
@@ -383,12 +384,154 @@ Wall.ClippedToY:
 	jp z,SkipWall ; Both ends are outside the left - bail out.
 	set PlotWalls.ClipFlag.EndOutsideLeft,(iy+PlotWalls.ClipFlags)
 +:
-	
 
 ; --------------------------------------------------------------------------
-; Clip to Y=X.
+; Do we need to do any clipping?
 ; --------------------------------------------------------------------------
 	
+	ld a,(iy+PlotWalls.ClipFlags)
+	and $0F
+	jp z,Wall.NoViewClippingRequired
+
+; --------------------------------------------------------------------------
+; Some clipping is, alas, required.
+; --------------------------------------------------------------------------
+	
+	; Is the wall steep or shallow?
+	; A "steep" wall is one in which |dY| > |dX|.
+	
+	ld hl,(Wall.Delta.AbsX)
+	ld de,(Wall.Delta.AbsY)
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	ld hl,(Wall.Delta.Y)
+	ld de,(Wall.Delta.X)
+	
+	jr c,Wall.IsShallow
+
+Wall.IsSteep:
+	set PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	ex de,hl
+
+Wall.IsShallow:
+
+; --------------------------------------------------------------------------
+; Calculate the gradient of the line.
+; --------------------------------------------------------------------------
+
+	call Nostromo.Maths.Div.S16S16
+	ld (Wall.Gradient),bc
+
+; --------------------------------------------------------------------------
+; Clip the start to Y=+X.
+; --------------------------------------------------------------------------
+
+	bit PlotWalls.ClipFlag.StartOutsideRight,(iy+PlotWalls.ClipFlags)
+	jr z,Wall.ClippedStartRight
+	
+	; If dY == 0, Start.X = Start.Y.
+	ld hl,(Wall.Delta.Y)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.Start.Y)
+		ld (Wall.Start.X),hl
+		jp Wall.ClippedStartRight
+	+:
+	
+	; If dX == 0, Start.Y = Start.X.
+	ld hl,(Wall.Delta.X)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.Start.X)
+		ld (Wall.Start.Y),hl
+		jp Wall.ClippedStartRight
+	+:
+	
+	; We can't take a shortcut, so perform a slow clip.
+	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	jr z,PlotWalls.ClipStartRight.Shallow
+
+PlotWalls.ClipStartRight.Steep:
+
+	call Wall.GetYIntercept
+	jr PlotWalls.ClipStartRight.Clip
+	
+PlotWalls.ClipStartRight.Shallow:
+
+	call Wall.GetXIntercept
+
+PlotWalls.ClipStartRight.Clip:
+
+	; X = -c * 256 / m - 256
+	ld de,(Wall.Gradient)
+	dec d
+	call Nostromo.Maths.Div.S16S16
+	neg_bc()
+	
+	ld (Wall.Start.X),bc
+	ld (Wall.Start.Y),bc
+
+Wall.ClippedStartRight:
+
+; --------------------------------------------------------------------------
+; Clip the end to Y=+X.
+; --------------------------------------------------------------------------
+
+	bit PlotWalls.ClipFlag.EndOutsideRight,(iy+PlotWalls.ClipFlags)
+	jr z,Wall.ClippedEndRight
+	
+	; If dY == 0, End.X = End.Y.
+	ld hl,(Wall.Delta.Y)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.End.Y)
+		ld (Wall.End.X),hl
+		jp Wall.ClippedEndRight
+	+:
+	
+	; If dX == 0, End.Y = End.X.
+	ld hl,(Wall.Delta.X)
+	ld a,h
+	or l
+	jr nz,+
+		ld hl,(Wall.End.X)
+		ld (Wall.End.Y),hl
+		jp Wall.ClippedEndRight
+	+:
+	
+	; We can't take a shortcut, so perform a slow clip.
+	bit PlotWalls.ClipFlag.Steep,(iy+PlotWalls.ClipFlags)
+	jr z,PlotWalls.ClipEndRight.Shallow
+
+PlotWalls.ClipEndRight.Steep:
+
+	call Wall.GetYIntercept
+	jr PlotWalls.ClipEndRight.Clip
+	
+PlotWalls.ClipEndRight.Shallow:
+
+	call Wall.GetXIntercept
+
+PlotWalls.ClipEndRight.Clip:
+
+	; X = -c * 256 / m - 256
+	ld de,(Wall.Gradient)
+	dec d
+	call Nostromo.Maths.Div.S16S16
+	neg_bc()
+	
+	ld (Wall.End.X),bc
+	ld (Wall.End.Y),bc
+
+Wall.ClippedEndRight:
+
+Wall.NoViewClippingRequired:
 	
 	ld a,(Wall.Start.X+1)
 	add a,48
@@ -426,6 +569,7 @@ Wall.Delta.X: .dw 0
 Wall.Delta.AbsX: .dw 0
 Wall.Delta.Y: .dw 0
 Wall.Delta.AbsY: .dw 0
+Wall.Gradient: .dw 0
 
 ; ==========================================================================
 ; Wall.GetYIntercept
