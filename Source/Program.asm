@@ -12,34 +12,33 @@ Main:
 
 Loop:
 
-	.bcall _GrBufClr
+; --------------------------------------------------------------------------
+; Clear the screen.
+; --------------------------------------------------------------------------
+
+	ld hl,plotSScreen
+	ld (hl),0
+	ld de,plotSScreen+1
+	ld bc,767
+	ldir	
+
+; --------------------------------------------------------------------------
+; Transform the vertices.
+; --------------------------------------------------------------------------
 	
 	call TransformVertices	
+	
+; --------------------------------------------------------------------------
+; Walk the BSP tree to render the level.
+; --------------------------------------------------------------------------
 
-	ld ix,Sector0
-	call Nostromo.Sector.Draw
-	ld ix,Sector1
-	call Nostromo.Sector.Draw
-	ld ix,Sector2
-	call Nostromo.Sector.Draw
-	ld ix,Sector3
-	call Nostromo.Sector.Draw
-	ld ix,Sector4
-	call Nostromo.Sector.Draw
-	ld ix,Sector5
-	call Nostromo.Sector.Draw
-	ld ix,Sector6
-	call Nostromo.Sector.Draw
-	ld ix,Sector7
-	call Nostromo.Sector.Draw
-	
-	; Walk the tree.
-	xor a
-	ld (penCol),a
-	ld (penRow),a
 	ld ix,Tree
-	;call WalkTree
-	
+	call WalkTree
+
+; --------------------------------------------------------------------------
+; Display the result on the screen.
+; --------------------------------------------------------------------------
+
 	call ionFastCopy
 	
 	.bcall _GetCSC
@@ -240,12 +239,11 @@ WalkTree:
 
 WalkTree.Leaf:
 	; We've encountered a leaf.
-	ld a,(ix+1)
-	.bcall _SetXXOP1
-	ld a,2
-	set textWrite,(iy+sGrFlags)
-	.bcall _DispOP1A
-	ret
+	ld l,(ix+1)
+	ld h,(ix+2)
+	push hl
+	pop ix
+	jp Nostromo.Sector.Draw
 
 WalkTree.Partition:
 	; Load the partition position.
@@ -271,7 +269,7 @@ WalkTree.CheckPartitionSide:
 	ld a,d \ xor $80 \ ld d,a
 	or a
 	sbc hl,de
-	jr c,WalkTree.BehindPartition
+	jr nc,WalkTree.BehindPartition
 
 WalkTree.InFrontOfPartition:
 	push ix

@@ -607,7 +607,132 @@ Project.End.X:
 	call Maths.Div.S16S16
 	call Clip24To16
 	ld (Projected.End.Y),bc
+
+; --------------------------------------------------------------------------
+; Clear behind the wall.
+; --------------------------------------------------------------------------
+
+	ld a,(Projected.End.X)
+	add a,7
+	sra a
+	sra a
+	sra a
+	ld d,a
+	; D = First column for solid fills.
 	
+	ld a,(Projected.Start.X)
+	sub 7
+	sra a
+	sra a
+	sra a
+	ld e,a
+	; E = Last column for solid fills.
+	
+	sub d
+	inc a
+	jp m,Clear.BothInSameByte
+	jr z,+
+	
+	push de
+	
+	ld b,a
+	ld c,d
+-:	push bc
+	ld l,c
+	call ClearColumn
+	pop bc
+	inc c
+	djnz -
+	
+	pop de
++:
+
+; --------------------------------------------------------------------------
+; Clear the left end cap.
+; --------------------------------------------------------------------------
+
+	ld a,(Projected.End.X)
+	and 7
+	jr z,Clear.SkipLeftCap
+	
+	ld b,a
+	ld a,$FF
+-:	srl a
+	djnz -
+	cpl
+	ld c,a
+	
+	ld l,d
+	dec l
+	push de
+	call AndColumn
+	pop de
+
+Clear.SkipLeftCap:
+
+; --------------------------------------------------------------------------
+; Clear the right end cap.
+; --------------------------------------------------------------------------
+
+	ld a,(Projected.Start.X)
+	and 7
+	cp 7
+	jr z,Clear.SkipRightCap
+	
+	ld b,a
+	inc b
+	ld c,$FF
+-:	srl c
+	djnz -
+	
+	ld l,e
+	inc l
+	call AndColumn
+
+Clear.SkipRightCap:
+
+	jr ClearedBehindWall
+
+; --------------------------------------------------------------------------
+; Clear both caps (they are in the same byte).
+; --------------------------------------------------------------------------
+Clear.BothInSameByte:
+	
+	ld e,$00
+	
+	ld a,(Projected.End.X)
+	and 7
+	jr z,Clear.BothInSameByte.LeftZero
+	
+	ld b,a
+	ld a,$FF
+-:	srl a
+	djnz -
+	cpl
+	ld e,a
+	
+Clear.BothInSameByte.LeftZero:
+	
+	ld a,(Projected.Start.X)
+	and 7
+	ld b,a
+	inc b
+
+	inc a
+	ld b,a
+	ld a,$FF
+-:	srl a
+	djnz -
+	
+	or e
+	ld c,a
+
+	ld l,d
+	dec l
+	call AndColumn
+
+ClearedBehindWall:
+
 ; --------------------------------------------------------------------------
 ; Draw the bottom edge of the wall.
 ; --------------------------------------------------------------------------
@@ -740,6 +865,48 @@ Project.End.X:
 SkipWall:
 
 	ret
+
+; ==========================================================================
+; ClearColumn
+; --------------------------------------------------------------------------
+; Clears a 8 pixels wide to white.
+; --------------------------------------------------------------------------
+; Inputs:    L: The column to clear.
+; Destroyed: AF, B, DE, HL.
+; ==========================================================================
+ClearColumn:
+	ld h,0
+	ld de,plotSScreen
+	add hl,de
+	ld b,64
+	ld de,12
+	xor a
+-:	ld (hl),a
+	add hl,de
+	djnz -
+	ret
+
+; ==========================================================================
+; AndColumn
+; --------------------------------------------------------------------------
+; ANDs a value against a column 8 pixels wide.
+; --------------------------------------------------------------------------
+; Inputs:    L: The column to AND. C: the value to AND.
+; Destroyed: AF, BC, DE, HL.
+; ==========================================================================
+AndColumn:
+	ld h,0
+	ld de,plotSScreen
+	add hl,de
+	ld b,64
+	ld de,12
+-:	ld a,(hl)
+	and c
+	ld (hl),a
+	add hl,de
+	djnz -
+	ret
+	
 
 ; ==========================================================================
 ; Clip24To16

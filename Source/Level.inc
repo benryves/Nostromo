@@ -1,27 +1,26 @@
-VertexScaleFactor = 1
 Vertices:
-	.dw VertexScaleFactor*0, VertexScaleFactor*0
-	.dw VertexScaleFactor*1536, VertexScaleFactor*0
-	.dw VertexScaleFactor*2048, VertexScaleFactor*512
-	.dw VertexScaleFactor*3840, VertexScaleFactor*512
-	.dw VertexScaleFactor*4608, VertexScaleFactor*1280
-	.dw VertexScaleFactor*4608, VertexScaleFactor*2816
-	.dw VertexScaleFactor*5120, VertexScaleFactor*3328
-	.dw VertexScaleFactor*5120, VertexScaleFactor*5376
-	.dw VertexScaleFactor*4608, VertexScaleFactor*5888
-	.dw VertexScaleFactor*3840, VertexScaleFactor*5888
-	.dw VertexScaleFactor*3328, VertexScaleFactor*5376
-	.dw VertexScaleFactor*3328, VertexScaleFactor*3328
-	.dw VertexScaleFactor*3840, VertexScaleFactor*2816
-	.dw VertexScaleFactor*3840, VertexScaleFactor*1280
-	.dw VertexScaleFactor*2048, VertexScaleFactor*1280
-	.dw VertexScaleFactor*1536, VertexScaleFactor*1792
-	.dw VertexScaleFactor*0, VertexScaleFactor*1792
-	.dw VertexScaleFactor*3840, VertexScaleFactor*4608
-	.dw VertexScaleFactor*4608, VertexScaleFactor*4608
-	.dw VertexScaleFactor*4224, VertexScaleFactor*5376
-	.dw VertexScaleFactor*5120, VertexScaleFactor*4608
-	.dw VertexScaleFactor*3328, VertexScaleFactor*4608
+	.dw 0, 0
+	.dw 1536, 0
+	.dw 2048, 512
+	.dw 3840, 512
+	.dw 4608, 1280
+	.dw 4608, 2816
+	.dw 5120, 3328
+	.dw 5120, 5376
+	.dw 4608, 5888
+	.dw 3840, 5888
+	.dw 3328, 5376
+	.dw 3328, 3328
+	.dw 3840, 2816
+	.dw 3840, 1280
+	.dw 2048, 1280
+	.dw 1536, 1792
+	.dw 0, 1792
+	.dw 3840, 4608
+	.dw 4608, 4608
+	.dw 4224, 5376
+	.dw 5120, 4608
+	.dw 3328, 4608
 Vertices.Count = ($ - Vertices) / 4
 
 Walls:
@@ -59,6 +58,7 @@ Sector4: .db 5, 5, 22, 23, 11, 17
 Sector5: .db 3, 7, 8, 9
 Sector6: .db 2, 21, 19
 Sector7: .db 2, 18, 20
+
 
 NodeType.Leaf = 0
 NodeType.VerticalPartition = 1
