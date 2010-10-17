@@ -1,26 +1,28 @@
+LevelScale = 1
+
 Vertices:
-	.dw 0, 0
-	.dw 1536, 0
-	.dw 2048, 512
-	.dw 3840, 512
-	.dw 4608, 1280
-	.dw 4608, 2816
-	.dw 5120, 3328
-	.dw 5120, 5376
-	.dw 4608, 5888
-	.dw 3840, 5888
-	.dw 3328, 5376
-	.dw 3328, 3328
-	.dw 3840, 2816
-	.dw 3840, 1280
-	.dw 2048, 1280
-	.dw 1536, 1792
-	.dw 0, 1792
-	.dw 3840, 4608
-	.dw 4608, 4608
-	.dw 4224, 5376
-	.dw 5120, 4608
-	.dw 3328, 4608
+	.dw LevelScale * 0, LevelScale * 0
+	.dw LevelScale * 1536, LevelScale * 0
+	.dw LevelScale * 2048, LevelScale * 512
+	.dw LevelScale * 3840, LevelScale * 512
+	.dw LevelScale * 4608, LevelScale * 1280
+	.dw LevelScale * 4608, LevelScale * 2816
+	.dw LevelScale * 5120, LevelScale * 3328
+	.dw LevelScale * 5120, LevelScale * 5376
+	.dw LevelScale * 4608, LevelScale * 5888
+	.dw LevelScale * 3840, LevelScale * 5888
+	.dw LevelScale * 3328, LevelScale * 5376
+	.dw LevelScale * 3328, LevelScale * 3328
+	.dw LevelScale * 3840, LevelScale * 2816
+	.dw LevelScale * 3840, LevelScale * 1280
+	.dw LevelScale * 2048, LevelScale * 1280
+	.dw LevelScale * 1536, LevelScale * 1792
+	.dw LevelScale * 0, LevelScale * 1792
+	.dw LevelScale * 3840, LevelScale * 4608
+	.dw LevelScale * 4608, LevelScale * 4608
+	.dw LevelScale * 4224, LevelScale * 5376
+	.dw LevelScale * 5120, LevelScale * 4608
+	.dw LevelScale * 3328, LevelScale * 4608
 Vertices.Count = ($ - Vertices) / 4
 
 Walls:
@@ -66,7 +68,7 @@ NodeType.HorizontalPartition = 2
 
 Tree:
 .db NodeType.VerticalPartition
-.dw 8*256
+.dw LevelScale * 8*256
 .dw Tree.F
 .dw Tree.B
 
@@ -76,13 +78,13 @@ Tree.B:
 
 Tree.F:
 .db NodeType.HorizontalPartition
-.dw 11*256
+.dw LevelScale * 11*256
 .dw Tree.F.F
 .dw Tree.F.B
 
 Tree.F.F:
 .db NodeType.HorizontalPartition
-.dw 18*256
+.dw LevelScale * 18*256
 .dw Tree.F.F.F
 .dw Tree.F.F.B
 
@@ -92,7 +94,7 @@ Tree.F.F.B:
 
 Tree.F.F.F:
 .db NodeType.HorizontalPartition
-.dw 21*256
+.dw LevelScale * 21*256
 .dw Tree.F.F.F.F
 .dw Tree.F.F.F.B
 
@@ -102,7 +104,7 @@ Tree.F.F.F.F:
 
 Tree.F.F.F.B:
 .db NodeType.VerticalPartition
-.dw 16.5*256
+.dw LevelScale * 16.5*256
 .dw Tree.F.F.F.B.F
 .dw Tree.F.F.F.B.B
 
@@ -116,7 +118,7 @@ Tree.F.F.F.B.B:
 
 Tree.F.B:
 .db NodeType.HorizontalPartition
-.dw 5*256
+.dw LevelScale * 5*256
 .dw Tree.F.B.F
 .dw Tree.F.B.B
 
@@ -126,7 +128,7 @@ Tree.F.B.F:
 
 Tree.F.B.B:
 .db NodeType.VerticalPartition
-.dw 4*256
+.dw LevelScale * 4*256
 .dw Tree.F.B.B.F
 .dw Tree.F.B.B.B
 

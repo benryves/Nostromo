@@ -9,6 +9,14 @@
 Main:
 
 	im 1
+	
+	ld hl,768
+	ld (Nostromo.Camera.X),hl
+	ld hl,896
+	ld (Nostromo.Camera.Y),hl
+	
+	ld a,$40
+	ld (Nostromo.Camera.Angle),a
 
 Loop:
 
