@@ -741,7 +741,15 @@ SkipWall:
 
 	ret
 
-
+; ==========================================================================
+; Clip24To16
+; --------------------------------------------------------------------------
+; Clips a 24-bit number to a 16-bit one.
+; --------------------------------------------------------------------------
+; Inputs:    ABC: The value to clip.
+; Outputs:   BC: The clipped value (between -32768 and +32767).
+; Destroyed: AF.
+; ==========================================================================
 Clip24To16:
 	or a
 	jr z,Clip24To16.SmallPositive
@@ -775,7 +783,7 @@ Clip24To16.SmallNegative:
 ; The returned value is cached.
 ; --------------------------------------------------------------------------
 ; Inputs:    Start.X, Start.Y, End.X, End.Y, Delta.X, Delta.Y.
-; Ouptuts:   HL: The X coordinate on the wall for Y=0.
+; Outputs:   HL: The X coordinate on the wall for Y=0.
 ; Destroyed: AF, BC, DE.
 ; ==========================================================================
 GetYIntercept:
@@ -809,7 +817,7 @@ GetYIntercept:
 ; The returned value is cached.
 ; --------------------------------------------------------------------------
 ; Inputs:    Start.X, Start.Y, End.X, End.Y, Delta.X, Delta.Y.
-; Ouptuts:   HL: The Y coordinate on the wall for X=0.
+; Outputs:   HL: The Y coordinate on the wall for X=0.
 ; Destroyed: AF, BC, DE.
 ; ==========================================================================
 GetXIntercept:
