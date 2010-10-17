@@ -637,15 +637,11 @@ Project.End.X:
 	push bc
 	pop hl
 
-	call nc,lineClipAndDrawLong
+	call nc,lineDraw
 
 ; --------------------------------------------------------------------------
 ; Draw the top edge of the wall.
 ; --------------------------------------------------------------------------
-	
-	xor a
-	ld (Clip.g_line16X1+1),a
-	ld (Clip.g_line16X2+1),a
 	
 	ld a,(Projected.Start.X)
 	ld (Clip.g_line16X1),a
@@ -669,7 +665,77 @@ Project.End.X:
 	
 	push bc
 	pop hl
-	call nc,lineClipAndDrawLong
+	call nc,lineDraw
+
+; --------------------------------------------------------------------------
+; Draw the lines between the floor and ceiling at the start.
+; --------------------------------------------------------------------------
+
+	bit ClipFlag.StartOutsideLeft,(iy+ClipFlags)
+	jr nz,+
+	bit ClipFlag.StartOutsideRight,(iy+ClipFlags)
+	jr nz,+
+
+	ld a,(Projected.Start.X)
+	ld (Clip.g_line16X1),a
+	
+	ld hl,(Projected.Start.Y)
+	sra h
+	rr l
+	ld de,32
+	add hl,de
+	ld (Clip.g_line16Y1),hl
+
+	ld a,(Projected.Start.X)
+	ld (Clip.g_line16X2),a
+	
+	ld hl,32
+	ld de,(Projected.Start.Y)
+	or a
+	sbc hl,de
+	ld (Clip.g_line16Y2),hl
+	
+	call Clip.Clip2DLine16Ex
+	
+	push bc
+	pop hl
+	call nc,lineDraw
++:
+
+; --------------------------------------------------------------------------
+; Draw the lines between the floor and ceiling at the end.
+; --------------------------------------------------------------------------
+
+	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
+	jr nz,+
+	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
+	jr nz,+
+
+	ld a,(Projected.End.X)
+	ld (Clip.g_line16X1),a
+	
+	ld hl,(Projected.End.Y)
+	sra h
+	rr l
+	ld de,32
+	add hl,de
+	ld (Clip.g_line16Y1),hl
+
+	ld a,(Projected.End.X)
+	ld (Clip.g_line16X2),a
+	
+	ld hl,32
+	ld de,(Projected.End.Y)
+	or a
+	sbc hl,de
+	ld (Clip.g_line16Y2),hl
+	
+	call Clip.Clip2DLine16Ex
+	
+	push bc
+	pop hl
+	call nc,lineDraw
++:
 
 SkipWall:
 
