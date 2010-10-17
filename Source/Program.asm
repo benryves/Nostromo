@@ -9,6 +9,8 @@
 
 Main:
 
+	im 1
+
 Loop:
 
 	.bcall _GrBufClr
