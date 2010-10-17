@@ -12,6 +12,14 @@ Main:
 Loop:
 
 	.bcall _GrBufClr
+	
+	ld hl,48*256+32
+	ld de,16*256
+	call lineClipAndDraw
+	
+	ld hl,48*256+32
+	ld de,80*256
+	call lineClipAndDraw
 
 	call TransformVertices
 	;call PlotVertices
@@ -143,12 +151,18 @@ PlotVertices:
 	ld (hl),a
 	
 +:
-	
+
 	pop hl
 	pop bc
 	
 	djnz -
 	ret
+
+PlotWalls.ClipFlags = asm_Flag1
+PlotWalls.ClipFlag.StartOutsideLeft = 0
+PlotWalls.ClipFlag.StartOutsideRight = 1
+PlotWalls.ClipFlag.EndOutsideLeft = 2
+PlotWalls.ClipFlag.EndOutsideRight = 3
 
 PlotWalls:
 	ld hl,Walls
@@ -202,18 +216,21 @@ PlotWalls.Loop:
 
 	push hl
 	push bc
-	
-	; Is the wall entirely behind the camera?
-	; if (startVertex.Y <= 0 && endVertex.Y <= 0) continue;
-	
+
+; --------------------------------------------------------------------------
+; Is the wall entirely behind the camera?
+; --------------------------------------------------------------------------
+
 	ld a,(Wall.Start.Y+1)
 	ld b,a
 	ld a,(Wall.End.Y+1)
 	and b
 	jp m,SkipWall
-	
-	; Calculate wall deltas.
-	
+
+; --------------------------------------------------------------------------
+; Calculate the wall delta values.
+; --------------------------------------------------------------------------
+
 	ld hl,(Wall.End.X)
 	ld de,(Wall.Start.X)
 	or a
@@ -234,13 +251,27 @@ PlotWalls.Loop:
 	neg_hl()
 +:	ld (Wall.Delta.AbsY),hl
 
-	; Clear the GetYIntercept cache.
+; --------------------------------------------------------------------------
+; Clear the GetYIntercept and GetXIntercept cache.
+; --------------------------------------------------------------------------
+
 	ld hl,$0118 ; JR $+1
 	ld (Wall.GetYIntercept+0),hl
-	
+	ld (Wall.GetXIntercept+0),hl
+
+; --------------------------------------------------------------------------
+; Clear the clipping flags.
+; --------------------------------------------------------------------------
+
+	ld (iy+PlotWalls.ClipFlags),0
+
+; --------------------------------------------------------------------------
+; Clip to Y=0.
+; --------------------------------------------------------------------------
+
 	; Does the start intersect the Y axis?
-	
-	; Clip the start of the line to Y=0.
+
+	; Clip the start of the wall to Y=0.
 	ld a,(Wall.Start.Y+1)
 	bit 7,a
 	jr z,Wall.Start.DoesNotIntersectY
@@ -249,20 +280,21 @@ PlotWalls.Loop:
 	ld a,d
 	or e
 	jr z,+
-	
+
 	call Wall.GetYIntercept	
 	ld (Wall.Start.X),hl
-	
+
 +:	ld hl,0
 	ld (Wall.Start.Y),hl
 
-	; We know that the end doesn't intersect Y, as we would have already culled the line.
+	; We know that the end can't intersect Y,
+	; as we would have already culled the wall.
 	; (At least one end must have Y>=0).
 	jr Wall.End.DoesNotIntersectY
 
 Wall.Start.DoesNotIntersectY:
 
-	; Clip the end of the line to Y=0.
+	; Clip the end of the wall to Y=0.
 	ld a,(Wall.End.Y+1)
 	bit 7,a
 	jr z,Wall.End.DoesNotIntersectY
@@ -271,17 +303,92 @@ Wall.Start.DoesNotIntersectY:
 	ld a,d
 	or e
 	jr z,+
-	
+
 	call Wall.GetYIntercept
-	
+
 	ld (Wall.End.X),hl
-	
+
 +:	ld hl,0
 	ld (Wall.End.Y),hl
 
 Wall.End.DoesNotIntersectY:
 
-Wall.ClippedToY:	
+Wall.ClippedToY:
+
+; --------------------------------------------------------------------------
+; Does the wall need to be clipped to Y=+X or Y=-X?
+; --------------------------------------------------------------------------
+
+	; Count the number of times Y=+X (B) and Y=-X (C) are clipped against.
+	ld bc,$0202
+
+	; Check the start against Y=+X.
+
+	ld hl,(Wall.Start.X)
+	ld de,(Wall.Start.Y)
+	
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	jr c,+
+	dec b
+	set PlotWalls.ClipFlag.StartOutsideRight,(iy+PlotWalls.ClipFlags)
++:
+
+	; Check the start against Y=-X.
+
+	ld hl,(Wall.Start.X)
+	ld de,(Wall.Start.Y)
+	neg_de()
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	jr nc,+
+	dec c
+	set PlotWalls.ClipFlag.StartOutsideLeft,(iy+PlotWalls.ClipFlags)
++:
+
+	; Check the end against Y=+X.
+
+	ld hl,(Wall.End.X)
+	ld de,(Wall.End.Y)
+	
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	jr c,+
+	dec b
+	jp z,SkipWall ; Both ends are outside the right - bail out.
+	set PlotWalls.ClipFlag.EndOutsideRight,(iy+PlotWalls.ClipFlags)
++:
+
+	; Check the end against Y=-X.
+
+	ld hl,(Wall.End.X)
+	ld de,(Wall.End.Y)
+	neg_de()
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	jr nc,+
+	dec c
+	jp z,SkipWall ; Both ends are outside the left - bail out.
+	set PlotWalls.ClipFlag.EndOutsideLeft,(iy+PlotWalls.ClipFlags)
++:
+	
+
+; --------------------------------------------------------------------------
+; Clip to Y=X.
+; --------------------------------------------------------------------------
+	
 	
 	ld a,(Wall.Start.X+1)
 	add a,48
@@ -309,8 +416,8 @@ SkipWall:
 	ret
 PlotWalls.Loop.Branch:
 	jp PlotWalls.Loop
-	
-	
+
+
 Wall.Start.X: .dw 0
 Wall.Start.Y: .dw 0
 Wall.End.X: .dw 0
@@ -320,16 +427,25 @@ Wall.Delta.AbsX: .dw 0
 Wall.Delta.Y: .dw 0
 Wall.Delta.AbsY: .dw 0
 
+; ==========================================================================
+; Wall.GetYIntercept
+; --------------------------------------------------------------------------
+; Calculates the Y intercept of a wall (the point where Y=0).
+; The returned value is cached.
+; --------------------------------------------------------------------------
+; Inputs:    Wall.Start.X, Wall.Start.Y, Wall.End.X, Wall.End.Y,
+;            Wall.Delta.X, Wall.Delta.Y.
+; Ouptuts:   HL: The X coordinate on the wall for Y=0.
+; Destroyed: AF, BC, DE.
+; ==========================================================================
 Wall.GetYIntercept:
 	jr $+1
 	nop
 	
-	; Wall.Start.X - (Wall.Delta.X * Wall.Start.Y) / Wall.Delta.Y
+	; Result = Wall.Start.X - (Wall.Delta.X * Wall.Start.Y) / Wall.Delta.Y
 	ld de,(Wall.Delta.X)
 	ld bc,(Wall.Start.Y)
 	call Nostromo.Maths.Mul.S16S16
-	
-	; DEHL = dX [DE] * startVertex.Y [BC]
 	
 	ld a,e
 	ld b,h
@@ -345,6 +461,43 @@ Wall.GetYIntercept:
 	ld (Wall.GetYIntercept+0),a
 	ld (Wall.GetYIntercept+1),hl
 	ret
+
+; ==========================================================================
+; Wall.GetXIntercept
+; --------------------------------------------------------------------------
+; Calculates the X intercept of a wall (the point where X=0).
+; The returned value is cached.
+; --------------------------------------------------------------------------
+; Inputs:    Wall.Start.X, Wall.Start.Y, Wall.End.X, Wall.End.Y,
+;            Wall.Delta.X, Wall.Delta.Y.
+; Ouptuts:   HL: The Y coordinate on the wall for X=0.
+; Destroyed: AF, BC, DE.
+; ==========================================================================
+Wall.GetXIntercept:
+	jr $+1
+	nop
+	
+	; Result = Wall.Start.Y - (Wall.Delta.Y * Wall.Start.X) / Wall.Delta.X
+	ld de,(Wall.Delta.Y)
+	ld bc,(Wall.Start.X)
+	call Nostromo.Maths.Mul.S16S16
+	
+	ld a,e
+	ld b,h
+	ld c,l
+	ld de,(Wall.Delta.X)
+	call Nostromo.Maths.Div.S24S16
+
+	ld hl,(Wall.Start.Y)
+	or a
+	sbc hl,bc
+	
+	ld a,$21 ; LC HL,nn
+	ld (Wall.GetXIntercept+0),a
+	ld (Wall.GetXIntercept+1),hl
+	
+	ret
+	
 
 WalkTree:
 	ld a,(ix+0)
