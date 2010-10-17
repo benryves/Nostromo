@@ -1,5 +1,12 @@
 .module Program
 
+	jp Main
+
+#include "Level.inc"
+#include "Nostromo/Nostromo.asm"
+#include "LINECLIP.INC"
+#include "LINEDRAW.INC"
+
 Main:
 
 Loop:
@@ -196,6 +203,86 @@ PlotWalls.Loop:
 	push hl
 	push bc
 	
+	; Is the wall entirely behind the camera?
+	; if (startVertex.Y <= 0 && endVertex.Y <= 0) continue;
+	
+	ld a,(Wall.Start.Y+1)
+	ld b,a
+	ld a,(Wall.End.Y+1)
+	and b
+	jp m,SkipWall
+	
+	; Calculate wall deltas.
+	
+	ld hl,(Wall.End.X)
+	ld de,(Wall.Start.X)
+	or a
+	sbc hl,de
+	ld (Wall.Delta.X),hl
+	bit 7,h
+	jr nz,+
+	neg_hl()
++:	ld (Wall.Delta.AbsX),hl
+	
+	ld hl,(Wall.End.Y)
+	ld de,(Wall.Start.Y)
+	or a
+	sbc hl,de
+	ld (Wall.Delta.Y),hl
+	bit 7,h
+	jr nz,+
+	neg_hl()
++:	ld (Wall.Delta.AbsY),hl
+
+	; Clear the GetYIntercept cache.
+	ld hl,$0118 ; JR $+1
+	ld (Wall.GetYIntercept+0),hl
+	
+	; Does the start intersect the Y axis?
+	
+	; Clip the start of the line to Y=0.
+	ld a,(Wall.Start.Y+1)
+	bit 7,a
+	jr z,Wall.Start.DoesNotIntersectY
+
+	ld de,(Wall.Delta.X)
+	ld a,d
+	or e
+	jr z,+
+	
+	call Wall.GetYIntercept	
+	ld (Wall.Start.X),hl
+	
++:	ld hl,0
+	ld (Wall.Start.Y),hl
+
+	; We know that the end doesn't intersect Y, as we would have already culled the line.
+	; (At least one end must have Y>=0).
+	jr Wall.End.DoesNotIntersectY
+
+Wall.Start.DoesNotIntersectY:
+
+	; Clip the end of the line to Y=0.
+	ld a,(Wall.End.Y+1)
+	bit 7,a
+	jr z,Wall.End.DoesNotIntersectY
+
+	ld de,(Wall.Delta.X)
+	ld a,d
+	or e
+	jr z,+
+	
+	call Wall.GetYIntercept
+	
+	ld (Wall.End.X),hl
+	
++:	ld hl,0
+	ld (Wall.End.Y),hl
+
+Wall.End.DoesNotIntersectY:
+
+Wall.ClippedToY:	
+	
 	ld a,(Wall.Start.X+1)
 	add a,48
 	ld d,a
@@ -213,17 +300,51 @@ PlotWalls.Loop:
 	ld l,a
 
 	call lineClipAndDrawLong
-	
+
+SkipWall:
+
 	pop bc
 	pop hl
-	djnz PlotWalls.Loop
+	djnz PlotWalls.Loop.Branch
 	ret
+PlotWalls.Loop.Branch:
+	jp PlotWalls.Loop
 	
 	
 Wall.Start.X: .dw 0
 Wall.Start.Y: .dw 0
 Wall.End.X: .dw 0
-Wall.End.Y: .dw 0	
+Wall.End.Y: .dw 0
+Wall.Delta.X: .dw 0
+Wall.Delta.AbsX: .dw 0
+Wall.Delta.Y: .dw 0
+Wall.Delta.AbsY: .dw 0
+
+Wall.GetYIntercept:
+	jr $+1
+	nop
+	
+	; Wall.Start.X - (Wall.Delta.X * Wall.Start.Y) / Wall.Delta.Y
+	ld de,(Wall.Delta.X)
+	ld bc,(Wall.Start.Y)
+	call Nostromo.Maths.Mul.S16S16
+	
+	; DEHL = dX [DE] * startVertex.Y [BC]
+	
+	ld a,e
+	ld b,h
+	ld c,l
+	ld de,(Wall.Delta.Y)
+	call Nostromo.Maths.Div.S24S16
+
+	ld hl,(Wall.Start.X)
+	or a
+	sbc hl,bc
+
+	ld a,$21 ; LC HL,nn
+	ld (Wall.GetYIntercept+0),a
+	ld (Wall.GetYIntercept+1),hl
+	ret
 
 WalkTree:
 	ld a,(ix+0)
@@ -297,8 +418,3 @@ Forwards.X: .dw 0
 Forwards.Y: .dw 0
 
 .endmodule
-
-#include "Level.inc"
-#include "Nostromo/Nostromo.asm"
-#include "LINECLIP.INC"
-#include "LINEDRAW.INC"
