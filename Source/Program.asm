@@ -4,7 +4,6 @@
 
 #include "Level.inc"
 #include "Nostromo/Nostromo.asm"
-#include "LINECLIP.INC"
 #include "LINEDRAW.INC"
 
 Main:
