@@ -27,11 +27,11 @@ Delta.AbsY: .dw 0
 
 Gradient: .dw 0
 
-Projected.Start.X: .db 0
-Projected.End.X: .db 0
+Trapezium.End.Column: .db 0
+Trapezium.Start.Column: .db 0
 
-Projected.Start.Y: .dw 0
-Projected.End.Y: .dw 0
+Trapezium.End.Ceiling: .dw 0
+Trapezium.Start.Ceiling: .dw 0
 
 ; ==========================================================================
 ; ClipAndDraw
@@ -538,7 +538,7 @@ NoViewClippingRequired:
 +:
 
 Project.Start.X:
-	ld (Projected.Start.X),a
+	ld (Trapezium.End.Column),a
 
 ; --------------------------------------------------------------------------
 ; Project the end X of the wall.
@@ -577,159 +577,79 @@ Project.Start.X:
 +:
 
 Project.End.X:
-	ld (Projected.End.X),a
+	ld (Trapezium.Start.Column),a
 	
 ; --------------------------------------------------------------------------
 ; Are we looking at the back of the wall?
 ; --------------------------------------------------------------------------
 
 	ld b,a
-	ld a,(Projected.Start.X)
+	ld a,(Trapezium.End.Column)
 	cp b
 	jp c,SkipWall
 
 ; --------------------------------------------------------------------------
-; Calculate the height of the start of the wall.
+; Calculate the height of the start of the wall's floor.
+; --------------------------------------------------------------------------
+
+	ld hl,-64
+	ld de,(Start.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.End.Floor),hl
+
+; --------------------------------------------------------------------------
+; Calculate the height of the end of the wall's floor.
+; --------------------------------------------------------------------------
+
+	ld hl,-64
+	ld de,(End.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.Start.Floor),hl
+
+; --------------------------------------------------------------------------
+; Calculate the height of the start of the wall's ceiling.
 ; --------------------------------------------------------------------------
 
 	ld hl,128
 	ld de,(Start.Y)
 	call Maths.Div.S16S16
 	call Clip24To16
-	ld (Projected.Start.Y),bc
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.End.Ceiling),hl
 
 ; --------------------------------------------------------------------------
-; Calculate the height of the end of the wall.
+; Calculate the height of the end of the wall's ceiling.
 ; --------------------------------------------------------------------------
 
 	ld hl,128
 	ld de,(End.Y)
 	call Maths.Div.S16S16
 	call Clip24To16
-	ld (Projected.End.Y),bc
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.Start.Ceiling),hl
 
 ; --------------------------------------------------------------------------
 ; Clear behind the wall.
 ; --------------------------------------------------------------------------
 
-	ld a,(Projected.End.X)
-	add a,7
-	sra a
-	sra a
-	sra a
+	ld a,(Trapezium.End.Column)
+	ld e,a
+	ld a,(Trapezium.Start.Column)
 	ld d,a
-	; D = First column for solid fills.
 	
-	ld a,(Projected.Start.X)
-	sub 7
-	sra a
-	sra a
-	sra a
-	ld e,a
-	; E = Last column for solid fills.
-	
-	sub d
-	inc a
-	jp m,Clear.BothInSameByte
-	jr z,+
-	
-	push de
-	
-	ld b,a
-	ld c,d
--:	push bc
-	ld l,c
-	call ClearColumn
-	pop bc
-	inc c
-	djnz -
-	
-	pop de
-+:
-
-; --------------------------------------------------------------------------
-; Clear the left end cap.
-; --------------------------------------------------------------------------
-
-	ld a,(Projected.End.X)
-	and 7
-	jr z,Clear.SkipLeftCap
-	
-	ld b,a
-	ld a,$FF
--:	srl a
-	djnz -
-	cpl
-	ld c,a
-	
-	ld l,d
-	dec l
-	push de
-	call AndColumn
-	pop de
-
-Clear.SkipLeftCap:
-
-; --------------------------------------------------------------------------
-; Clear the right end cap.
-; --------------------------------------------------------------------------
-
-	ld a,(Projected.Start.X)
-	and 7
-	cp 7
-	jr z,Clear.SkipRightCap
-	
-	ld b,a
-	inc b
-	ld c,$FF
--:	srl c
-	djnz -
-	
-	ld l,e
-	inc l
-	call AndColumn
-
-Clear.SkipRightCap:
-
-	jr ClearedBehindWall
-
-; --------------------------------------------------------------------------
-; Clear both caps (they are in the same byte).
-; --------------------------------------------------------------------------
-Clear.BothInSameByte:
-	
-	ld e,$00
-	
-	ld a,(Projected.End.X)
-	and 7
-	jr z,Clear.BothInSameByte.LeftZero
-	
-	ld b,a
-	ld a,$FF
--:	srl a
-	djnz -
-	cpl
-	ld e,a
-	
-Clear.BothInSameByte.LeftZero:
-	
-	ld a,(Projected.Start.X)
-	and 7
-	ld b,a
-	inc b
-
-	inc a
-	ld b,a
-	ld a,$FF
--:	srl a
-	djnz -
-	
-	or e
-	ld c,a
-
-	ld l,d
-	dec l
-	call AndColumn
+	call Trapezium.Fill
 
 ClearedBehindWall:
 
@@ -737,24 +657,16 @@ ClearedBehindWall:
 ; Draw the bottom edge of the wall.
 ; --------------------------------------------------------------------------
 	
-	ld a,(Projected.Start.X)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Projected.Start.Y)
-	sra h
-	rr l
-	ld de,32
-	add hl,de
+	ld hl,(Trapezium.End.Floor)
 	ld (Clip.g_line16Y1),hl
 	
-	ld a,(Projected.End.X)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,(Projected.End.Y)
-	sra h
-	rr l
-	ld de,32
-	add hl,de
+	ld hl,(Trapezium.Start.Floor)
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
@@ -768,22 +680,16 @@ ClearedBehindWall:
 ; Draw the top edge of the wall.
 ; --------------------------------------------------------------------------
 	
-	ld a,(Projected.Start.X)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,32
-	ld de,(Projected.Start.Y)
-	or a
-	sbc hl,de
+	ld hl,(Trapezium.End.Ceiling)
 	ld (Clip.g_line16Y1),hl
 	
-	ld a,(Projected.End.X)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,32
-	ld de,(Projected.End.Y)
-	or a
-	sbc hl,de
+	ld hl,(Trapezium.Start.Ceiling)
 	ld (Clip.g_line16Y2),hl	
 	
 	call Clip.Clip2DLine16Ex
@@ -801,23 +707,16 @@ ClearedBehindWall:
 	bit ClipFlag.StartOutsideRight,(iy+ClipFlags)
 	jr nz,+
 
-	ld a,(Projected.Start.X)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Projected.Start.Y)
-	sra h
-	rr l
-	ld de,32
-	add hl,de
+	ld hl,(Trapezium.End.Floor)
 	ld (Clip.g_line16Y1),hl
 
-	ld a,(Projected.Start.X)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,32
-	ld de,(Projected.Start.Y)
-	or a
-	sbc hl,de
+	ld hl,(Trapezium.End.Ceiling)
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
@@ -836,23 +735,16 @@ ClearedBehindWall:
 	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
 	jr nz,+
 
-	ld a,(Projected.End.X)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Projected.End.Y)
-	sra h
-	rr l
-	ld de,32
-	add hl,de
+	ld hl,(Trapezium.Start.Floor)
 	ld (Clip.g_line16Y1),hl
 
-	ld a,(Projected.End.X)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,32
-	ld de,(Projected.End.Y)
-	or a
-	sbc hl,de
+	ld hl,(Trapezium.Start.Ceiling)
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
