@@ -3,28 +3,60 @@
 Edges:
 	.fill 128
 
+Columns:
 Start.Column: .db 0
+End.Column: .db 0
+
 Start.Ceiling: .dw 0
 Start.Floor: .dw 0
-
-End.Column: .db 0
 End.Ceiling: .dw 0
 End.Floor: .dw 0
 
+Rows:
+Row.End: .db 0
+Row.Start: .db 0
+Row.Count: .db 0
+
 Fill:
+	
+	ld hl,(Start.Ceiling)
+	call Clip16ToRow
+	ld b,a
+	ld c,a
+	
+	ld hl,(Start.Floor)
+	call Clip16ToRow
+	call MinMaxBC
+	
+	ld hl,(End.Ceiling)
+	call Clip16ToRow
+	call MinMaxBC
+
+	ld hl,(End.Floor)
+	call Clip16ToRow
+	call MinMaxBC
+	
+	ld (Rows),bc
+	ld a,c
+	sub b
+	inc a
+	ld (Row.Count),a	
 
 	; Fill the Edges table with D and E.
 	ld b,64
 	ld hl,Edges
 
--:	ld (hl),d
+	ld de,(Columns)
+-:	ld (hl),e
 	inc hl
-	ld (hl),e
+	ld (hl),d
 	inc hl
 	djnz -
 
-	ld b,64
-	ld a,-1
+	ld a,(Row.Count)
+	ld b,a
+	ld a,(Row.Start)
+	dec a
 	ld (FillRow),a
 	
 	ld hl,Edges
@@ -240,7 +272,56 @@ _byteLine:
 
 
 FillPattern:
-	.db 0, 0, 0, 0, 0, 0, 0, 0
+	.db $55, $AA, $55, $AA, $55, $AA, $55, $AA
+
+; ==========================================================================
+; Clip16ToRow
+; --------------------------------------------------------------------------
+; Clips a 16-bit number to an 8-bit one in the range of screen rows (0..63).
+; --------------------------------------------------------------------------
+; Inputs:    HL: The value to clip.
+; Outputs:   A: The clipped value (between 0 and 63).
+; Destroyed: F.
+; ==========================================================================
+Clip16ToRow:
+	bit 7,h
+	jr z,+
+	xor a
+	ret
++:	ld a,h
+	or a
+	jr z,+
+	ld a,63
+	ret
++:	ld a,l
+	cp 64
+	ret c
+	xor a
+	bit 7,l
+	ret nz
+	ld a,63
+	ret
+
+; ==========================================================================
+; MinMaxBC
+; --------------------------------------------------------------------------
+; Updates B and C with A to ensure that B=min(A,B) and C=max(A,C).
+; --------------------------------------------------------------------------
+; Inputs:    B: The current minimum.
+;            C: The current maximum.
+;            A: The value to update B and C with.
+; Outputs:   B: min(A, B).
+;            C: max(A, C).
+; Destroyed: F.
+; ==========================================================================
+MinMaxBC:
+	cp b
+	jr nc,+
+	ld b,a
++:	cp c
+	ret c
+	ld c,a
+	ret
 
 
 .fill (($+$F)&$FFF0)-$
@@ -254,5 +335,6 @@ hFillPlotMask:
 .db %11111100
 .db %11111110
 .db %11111111
+
 
 .endmodule

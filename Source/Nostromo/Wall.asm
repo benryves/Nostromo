@@ -27,12 +27,6 @@ Delta.AbsY: .dw 0
 
 Gradient: .dw 0
 
-Trapezium.End.Column: .db 0
-Trapezium.Start.Column: .db 0
-
-Trapezium.End.Ceiling: .dw 0
-Trapezium.Start.Ceiling: .dw 0
-
 ; ==========================================================================
 ; ClipAndDraw
 ; --------------------------------------------------------------------------
@@ -641,13 +635,8 @@ Project.End.X:
 	ld (Trapezium.Start.Ceiling),hl
 
 ; --------------------------------------------------------------------------
-; Clear behind the wall.
+; Fill the wall.
 ; --------------------------------------------------------------------------
-
-	ld a,(Trapezium.End.Column)
-	ld e,a
-	ld a,(Trapezium.Start.Column)
-	ld d,a
 	
 	call Trapezium.Fill
 
