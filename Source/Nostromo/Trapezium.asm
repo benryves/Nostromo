@@ -1,7 +1,6 @@
 .module Trapezium
 
-Edges:
-	.fill 128
+Edges: .fill 128
 
 Columns:
 Start.Column: .db 0
@@ -17,6 +16,19 @@ Row.End: .db 0
 Row.Start: .db 0
 Row.Count: .db 0
 
+; ==========================================================================
+; Fill
+; --------------------------------------------------------------------------
+; Fills a trapezium-shaped wall section.
+; --------------------------------------------------------------------------
+; Inputs:    Start.Column: Column of the wall start.
+;            Start.Floor: Row of the wall start's floor.
+;            Start.Ceiling: Row of the wall start's ceiling.
+;            End.Column: Column of the wall end.
+;            End.Floor: Row of the wall end's floor.
+;            End.Ceiling: Row of the wall end's ceiling.
+; Destroyed: AF, BC, DE, HL.
+; ==========================================================================
 Fill:
 	
 	ld hl,(Start.Ceiling)
@@ -42,9 +54,12 @@ Fill:
 	inc a
 	ld (Row.Count),a	
 
-	; Fill the Edges table with D and E.
-	ld b,64
+	; Fill the edge table with the column extents.
 	ld hl,Edges
+	ld e,b
+	ld d,0
+	add hl,de	
+	ld b,a
 
 	ld de,(Columns)
 -:	ld (hl),e
@@ -56,10 +71,16 @@ Fill:
 	ld a,(Row.Count)
 	ld b,a
 	ld a,(Row.Start)
+	
+	ld e,a
+	ld d,0
+	ld hl,Edges
+	add hl,de
+	
 	dec a
 	ld (FillRow),a
 	
-	ld hl,Edges
+	
 	
 -:	push bc
 	push hl
@@ -335,6 +356,5 @@ hFillPlotMask:
 .db %11111100
 .db %11111110
 .db %11111111
-
 
 .endmodule
