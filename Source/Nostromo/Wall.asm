@@ -642,6 +642,8 @@ Project.End.X:
 
 ClearedBehindWall:
 
+.if 0
+
 ; --------------------------------------------------------------------------
 ; Draw the bottom edge of the wall.
 ; --------------------------------------------------------------------------
@@ -742,6 +744,8 @@ ClearedBehindWall:
 	pop hl
 	call nc,lineDraw
 +:
+
+.endif
 
 SkipWall:
 
