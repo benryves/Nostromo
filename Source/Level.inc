@@ -52,14 +52,16 @@ Walls:
 	.db 11, 21
 Walls.Count = ($ - Walls) / 2
 
-Sector0: .db 5, 0, 1, 14, 15, 16
-Sector1: .db 2, 2, 13
-Sector2: .db 1, 3
-Sector3: .db 2, 4, 12
-Sector4: .db 5, 5, 22, 23, 11, 17
-Sector5: .db 3, 7, 8, 9
-Sector6: .db 2, 21, 19
-Sector7: .db 2, 18, 20
+.define Wall(n) (Walls + n * 2)
+
+Sector0: .db 5 \ .dw Wall(0), Wall(1), Wall(14), Wall(15), Wall(16)
+Sector1: .db 2 \ .dw Wall(2), Wall(13)
+Sector2: .db 1 \ .dw Wall(3)
+Sector3: .db 2 \ .dw Wall(4), Wall(12)
+Sector4: .db 5 \ .dw Wall(5), Wall(22), Wall(23), Wall(11), Wall(17)
+Sector5: .db 3 \ .dw  Wall(7), Wall(8), Wall(9)
+Sector6: .db 2 \ .dw  Wall(21), Wall(19)
+Sector7: .db 2 \ .dw  Wall(18), Wall(20)
 
 
 NodeType.Leaf = 0

@@ -21,10 +21,8 @@ Draw.Loop:
 	
 	ld l,(ix)
 	inc ix
-	ld h,0
-	add hl,hl ; Each wall is two 8-bit indices.
-	ld de,Walls
-	add hl,de
+	ld h,(ix)
+	inc ix
 	
 	; HL points to the vertex indices.
 	
