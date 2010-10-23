@@ -1,5 +1,8 @@
 .module Sector
 
+Front: .dw 0
+Back: .dw 0
+
 ; ==========================================================================
 ; Draw
 ; --------------------------------------------------------------------------
@@ -23,7 +26,7 @@ Draw.Loop:
 	inc ix
 	ld h,(ix)
 	inc ix
-	
+
 	; HL points to the vertex indices.
 	
 	push hl
@@ -50,6 +53,7 @@ Draw.Loop:
 	
 	pop hl
 	inc hl
+	push hl
 	
 	; End vertex.
 
@@ -70,6 +74,24 @@ Draw.Loop:
 	inc hl
 	ld d,(hl)
 	ld (Wall.End.Y),de
+	
+	pop hl
+	inc hl
+	
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	inc hl
+	ld (Front),de
+	
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	inc hl
+	ld (Back),de
+	
+	ld a,(hl)
+	ld (Wall.DrawFlags),a
 
 	push ix
 	

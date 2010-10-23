@@ -25,43 +25,49 @@ Vertices:
 	.dw LevelScale * 3328, LevelScale * 4608
 Vertices.Count = ($ - Vertices) / 4
 
+Sector0: .dw -64, 128
+Sector1: .dw 32, 64
+
+WallFlag.DrawLower = $01
+WallFlag.DrawMiddle = $02
+WallFlag.DrawUpper = $04
+
 Walls:
-	.db 1, 0
-	.db 2, 1
-	.db 3, 2
-	.db 4, 3
-	.db 5, 4
-	.db 6, 5
-	.db 7, 6
-	.db 8, 7
-	.db 9, 8
-	.db 10, 9
-	.db 11, 10
-	.db 12, 11
-	.db 13, 12
-	.db 14, 13
-	.db 15, 14
-	.db 16, 15
-	.db 0, 16
-	.db 17, 18
-	.db 18, 19
-	.db 19, 17
-	.db 7, 20
-	.db 21, 10
-	.db 20, 6
-	.db 11, 21
-Walls.Count = ($ - Walls) / 2
+	.db 1, 0 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (6 << 3) ; 0
+	.db 2, 1 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (7 << 3) ; 1
+	.db 3, 2 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (15 << 3) ; 2
+	.db 4, 3 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 3
+	.db 5, 4 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 4
+	.db 6, 5 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (10 << 3) ; 5
+	.db 7, 6 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 6
+	.db 8, 7 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 7
+	.db 9, 8 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 8
+	.db 10, 9 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 9
+	.db 11, 10 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 10
+	.db 12, 11 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (10 << 3) ; 11
+	.db 13, 12 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 12
+	.db 14, 13 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (15 << 3) ; 13
+	.db 15, 14 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (7 << 3) ; 14
+	.db 16, 15 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (6 << 3) ; 15
+	.db 0, 16 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 16
+	.db 17, 18 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (2 << 3) ; 17
+	.db 18, 19 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (4 << 3) ; 18
+	.db 19, 17 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (6 << 3) ; 19
+	.db 7, 20 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 20
+	.db 21, 10 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 21
+	.db 20, 6 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 22
+	.db 11, 21 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 23
 
-.define Wall(n) (Walls + n * 2)
+.define Wall(n) (Walls + n * 7)
 
-Sector0: .db 5 \ .dw Wall(0), Wall(1), Wall(14), Wall(15), Wall(16)
-Sector1: .db 2 \ .dw Wall(2), Wall(13)
-Sector2: .db 1 \ .dw Wall(3)
-Sector3: .db 2 \ .dw Wall(4), Wall(12)
-Sector4: .db 5 \ .dw Wall(5), Wall(22), Wall(23), Wall(11), Wall(17)
-Sector5: .db 3 \ .dw  Wall(7), Wall(8), Wall(9)
-Sector6: .db 2 \ .dw  Wall(21), Wall(19)
-Sector7: .db 2 \ .dw  Wall(18), Wall(20)
+SubSector0: .db 5 \ .dw Wall(0), Wall(1), Wall(14), Wall(15), Wall(16)
+SubSector1: .db 2 \ .dw Wall(2), Wall(13)
+SubSector2: .db 1 \ .dw Wall(3)
+SubSector3: .db 2 \ .dw Wall(4), Wall(12)
+SubSector4: .db 5 \ .dw Wall(5), Wall(22), Wall(23), Wall(11), Wall(17)
+SubSector5: .db 3 \ .dw  Wall(7), Wall(8), Wall(9)
+SubSector6: .db 2 \ .dw  Wall(21), Wall(19)
+SubSector7: .db 2 \ .dw  Wall(18), Wall(20)
 
 
 NodeType.Leaf = 0
@@ -76,7 +82,7 @@ Tree:
 
 Tree.B:
 .db NodeType.Leaf
-.dw Sector0
+.dw SubSector0
 
 Tree.F:
 .db NodeType.HorizontalPartition
@@ -92,7 +98,7 @@ Tree.F.F:
 
 Tree.F.F.B:
 .db NodeType.Leaf
-.dw Sector4
+.dw SubSector4
 
 Tree.F.F.F:
 .db NodeType.HorizontalPartition
@@ -102,7 +108,7 @@ Tree.F.F.F:
 
 Tree.F.F.F.F:
 .db NodeType.Leaf
-.dw Sector5
+.dw SubSector5
 
 Tree.F.F.F.B:
 .db NodeType.VerticalPartition
@@ -112,11 +118,11 @@ Tree.F.F.F.B:
 
 Tree.F.F.F.B.F:
 .db NodeType.Leaf
-.dw Sector7
+.dw SubSector7
 
 Tree.F.F.F.B.B:
 .db NodeType.Leaf
-.dw Sector6
+.dw SubSector6
 
 Tree.F.B:
 .db NodeType.HorizontalPartition
@@ -126,7 +132,7 @@ Tree.F.B:
 
 Tree.F.B.F:
 .db NodeType.Leaf
-.dw Sector3
+.dw SubSector3
 
 Tree.F.B.B:
 .db NodeType.VerticalPartition
@@ -136,8 +142,8 @@ Tree.F.B.B:
 
 Tree.F.B.B.F:
 .db NodeType.Leaf
-.dw Sector2
+.dw SubSector2
 	
 Tree.F.B.B.B:
 .db NodeType.Leaf
-.dw Sector1
+.dw SubSector1

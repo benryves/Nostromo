@@ -27,6 +27,8 @@ Delta.AbsY: .dw 0
 
 Gradient: .dw 0
 
+DrawFlags: .db 0
+
 ; ==========================================================================
 ; ClipAndDraw
 ; --------------------------------------------------------------------------
@@ -583,64 +585,22 @@ Project.End.X:
 	jp c,SkipWall
 
 ; --------------------------------------------------------------------------
-; Calculate the height of the start of the wall's floor.
+; Fetch the ceiling and floor height for the front sector.
 ; --------------------------------------------------------------------------
 
-	ld hl,-64
-	ld de,(Start.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.End.Floor),hl
-
-; --------------------------------------------------------------------------
-; Calculate the height of the end of the wall's floor.
-; --------------------------------------------------------------------------
-
-	ld hl,-64
-	ld de,(End.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.Start.Floor),hl
-
-; --------------------------------------------------------------------------
-; Calculate the height of the start of the wall's ceiling.
-; --------------------------------------------------------------------------
-
-	ld hl,128
-	ld de,(Start.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.End.Ceiling),hl
-
-; --------------------------------------------------------------------------
-; Calculate the height of the end of the wall's ceiling.
-; --------------------------------------------------------------------------
-
-	ld hl,128
-	ld de,(End.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.Start.Ceiling),hl
-
-; --------------------------------------------------------------------------
-; Fill the wall.
-; --------------------------------------------------------------------------
+	ld hl,(Sector.Front)
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	inc hl
+	ld (WallPart.FloorHeight),de
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.CeilingHeight),de
 	
-	call Trapezium.Fill
+	call DrawWallPart
 
-ClearedBehindWall:
 
 .if 0
 
@@ -750,6 +710,74 @@ ClearedBehindWall:
 SkipWall:
 
 	ret
+
+; ==========================================================================
+; DrawWallPart
+; --------------------------------------------------------------------------
+; Draws a wall "part".
+; Multiple parts have differing floor and ceiling heights.
+; ==========================================================================
+DrawWallPart:
+; --------------------------------------------------------------------------
+; Calculate the height of the start of the wall's floor.
+; --------------------------------------------------------------------------
+
+WallPart.FloorHeight = $+1
+	ld hl,-64
+	ld de,(Start.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.End.Floor),hl
+
+; --------------------------------------------------------------------------
+; Calculate the height of the end of the wall's floor.
+; --------------------------------------------------------------------------
+
+	ld hl,(WallPart.FloorHeight)
+	ld de,(End.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.Start.Floor),hl
+
+; --------------------------------------------------------------------------
+; Calculate the height of the start of the wall's ceiling.
+; --------------------------------------------------------------------------
+
+WallPart.CeilingHeight = $+1
+	ld hl,128
+	ld de,(Start.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.End.Ceiling),hl
+
+; --------------------------------------------------------------------------
+; Calculate the height of the end of the wall's ceiling.
+; --------------------------------------------------------------------------
+
+	ld hl,(WallPart.CeilingHeight)
+	ld de,(End.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
+	ld (Trapezium.Start.Ceiling),hl
+
+; --------------------------------------------------------------------------
+; Fill the wall.
+; --------------------------------------------------------------------------
+	
+	ld a,(DrawFlags)
+	jp Trapezium.Fill
 
 ; ==========================================================================
 ; ClearColumn
