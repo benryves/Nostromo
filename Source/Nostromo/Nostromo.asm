@@ -2,6 +2,7 @@
 
 Camera.X: .dw 768
 Camera.Y: .dw 896
+Camera.Z: .dw 0
 Camera.Angle: .db 0
 
 #define neg_hl() ld a,h \ cpl \ ld h,a \ ld a,l \ cpl \ ld l,a \ inc hl

@@ -588,6 +588,45 @@ Project.End.X:
 ; Fetch the ceiling and floor height for the front sector.
 ; --------------------------------------------------------------------------
 
+	ld a,(Wall.DrawFlags)
+	bit 1,a
+	jr nz,Wall.DrawMiddle
+
+Wall.DrawUpperAndLower:
+	
+	ld hl,(Sector.Front)
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.FloorHeight),de
+	ld hl,(Sector.Back)
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.CeilingHeight),de
+
+	call DrawWallPart
+
+	ld hl,(Sector.Front)
+	inc hl
+	inc hl
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.CeilingHeight),de
+	ld hl,(Sector.Back)
+	inc hl
+	inc hl
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.FloorHeight),de
+
+	call DrawWallPart
+
+	jr Wall.Drawn
+
+Wall.DrawMiddle:
 	ld hl,(Sector.Front)
 	ld e,(hl)
 	inc hl
@@ -600,6 +639,8 @@ Project.End.X:
 	ld (WallPart.CeilingHeight),de
 	
 	call DrawWallPart
+
+Wall.Drawn
 
 
 .if 0
@@ -724,6 +765,10 @@ DrawWallPart:
 
 WallPart.FloorHeight = $+1
 	ld hl,-64
+	ld de,(Camera.Z)
+	or a
+	sbc hl,de
+	ld (WallPart.FloorHeight),hl
 	ld de,(Start.Y)
 	call Maths.Div.S16S16
 	call Clip24To16
@@ -751,6 +796,10 @@ WallPart.FloorHeight = $+1
 
 WallPart.CeilingHeight = $+1
 	ld hl,128
+	ld de,(Camera.Z)
+	or a
+	sbc hl,de
+	ld (WallPart.CeilingHeight),hl
 	ld de,(Start.Y)
 	call Maths.Div.S16S16
 	call Clip24To16

@@ -1,28 +1,32 @@
 LevelScale = 1
 
 Vertices:
-	.dw LevelScale * 0, LevelScale * 0
-	.dw LevelScale * 1536, LevelScale * 0
-	.dw LevelScale * 2048, LevelScale * 512
-	.dw LevelScale * 3840, LevelScale * 512
-	.dw LevelScale * 4608, LevelScale * 1280
-	.dw LevelScale * 4608, LevelScale * 2816
-	.dw LevelScale * 5120, LevelScale * 3328
-	.dw LevelScale * 5120, LevelScale * 5376
-	.dw LevelScale * 4608, LevelScale * 5888
-	.dw LevelScale * 3840, LevelScale * 5888
-	.dw LevelScale * 3328, LevelScale * 5376
-	.dw LevelScale * 3328, LevelScale * 3328
-	.dw LevelScale * 3840, LevelScale * 2816
-	.dw LevelScale * 3840, LevelScale * 1280
-	.dw LevelScale * 2048, LevelScale * 1280
-	.dw LevelScale * 1536, LevelScale * 1792
-	.dw LevelScale * 0, LevelScale * 1792
-	.dw LevelScale * 3840, LevelScale * 4608
-	.dw LevelScale * 4608, LevelScale * 4608
-	.dw LevelScale * 4224, LevelScale * 5376
-	.dw LevelScale * 5120, LevelScale * 4608
-	.dw LevelScale * 3328, LevelScale * 4608
+	.dw LevelScale * 0, LevelScale * 0 ; 0
+	.dw LevelScale * 1536, LevelScale * 0 ; 1
+	.dw LevelScale * 2048, LevelScale * 512 ; 2
+	.dw LevelScale * 3840, LevelScale * 512 ; 3
+	.dw LevelScale * 4608, LevelScale * 1280 ; 4
+	.dw LevelScale * 4608, LevelScale * 2816 ; 5
+	.dw LevelScale * 5120, LevelScale * 3328 ; 6
+	.dw LevelScale * 5120, LevelScale * 5376 ; 7
+	.dw LevelScale * 4608, LevelScale * 5888 ; 8
+	.dw LevelScale * 3840, LevelScale * 5888 ; 9
+	.dw LevelScale * 3328, LevelScale * 5376 ; 10
+	.dw LevelScale * 3328, LevelScale * 3328 ; 11
+	.dw LevelScale * 3840, LevelScale * 2816 ; 12
+	.dw LevelScale * 3840, LevelScale * 1280 ; 13
+	.dw LevelScale * 2048, LevelScale * 1280 ; 14
+	.dw LevelScale * 1536, LevelScale * 1792 ; 15
+	.dw LevelScale * 0, LevelScale * 1792 ; 16
+	.dw LevelScale * 3840, LevelScale * 4608 ; 17
+	.dw LevelScale * 4608, LevelScale * 4608 ; 18
+	.dw LevelScale * 4224, LevelScale * 5376 ; 19
+	.dw LevelScale * 5120, LevelScale * 4608 ; 20
+	.dw LevelScale * 3328, LevelScale * 4608 ; 21
+	.dw LevelScale * 0 * 256, LevelScale * 2 * 256 ; 22
+	.dw LevelScale * 0 * 256, LevelScale * 5 * 256 ; 23
+	.dw LevelScale * -1 * 256, LevelScale * 5 * 256 ; 24
+	.dw LevelScale * -1 * 256, LevelScale * 2 * 256 ; 25
 Vertices.Count = ($ - Vertices) / 4
 
 Sector0: .dw -64, 128
@@ -57,10 +61,16 @@ Walls:
 	.db 21, 10 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 21
 	.db 20, 6 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 22
 	.db 11, 21 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 23
+	.db 0, 22 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 24
+	.db 22, 23 \ .dw Sector0, Sector1 \ .db WallFlag.DrawLower | WallFlag.DrawUpper | (8 << 3) ; 25
+	.db 23, 16 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 26
+	.db 24, 23 \ .dw Sector1, Sector0 \ .db WallFlag.DrawMiddle | (4 << 3) ; 27
+	.db 25, 24 \ .dw Sector1, Sector0 \ .db WallFlag.DrawMiddle | (15 << 3) ; 28
+	.db 22, 25 \ .dw Sector1, Sector0 \ .db WallFlag.DrawMiddle | (4 << 3) ; 29
 
 .define Wall(n) (Walls + n * 7)
 
-SubSector0: .db 5 \ .dw Wall(0), Wall(1), Wall(14), Wall(15), Wall(16)
+SubSector0: .db 7 \ .dw Wall(0), Wall(1), Wall(14), Wall(15), Wall(24), Wall(25), Wall(26)
 SubSector1: .db 2 \ .dw Wall(2), Wall(13)
 SubSector2: .db 1 \ .dw Wall(3)
 SubSector3: .db 2 \ .dw Wall(4), Wall(12)
@@ -68,6 +78,7 @@ SubSector4: .db 5 \ .dw Wall(5), Wall(22), Wall(23), Wall(11), Wall(17)
 SubSector5: .db 3 \ .dw  Wall(7), Wall(8), Wall(9)
 SubSector6: .db 2 \ .dw  Wall(21), Wall(19)
 SubSector7: .db 2 \ .dw  Wall(18), Wall(20)
+SubSector8: .db 3 \ .dw  Wall(27), Wall(28), Wall(29)
 
 
 NodeType.Leaf = 0
@@ -81,8 +92,18 @@ Tree:
 .dw Tree.B
 
 Tree.B:
+.db NodeType.VerticalPartition
+.dw LevelScale * 0*256
+.dw Tree.B.F
+.dw Tree.B.B
+
+Tree.B.F:
 .db NodeType.Leaf
 .dw SubSector0
+
+Tree.B.B:
+.db NodeType.Leaf
+.dw SubSector8
 
 Tree.F:
 .db NodeType.HorizontalPartition

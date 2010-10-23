@@ -14,8 +14,10 @@ Main:
 	ld (Nostromo.Camera.X),hl
 	ld hl,896
 	ld (Nostromo.Camera.Y),hl
+	ld hl,0
+	ld (Nostromo.Camera.Z),hl
 	
-	ld a,$40
+	ld a,$C0
 	ld (Nostromo.Camera.Angle),a
 
 Loop:
@@ -189,6 +191,40 @@ Loop:
 	ld (Nostromo.Camera.Y),hl
 	
 +:
+
+	ld hl,(Nostromo.Camera.Z)
+	ld de,5
+
+	; Check for Del
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$BF
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 7,a
+	jr nz,+
+	add hl,de
++:
+
+	; Check for Stat
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$F7
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 7,a
+	jr nz,+
+	or a
+	sbc hl,de
++:
+	
+	ld (Nostromo.Camera.Z),hl
 
 	jp Loop
 
