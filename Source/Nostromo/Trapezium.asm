@@ -16,6 +16,11 @@ Row.End: .db 0
 Row.Start: .db 0
 Row.Count: .db 0
 
+Trace.X: .db 0
+Trace.Count: .db 0
+Trace.Delta.X: .db 0
+Trace.Delta.Y: .db 0
+
 ; ==========================================================================
 ; Fill
 ; --------------------------------------------------------------------------
@@ -62,10 +67,13 @@ Fill:
 ; Fill the edge table with the column extents.
 ; --------------------------------------------------------------------------
 
-	ld hl,Edges
-	ld e,b
-	ld d,0
+	
+	ld l,b
+	ld h,0
+	add hl,hl
+	ld de,Edges	
 	add hl,de	
+	
 	ld b,a
 
 	ld de,(Columns)
@@ -76,6 +84,174 @@ Fill:
 	djnz -
 
 ; --------------------------------------------------------------------------
+; Trace the top edge of the wall.
+; --------------------------------------------------------------------------
+
+	ld a,(Trapezium.Start.Column)
+	ld (Clip.g_line16X1),a
+	
+	ld hl,(Trapezium.Start.Ceiling)
+	ld (Clip.g_line16Y1),hl
+
+	ld a,(Trapezium.End.Column)
+	ld (Clip.g_line16X2),a
+	
+	ld hl,(Trapezium.End.Ceiling)
+	ld (Clip.g_line16Y2),hl
+	
+	call Clip.Clip2DLine16Ex
+	
+	jr c,CulledCeilingEdge
+
+	ld h,b
+	ld l,c
+	
+	ld bc,Edges+1
+	ld a,e
+	sub l
+	jr z,CulledCeilingEdge
+	jr nc,+
+	neg
+	ex de,hl
++:	ld (Trace.Count),a
+
+	ld a,h
+	ld (Trace.X),a
+	
+	ld a,d
+	sub h
+	ld h,$0C ; INC C
+	jp p,+
+	neg
+	dec bc
+	inc h ; DEC C
++:	ld (Trace.Delta.X),a
+
+	ld a,h
+	ld (CeilingTraceDirection),a
+
+	ld h,0
+	add hl,hl
+	add hl,bc
+	
+	ld a,(Trace.Count)
+	ld b,a
+	
+	ld a,(Trace.X)
+	ld c,a
+	
+	ld a,(Trace.Delta.X)
+	ld d,a
+	ld e,b
+	
+	srl a
+
+CeilingTraceLoop:
+
+	ld (hl),c
+	inc hl
+	inc hl
+	
+	sub d
+	jp p,+
+	
+-:	
+CeilingTraceDirection:
+	dec c
+	add a,e
+	jp m,-
+	
++:
+
+	djnz CeilingTraceLoop	
+
+CulledCeilingEdge:
+
+; --------------------------------------------------------------------------
+; Trace the bottom edge of the wall.
+; --------------------------------------------------------------------------
+
+	ld a,(Trapezium.Start.Column)
+	ld (Clip.g_line16X1),a
+	
+	ld hl,(Trapezium.Start.Floor)
+	ld (Clip.g_line16Y1),hl
+
+	ld a,(Trapezium.End.Column)
+	ld (Clip.g_line16X2),a
+	
+	ld hl,(Trapezium.End.Floor)
+	ld (Clip.g_line16Y2),hl
+	
+	call Clip.Clip2DLine16Ex
+	
+	jr c,CulledFloorEdge
+
+	ld h,b
+	ld l,c
+	
+	ld bc,Edges+1
+	ld a,l
+	sub e
+	jr z,CulledFloorEdge
+	jr nc,+
+	neg
+	ex de,hl
++:	ld (Trace.Count),a
+
+	ld a,h
+	ld (Trace.X),a
+	
+	ld a,d
+	sub h
+	ld h,$0C ; INC C
+	jp p,+
+	neg
+	dec bc
+	inc h ; DEC C
++:	ld (Trace.Delta.X),a
+
+	ld a,h
+	ld (FloorTraceDirection),a
+
+	ld h,0
+	add hl,hl
+	add hl,bc
+	
+	ld a,(Trace.Count)
+	ld b,a
+	
+	ld a,(Trace.X)
+	ld c,a
+	
+	ld a,(Trace.Delta.X)
+	ld d,a
+	ld e,b
+	
+	srl a
+
+FloorTraceLoop:
+
+	ld (hl),c
+	dec hl
+	dec hl
+	
+	sub d
+	jp p,+
+	
+-:	
+FloorTraceDirection:
+	dec c
+	add a,e
+	jp m,-
+	
++:
+
+	djnz FloorTraceLoop	
+
+CulledFloorEdge:
+
+; --------------------------------------------------------------------------
 ; Calculate where to start and how many rows to draw.
 ; --------------------------------------------------------------------------
 
@@ -83,9 +259,10 @@ Fill:
 	ld b,a
 	ld a,(Row.Start)
 	
-	ld e,a
-	ld d,0
-	ld hl,Edges
+	ld l,a
+	ld h,0
+	add hl,hl
+	ld de,Edges
 	add hl,de
 	
 	dec a
@@ -96,12 +273,13 @@ Fill:
 ; --------------------------------------------------------------------------
 
 -:	push bc
-	push hl
 	
 	ld b,(hl)
 	inc hl
 	ld c,(hl)
 	inc hl
+
+	push hl
 
 FillRow = $+1
 	ld a,0

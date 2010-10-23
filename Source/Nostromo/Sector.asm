@@ -10,7 +10,10 @@
 ; ==========================================================================
 Draw:
 
-	ld b,(ix) ; Number of walls in the sector.
+	ld a,(ix) ; Number of walls in the sector.
+	or a
+	ret z
+	ld b,a
 	inc ix
 
 Draw.Loop:
