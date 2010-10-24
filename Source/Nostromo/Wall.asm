@@ -934,6 +934,7 @@ Line.Clip.Default:
 	inc h
 	inc h
 	cp (hl)
+	jr z,+
 	ccf
 
 +:	ld h,d
@@ -1002,6 +1003,7 @@ Line.Clip.LowerCeiling:
 	inc h
 	inc h
 	cp (hl)
+	jr z,+
 	ccf
 	jr c,+
 	
