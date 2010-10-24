@@ -49,28 +49,28 @@ Walk.CheckPartitionSide:
 
 Walk.InFrontOfPartition:
 	push ix
-	ld l,(ix+5)
-	ld h,(ix+6)
+	ld l,(ix+3)
+	ld h,(ix+4)
 	push hl
 	pop ix
 	call Walk
 	pop ix
-	ld l,(ix+3)
-	ld h,(ix+4)
+	ld l,(ix+5)
+	ld h,(ix+6)
 	push hl
 	pop ix
 	jp Walk
 
 Walk.BehindPartition:
 	push ix
-	ld l,(ix+3)
-	ld h,(ix+4)
+	ld l,(ix+5)
+	ld h,(ix+6)
 	push hl
 	pop ix
 	call Walk
 	pop ix
-	ld l,(ix+5)
-	ld h,(ix+6)
+	ld l,(ix+3)
+	ld h,(ix+4)
 	push hl
 	pop ix
 	jp Walk

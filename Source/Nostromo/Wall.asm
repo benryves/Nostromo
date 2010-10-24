@@ -647,10 +647,27 @@ Wall.DrawMiddle:
 	ld (WallPart.CeilingHeight),de
 	
 	call DrawWallPart
+	
+	; Flag the "middle" columns as being drawn.
+	ld hl,(Trapezium.Start.Column)
+	ld h,CompletedColumns >> 8
+	ld a,(Trapezium.End.Column)
+	sub l
+	ld b,a
+	inc b
+-:	ld a,(hl)
+	or a
+	jr nz,+
+	dec a
+	ld (hl),a
+	ld a,(ColumnsToDraw)
+	dec a
+	jp z,Render.Finish ; Quickly bail out if we've finished.
+	ld (ColumnsToDraw),a
++:	inc l
+	djnz -
 
 Wall.Drawn
-
-
 
 SkipWall:
 

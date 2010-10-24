@@ -41,6 +41,23 @@ Render:
 	ldir
 
 ; --------------------------------------------------------------------------
+; Clear the completed columns.
+; --------------------------------------------------------------------------
+
+	ld hl,CompletedColumns
+	ld (hl),0
+	ld de,CompletedColumns+1
+	ld bc,95
+	ldir
+
+; --------------------------------------------------------------------------
+; We have 96 columns to draw.
+; --------------------------------------------------------------------------
+	
+	ld a,96
+	ld (ColumnsToDraw),a
+
+; --------------------------------------------------------------------------
 ; Transform the vertices.
 ; --------------------------------------------------------------------------
 	
@@ -53,9 +70,21 @@ Render:
 ; Walk the BSP tree to render the level.
 ; --------------------------------------------------------------------------
 
+	ld (Render.Finish+1),sp
+
 	ld ix,Tree
 	call Tree.Walk
 
+Render.Finish:
+	ld sp,0
+	
 	ret
+
+.fill (($+$FF)&$FF00)-$
+CompletedColumns:
+	.fill 96
+
+ColumnsToDraw:
+	.db 0
 
 .endmodule
