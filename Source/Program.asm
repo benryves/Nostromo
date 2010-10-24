@@ -10,9 +10,12 @@ Level:
 #include "Level.inc"
 .echoln strformat("Level size: {0} bytes.", $-Level)
 
+MovementTicks:
+	.dw 0
+
 Main:
 
-	im 1
+	call Nostromo.Interrupt.Load
 	
 	ld hl,768
 	ld (Nostromo.Camera.X),hl
@@ -37,10 +40,21 @@ Loop:
 ; --------------------------------------------------------------------------
 
 	call ionFastCopy
+	ei
 	
-	.bcall _GetCSC
-	cp skClear	
-	ret z
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$FD
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 6,a
+	jr nz,+	
+	im 1
+	ret
++:
 	
 	ld a,$FF
 	out (1),a
@@ -52,20 +66,38 @@ Loop:
 	in a,(1)
 	ld c,a
 	
+	di
+	ld hl,(Nostromo.Interrupt.Ticks)
+	ld (MovementTicks),hl
+	ld hl,0
+	ld (Nostromo.Interrupt.Ticks),hl
+	ei
+	
 	; Check for Left/Right.
 	
 	ld hl,Nostromo.Camera.Angle	
 	
 	bit 1,c
 	jr nz,+
-	inc (hl)
-	inc (hl)
+	ld a,(MovementTicks)
+	sra a
+	sra a
+	sra a
+	jr z,+
+	add a,(hl)
+	ld (hl),a
 +:
 
 	bit 2,c
 	jr nz,+
-	dec (hl)
-	dec (hl)
+	ld a,(MovementTicks)
+	neg
+	sra a
+	sra a
+	sra a
+	jr z,+
+	add a,(hl)
+	ld (hl),a
 +:
 
 	; Check for Up/Down.
@@ -74,15 +106,21 @@ Loop:
 	
 	ld a,(Nostromo.Camera.Angle)
 	call Nostromo.Maths.Trig.Sin
-	sra b \ rr c
-	sra b \ rr c
-	ld (Forwards.X),bc
+	ld de,(MovementTicks)
+	call Nostromo.Maths.Mul.S16S16
+	sla l \ rl h \ rl e
+	ld l,h
+	ld h,e	
+	ld (Forwards.X),hl
 	
 	ld a,(Nostromo.Camera.Angle)
 	call Nostromo.Maths.Trig.Cos
-	sra b \ rr c
-	sra b \ rr c
-	ld (Forwards.Y),bc
+	ld de,(MovementTicks)
+	call Nostromo.Maths.Mul.S16S16
+	sla l \ rl h \ rl e
+	ld l,h
+	ld h,e
+	ld (Forwards.Y),hl
 	
 	pop bc
 	
@@ -134,16 +172,22 @@ Loop:
 	
 	ld a,(Nostromo.Camera.Angle)
 	call Nostromo.Maths.Trig.Cos
-	sra b \ rr c
-	sra b \ rr c
-	ld (Forwards.X),bc
+	ld de,(MovementTicks)
+	call Nostromo.Maths.Mul.S16S16
+	sla l \ rl h \ rl e
+	ld l,h
+	ld h,e
+	ld (Forwards.X),hl
 	
 	ld a,(Nostromo.Camera.Angle)
 	call Nostromo.Maths.Trig.Sin
-	sra b \ rr c
-	sra b \ rr c
-	neg_bc()
-	ld (Forwards.Y),bc
+	ld de,(MovementTicks)
+	call Nostromo.Maths.Mul.S16S16
+	sla l \ rl h \ rl e
+	ld l,h
+	ld h,e
+	neg_hl()
+	ld (Forwards.Y),hl
 	
 	pop bc
 
@@ -180,7 +224,9 @@ Loop:
 +:
 
 	ld hl,(Nostromo.Camera.Z)
-	ld de,5
+	ld de,(MovementTicks)
+	sra d \ rr e
+	sra d \ rr e
 
 	; Check for Del
 	ld a,$FF
