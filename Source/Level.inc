@@ -1,129 +1,126 @@
-LevelScale = 1
-
-Vertices:
-	.dw LevelScale * 0, LevelScale * 0 ; 0
-	.dw LevelScale * 1536, LevelScale * 0 ; 1
-	.dw LevelScale * 2048, LevelScale * 512 ; 2
-	.dw LevelScale * 3840, LevelScale * 512 ; 3
-	.dw LevelScale * 4608, LevelScale * 1280 ; 4
-	.dw LevelScale * 4608, LevelScale * 2816 ; 5
-	.dw LevelScale * 5120, LevelScale * 3328 ; 6
-	.dw LevelScale * 5120, LevelScale * 5376 ; 7
-	.dw LevelScale * 4608, LevelScale * 5888 ; 8
-	.dw LevelScale * 3840, LevelScale * 5888 ; 9
-	.dw LevelScale * 3328, LevelScale * 5376 ; 10
-	.dw LevelScale * 3328, LevelScale * 3328 ; 11
-	.dw LevelScale * 3840, LevelScale * 2816 ; 12
-	.dw LevelScale * 3840, LevelScale * 1280 ; 13
-	.dw LevelScale * 2048, LevelScale * 1280 ; 14
-	.dw LevelScale * 1536, LevelScale * 1792 ; 15
-	.dw LevelScale * 0, LevelScale * 1792 ; 16
-	.dw LevelScale * 3840, LevelScale * 4608 ; 17
-	.dw LevelScale * 4608, LevelScale * 4608 ; 18
-	.dw LevelScale * 4224, LevelScale * 5376 ; 19
-	.dw LevelScale * 5120, LevelScale * 4608 ; 20
-	.dw LevelScale * 3328, LevelScale * 4608 ; 21
-	.dw LevelScale * 0 * 256, LevelScale * 2 * 256 ; 22
-	.dw LevelScale * 0 * 256, LevelScale * 5 * 256 ; 23
-	.dw LevelScale * -1 * 256, LevelScale * 5 * 256 ; 24
-	.dw LevelScale * -1 * 256, LevelScale * 2 * 256 ; 25
-Vertices.Count = ($ - Vertices) / 4
-
-Sector0: .dw -64, 128
-Sector1: .dw 32, 64
-
-WallFlag.DrawLower = $01
-WallFlag.DrawMiddle = $02
-WallFlag.DrawUpper = $04
-
-Walls:
-	.db 1, 0 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (6 << 3) ; 0
-	.db 2, 1 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (7 << 3) ; 1
-	.db 3, 2 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (15 << 3) ; 2
-	.db 4, 3 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 3
-	.db 5, 4 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 4
-	.db 6, 5 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (10 << 3) ; 5
-	.db 7, 6 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 6
-	.db 8, 7 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 7
-	.db 9, 8 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 8
-	.db 10, 9 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 9
-	.db 11, 10 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 10
-	.db 12, 11 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (10 << 3) ; 11
-	.db 13, 12 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (12 << 3) ; 12
-	.db 14, 13 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (15 << 3) ; 13
-	.db 15, 14 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (7 << 3) ; 14
-	.db 16, 15 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (6 << 3) ; 15
-	.db 0, 16 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 16
-	.db 17, 18 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (2 << 3) ; 17
-	.db 18, 19 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (4 << 3) ; 18
-	.db 19, 17 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (6 << 3) ; 19
-	.db 7, 20 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 20
-	.db 21, 10 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 21
-	.db 20, 6 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 22
-	.db 11, 21 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (14 << 3) ; 23
-	.db 0, 22 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 24
-	.db 22, 23 \ .dw Sector0, Sector1 \ .db WallFlag.DrawLower | WallFlag.DrawUpper | (8 << 3) ; 25
-	.db 23, 16 \ .dw Sector0, Sector0 \ .db WallFlag.DrawMiddle | (8 << 3) ; 26
-	.db 24, 23 \ .dw Sector1, Sector0 \ .db WallFlag.DrawMiddle | (4 << 3) ; 27
-	.db 25, 24 \ .dw Sector1, Sector0 \ .db WallFlag.DrawMiddle | (15 << 3) ; 28
-	.db 22, 25 \ .dw Sector1, Sector0 \ .db WallFlag.DrawMiddle | (4 << 3) ; 29
-
-.define Wall(n) (Walls + n * 7)
-
-SubSector0: .db 7 \ .dw Wall(0), Wall(1), Wall(14), Wall(15), Wall(24), Wall(25), Wall(26)
-SubSector1: .db 2 \ .dw Wall(2), Wall(13)
-SubSector2: .db 1 \ .dw Wall(3)
-SubSector3: .db 2 \ .dw Wall(4), Wall(12)
-SubSector4: .db 5 \ .dw Wall(5), Wall(22), Wall(23), Wall(11), Wall(17)
-SubSector5: .db 3 \ .dw  Wall(7), Wall(8), Wall(9)
-SubSector6: .db 2 \ .dw  Wall(21), Wall(19)
-SubSector7: .db 2 \ .dw  Wall(18), Wall(20)
-SubSector8: .db 3 \ .dw  Wall(27), Wall(28), Wall(29)
-
-
 NodeType.Leaf = 0
 NodeType.VerticalPartition = 1
 NodeType.HorizontalPartition = 2
 
+Sector0: .dw -64, 128
+Sector1: .dw 32, 96
+Sector2: .dw -50, 64
+Sector3: .dw -96, 192
+
+Vertices:
+	.dw 0, 0
+	.dw 1536, 0
+	.dw 2048, 512
+	.dw 3840, 512
+	.dw 4608, 1280
+	.dw 4608, 2816
+	.dw 5120, 3328
+	.dw 5120, 5376
+	.dw 4608, 5888
+	.dw 3840, 5888
+	.dw 3328, 5376
+	.dw 3328, 3328
+	.dw 3840, 2816
+	.dw 3840, 1280
+	.dw 2048, 1280
+	.dw 1536, 1792
+	.dw 0, 1792
+	.dw 4224, 4608
+	.dw 4608, 5376
+	.dw 3840, 5376
+	.dw 5120, 4608
+	.dw 3328, 4608
+	.dw 0, 512
+	.dw 0, 1280
+	.dw -512, 1280
+	.dw -512, 512
+	.dw 1024, 1792
+	.dw 1024, 2304
+	.dw 2048, 2304
+	.dw 2048, 3840
+	.dw -512, 3840
+	.dw -512, 2304
+	.dw 512, 2304
+	.dw 512, 1792
+Vertices.Count = ($ - Vertices) / 4
+
+Wall0: .db 1, 0 \ .dw Sector0, Sector0 \ .db 11
+Wall1: .db 2, 1 \ .dw Sector0, Sector0 \ .db 11
+Wall2: .db 3, 2 \ .dw Sector0, Sector0 \ .db 11
+Wall3: .db 4, 3 \ .dw Sector0, Sector0 \ .db 11
+Wall4: .db 5, 4 \ .dw Sector0, Sector0 \ .db 11
+Wall5: .db 6, 5 \ .dw Sector0, Sector0 \ .db 11
+Wall6: .db 7, 6 \ .dw Sector0, Sector0 \ .db 11
+Wall7: .db 8, 7 \ .dw Sector0, Sector0 \ .db 11
+Wall8: .db 9, 8 \ .dw Sector0, Sector0 \ .db 11
+Wall9: .db 10, 9 \ .dw Sector0, Sector0 \ .db 11
+Wall10: .db 11, 10 \ .dw Sector0, Sector0 \ .db 11
+Wall11: .db 12, 11 \ .dw Sector0, Sector0 \ .db 11
+Wall12: .db 13, 12 \ .dw Sector0, Sector0 \ .db 11
+Wall13: .db 14, 13 \ .dw Sector0, Sector0 \ .db 11
+Wall14: .db 15, 14 \ .dw Sector0, Sector0 \ .db 11
+Wall15: .db 16, 15 \ .dw Sector0, Sector0 \ .db 11
+Wall16: .db 0, 16 \ .dw Sector0, Sector0 \ .db 11
+Wall17: .db 17, 18 \ .dw Sector0, Sector0 \ .db 11
+Wall18: .db 18, 19 \ .dw Sector0, Sector0 \ .db 11
+Wall19: .db 19, 17 \ .dw Sector0, Sector0 \ .db 11
+Wall20: .db 7, 20 \ .dw Sector0, Sector0 \ .db 10
+Wall21: .db 21, 10 \ .dw Sector0, Sector0 \ .db 9
+Wall22: .db 20, 6 \ .dw Sector0, Sector0 \ .db 9
+Wall23: .db 11, 21 \ .dw Sector0, Sector0 \ .db 10
+Wall24: .db 0, 22 \ .dw Sector0, Sector0 \ .db 11
+Wall25: .db 22, 23 \ .dw Sector0, Sector1 \ .db 20
+Wall26: .db 23, 16 \ .dw Sector0, Sector0 \ .db 11
+Wall27: .db 24, 23 \ .dw Sector1, Sector0 \ .db 11
+Wall28: .db 25, 24 \ .dw Sector1, Sector0 \ .db 11
+Wall29: .db 22, 25 \ .dw Sector1, Sector0 \ .db 11
+Wall30: .db 16, 33 \ .dw Sector0, Sector0 \ .db 11
+Wall31: .db 33, 26 \ .dw Sector0, Sector2 \ .db 20
+Wall32: .db 26, 15 \ .dw Sector0, Sector0 \ .db 11
+Wall33: .db 27, 26 \ .dw Sector2, Sector0 \ .db 11
+Wall34: .db 28, 27 \ .dw Sector3, Sector0 \ .db 11
+Wall35: .db 29, 28 \ .dw Sector3, Sector0 \ .db 11
+Wall36: .db 30, 29 \ .dw Sector3, Sector0 \ .db 11
+Wall37: .db 31, 30 \ .dw Sector3, Sector0 \ .db 11
+Wall38: .db 32, 31 \ .dw Sector3, Sector0 \ .db 11
+Wall39: .db 33, 32 \ .dw Sector2, Sector0 \ .db 11
+Wall40: .db 26, 33 \ .dw Sector2, Sector2 \ .db 20
+Wall41: .db 27, 32 \ .dw Sector3, Sector2 \ .db 20
+Wall42: .db 32, 27 \ .dw Sector2, Sector2 \ .db 20
+
+SubSector0: .db 9 \ .dw Wall0, Wall1, Wall14, Wall31, Wall30, Wall32, Wall25, Wall24, Wall26
+SubSector1: .db 2 \ .dw Wall2, Wall13
+SubSector2: .db 1 \ .dw Wall3
+SubSector3: .db 2 \ .dw Wall4, Wall12
+SubSector4: .db 4 \ .dw Wall5, Wall22, Wall23, Wall11
+SubSector5: .db 4 \ .dw Wall7, Wall8, Wall9, Wall18
+SubSector6: .db 2 \ .dw Wall21, Wall19
+SubSector7: .db 2 \ .dw Wall17, Wall20
+SubSector8: .db 3 \ .dw Wall27, Wall28, Wall29
+SubSector9: .db 4 \ .dw Wall42, Wall33, Wall39, Wall40
+SubSector10: .db 6 \ .dw Wall41, Wall34, Wall35, Wall36, Wall37, Wall38
+
 Tree:
 .db NodeType.VerticalPartition
-.dw LevelScale * 8*256
+.dw 2048
 .dw Tree.F
 .dw Tree.B
 
-Tree.B:
-.db NodeType.VerticalPartition
-.dw LevelScale * 0*256
-.dw Tree.B.F
-.dw Tree.B.B
-
-Tree.B.F:
-.db NodeType.Leaf
-.dw SubSector0
-
-Tree.B.B:
-.db NodeType.Leaf
-.dw SubSector8
-
 Tree.F:
 .db NodeType.HorizontalPartition
-.dw LevelScale * 11*256
+.dw 2816
 .dw Tree.F.F
 .dw Tree.F.B
 
 Tree.F.F:
 .db NodeType.HorizontalPartition
-.dw LevelScale * 18*256
+.dw 4608
 .dw Tree.F.F.F
 .dw Tree.F.F.B
 
-Tree.F.F.B:
-.db NodeType.Leaf
-.dw SubSector4
-
 Tree.F.F.F:
 .db NodeType.HorizontalPartition
-.dw LevelScale * 21*256
+.dw 5376
 .dw Tree.F.F.F.F
 .dw Tree.F.F.F.B
 
@@ -133,7 +130,7 @@ Tree.F.F.F.F:
 
 Tree.F.F.F.B:
 .db NodeType.VerticalPartition
-.dw LevelScale * 16.5*256
+.dw 4224
 .dw Tree.F.F.F.B.F
 .dw Tree.F.F.F.B.B
 
@@ -145,9 +142,13 @@ Tree.F.F.F.B.B:
 .db NodeType.Leaf
 .dw SubSector6
 
+Tree.F.F.B:
+.db NodeType.Leaf
+.dw SubSector4
+
 Tree.F.B:
 .db NodeType.HorizontalPartition
-.dw LevelScale * 5*256
+.dw 1280
 .dw Tree.F.B.F
 .dw Tree.F.B.B
 
@@ -157,14 +158,49 @@ Tree.F.B.F:
 
 Tree.F.B.B:
 .db NodeType.VerticalPartition
-.dw LevelScale * 4*256
+.dw 1024
 .dw Tree.F.B.B.F
 .dw Tree.F.B.B.B
 
 Tree.F.B.B.F:
 .db NodeType.Leaf
 .dw SubSector2
-	
+
 Tree.F.B.B.B:
 .db NodeType.Leaf
 .dw SubSector1
+
+Tree.B:
+.db NodeType.HorizontalPartition
+.dw 1792
+.dw Tree.B.F
+.dw Tree.B.B
+
+Tree.B.F:
+.db NodeType.HorizontalPartition
+.dw 2304
+.dw Tree.B.F.F
+.dw Tree.B.F.B
+
+Tree.B.F.F:
+.db NodeType.Leaf
+.dw SubSector10
+
+Tree.B.F.B:
+.db NodeType.Leaf
+.dw SubSector9
+
+Tree.B.B:
+.db NodeType.VerticalPartition
+.dw 0
+.dw Tree.B.B.F
+.dw Tree.B.B.B
+
+Tree.B.B.F:
+.db NodeType.Leaf
+.dw SubSector0
+
+Tree.B.B.B:
+.db NodeType.Leaf
+.dw SubSector8
+
