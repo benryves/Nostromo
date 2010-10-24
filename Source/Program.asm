@@ -43,7 +43,7 @@ Loop:
 ; --------------------------------------------------------------------------
 
 	ld ix,Tree
-	call WalkTree
+	call Nostromo.Tree.Walk
 
 ; --------------------------------------------------------------------------
 ; Display the result on the screen.
@@ -275,73 +275,6 @@ PlotVertices:
 	
 	djnz -
 	ret
-
-WalkTree:
-	ld a,(ix+0)
-	or a
-	jr nz,WalkTree.Partition
-
-WalkTree.Leaf:
-	; We've encountered a leaf.
-	ld l,(ix+1)
-	ld h,(ix+2)
-	push hl
-	pop ix
-	jp Nostromo.Sector.Draw
-
-WalkTree.Partition:
-	; Load the partition position.
-	ld l,(ix+1)
-	ld h,(ix+2)
-	
-	; Is it a horizontal or vertical partition?
-	dec a
-	jr nz,WalkTree.HorizontalPartition
-
-WalkTree.VerticalPartition:
-	; We've encountered a vertical partition.
-	ld de,(Nostromo.Camera.X)
-	jr WalkTree.CheckPartitionSide
-	
-WalkTree.HorizontalPartition:
-	; We've encountered a horizontal partition.
-	ld de,(Nostromo.Camera.Y)
-
-WalkTree.CheckPartitionSide:
-	; Which side of the partition are we on?
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
-	jr nc,WalkTree.BehindPartition
-
-WalkTree.InFrontOfPartition:
-	push ix
-	ld l,(ix+5)
-	ld h,(ix+6)
-	push hl
-	pop ix
-	call WalkTree
-	pop ix
-	ld l,(ix+3)
-	ld h,(ix+4)
-	push hl
-	pop ix
-	jp WalkTree
-
-WalkTree.BehindPartition:
-	push ix
-	ld l,(ix+3)
-	ld h,(ix+4)
-	push hl
-	pop ix
-	call WalkTree
-	pop ix
-	ld l,(ix+5)
-	ld h,(ix+6)
-	push hl
-	pop ix
-	jp WalkTree
 
 Forwards.X: .dw 0
 Forwards.Y: .dw 0

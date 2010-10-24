@@ -19,5 +19,6 @@ Camera.Angle: .db 0
 #include "Clip.asm"
 #include "Sector.asm"
 #include "Trapezium.asm"
+#include "Tree.asm"
 
 .endmodule
