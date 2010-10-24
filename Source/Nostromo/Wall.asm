@@ -588,7 +588,7 @@ Project.Start.X:
 ; --------------------------------------------------------------------------
 
 	ld b,a
-	ld a,(Trapezium.Start.Column)
+	ld a,(Trapezium.End.Column)
 	cp b
 	jp c,SkipWall
 
