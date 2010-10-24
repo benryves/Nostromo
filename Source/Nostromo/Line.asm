@@ -3,6 +3,8 @@
 LineFlags = asm_Flag1
 LineFlag.Steep = 7
 
+Error: .db 0
+
 ; ==========================================================================
 ; Line.Draw
 ; --------------------------------------------------------------------------
@@ -83,6 +85,9 @@ SetSteepness:
 	
 	ld b,a ; b = number of steps.
 	
+	ld a,(Error)
+	ld c,a
+	
 Delta.X = $+2
 Delta.Y = $+1
 	ld de,0
@@ -92,30 +97,34 @@ Delta.Y = $+1
 	push bc
 	
 	bit LineFlag.Steep,(iy+LineFlags)
-	jr z,+
+	jr nz,+
 	ld a,h \ ld h,l \ ld l,a	
 +:
 
-	; Plot HL
-	ld a,h
-	ld e,l
+ClipPixel = $+1
+	call 0
+	jr c,Line.PixelClipped
+
+	; Plot (L,H)
+	ld a,l
+	ld e,h
 	call ionGetPixel
 	or (hl)
 	ld (hl),a
+
+Line.PixelClipped:
 	
 	pop bc
 	pop de
 	pop hl
 
-Error = $+1
-	ld a,0
-
+	ld a,c
 	sub e
 	jp p,+
 YStep:
 	inc l
 	add a,d
-+:	ld (Error),a
++:	ld c,a
 
 	inc h ; ++x
 	djnz -

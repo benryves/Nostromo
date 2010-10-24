@@ -683,6 +683,10 @@ Clip.Default:
 ; Multiple parts have differing floor and ceiling heights.
 ; ==========================================================================
 DrawWallPart:
+
+	ld hl,Line.Clip.Default
+	ld (Line.ClipPixel),hl
+
 ; --------------------------------------------------------------------------
 ; Calculate the height of the start of the wall's floor.
 ; --------------------------------------------------------------------------
@@ -832,6 +836,16 @@ WallPart.CeilingHeight = $+1
 +:
 	
 	ret
+
+Line.Clip.Default:
+	ld d,h
+	ld h,CompletedColumns >> 8
+	ld a,(hl)
+	ld h,d
+	or a
+	jr z,+
+	scf
++:	ret
 
 ; ==========================================================================
 ; ClearColumn
