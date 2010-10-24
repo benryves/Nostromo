@@ -819,7 +819,31 @@ WallPart.LowerClipper = $+1
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
-	call nc,Line.Draw
+	jr c,WallPart.Lower.Culled
+	call Line.Draw
+	jr WallPart.Lower.Done
+
+WallPart.Lower.Culled:
+
+	ld hl,(WallPart.LowerClipper)
+	ld (WallPart.Lower.Culled.Clipped),hl
+
+	ld hl,(Trapezium.Start.Floor)
+	call Clip16ToRowPlusOne
+	ld h,a
+	ld a,(Trapezium.Start.Column)
+	ld l,a
+	ld a,(Trapezium.End.Column)
+	sub l
+	ld b,a
+	inc b
+-:	
+WallPart.Lower.Culled.Clipped = $+1
+	call Line.Clip.Default
+	inc l
+	djnz -
+
+WallPart.Lower.Done:
 
 ; --------------------------------------------------------------------------
 ; Draw the top edge of the wall.
@@ -842,7 +866,31 @@ WallPart.UpperClipper = $+1
 	ld (Clip.g_line16Y2),hl	
 	
 	call Clip.Clip2DLine16Ex
-	call nc,Line.Draw
+	jr c,WallPart.Upper.Culled
+	call Line.Draw
+	jr WallPart.Upper.Done
+
+WallPart.Upper.Culled:
+
+	ld hl,(WallPart.UpperClipper)
+	ld (WallPart.Upper.Culled.Clipped),hl
+
+	ld hl,(Trapezium.Start.Ceiling)
+	call Clip16ToRowPlusOne
+	ld h,a
+	ld a,(Trapezium.Start.Column)
+	ld l,a
+	ld a,(Trapezium.End.Column)
+	sub l
+	ld b,a
+	inc b
+-:	
+WallPart.Upper.Culled.Clipped = $+1
+	call Line.Clip.Default
+	inc l
+	djnz -
+
+WallPart.Upper.Done:
 
 ; --------------------------------------------------------------------------
 ; The vertical lines connecting the floor/ceiling use the default clipper.
@@ -1048,6 +1096,63 @@ Clip24To16.SmallNegative:
 	bit 7,b
 	ret nz
 	ld bc,-32768
+	ret
+
+; ==========================================================================
+; Clip16ToRow
+; --------------------------------------------------------------------------
+; Clips a 16-bit number to an 8-bit one in the range of screen rows (0..63).
+; --------------------------------------------------------------------------
+; Inputs:    HL: The value to clip.
+; Outputs:   A: The clipped value (between 0 and 63).
+; Destroyed: F.
+; ==========================================================================
+Clip16ToRow:
+	bit 7,h
+	jr z,+
+	xor a
+	ret
++:	ld a,h
+	or a
+	jr z,+
+	ld a,63
+	ret
++:	ld a,l
+	cp 64
+	ret c
+	xor a
+	bit 7,l
+	ret nz
+	ld a,63
+	ret
+
+; ==========================================================================
+; Clip16ToRowPlusOne
+; --------------------------------------------------------------------------
+; Clips a 16-bit number to an 8-bit one in the range of screen rows plus one
+; (-1..64).
+; --------------------------------------------------------------------------
+; Inputs:    HL: The value to clip.
+; Outputs:   A: The clipped value (between -1 and 64).
+; Destroyed: F.
+; ==========================================================================
+Clip16ToRowPlusOne:
+	bit 7,h
+	jr z,+
+	ld a,0
+	ret
++:	ld a,h
+	or a
+	jr z,+
+	ld a,64
+	ret
++:	ld a,l
+	cp 64
+	ret c
+	ld a,0
+	bit 7,l
+	ret nz
+	ld a,64
 	ret
 
 ; ==========================================================================
