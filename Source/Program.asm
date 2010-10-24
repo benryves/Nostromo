@@ -21,7 +21,7 @@ Main:
 	ld hl,0
 	ld (Nostromo.Camera.Z),hl
 	
-	ld a,$C0
+	ld a,$00
 	ld (Nostromo.Camera.Angle),a
 
 Loop:

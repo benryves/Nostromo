@@ -1047,60 +1047,125 @@ WallPart.Upper.Culled.Clipper = $+1
 WallPart.Upper.Done:
 
 ; --------------------------------------------------------------------------
-; The vertical lines connecting the floor/ceiling use the default clipper.
-; --------------------------------------------------------------------------
-
-	ld hl,Line.Clip.Default
-	ld (Line.ClipPixel),hl
-
-; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the start.
 ; --------------------------------------------------------------------------
 
 	bit DrawFlag.StrokeStart,(iy+DrawFlags)
-	jr z,+
+	jr z,WallPart.SkipStrokeStart
 	
-	ld a,(Trapezium.Start.Column)
-	ld (Clip.g_line16X1),a
+	ld de,(Trapezium.Start.Column)
+	ld d,CompletedColumns >> 8
+	ld a,(de)
+	or a
+	jr nz,WallPart.SkipStrokeStart
+
+	ld hl,(Trapezium.Start.Ceiling)
+	call Clip16ToRow
+	ld b,a
+	
+	inc d
+	ld a,(de)
+	cp b
+	jr c,+
+	ld b,a
++:	
 	
 	ld hl,(Trapezium.Start.Floor)
-	ld (Clip.g_line16Y1),hl
+	call Clip16ToRow
+	ld c,a
+	
+	inc d
+	inc d
+	ld a,(de)
+	cp c
+	jr c,+
+	ld a,c
++:
+	
+	sub b
+	jr c,WallPart.SkipStrokeStart
+	
+	ld e,b
+	ld b,a
+	inc b
 
 	ld a,(Trapezium.Start.Column)
-	ld (Clip.g_line16X2),a
 	
-	ld hl,(Trapezium.Start.Ceiling)
-	ld (Clip.g_line16Y2),hl
+	push bc
+	call ionGetPixel
+	pop bc
 	
-	call Clip.Clip2DLine16Ex
+	ld de,12
+	ld c,a
 	
-	call nc,Line.Draw
-+:
+-:	ld a,(hl)
+	or c
+	ld (hl),a
+	add hl,de
+	djnz -
+	
+WallPart.SkipStrokeStart:
 
 ; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the end.
 ; --------------------------------------------------------------------------
 
 	bit DrawFlag.StrokeEnd,(iy+DrawFlags)
-	jr z,+
+	jr z,WallPart.SkipStrokeEnd
 	
-	ld a,(Trapezium.End.Column)
-	ld (Clip.g_line16X1),a
+	ld de,(Trapezium.End.Column)
+	ld d,CompletedColumns >> 8
+	ld a,(de)
+	or a
+	jr nz,WallPart.SkipStrokeEnd
+
+	ld hl,(Trapezium.End.Ceiling)
+	call Clip16ToRow
+	ld b,a
+	
+	inc d
+	ld a,(de)
+	cp b
+	jr c,+
+	ld b,a
++:	
 	
 	ld hl,(Trapezium.End.Floor)
-	ld (Clip.g_line16Y1),hl
-
-	ld a,(Trapezium.End.Column)
-	ld (Clip.g_line16X2),a
+	call Clip16ToRow
+	ld c,a
 	
-	ld hl,(Trapezium.End.Ceiling)
-	ld (Clip.g_line16Y2),hl
-	
-	call Clip.Clip2DLine16Ex
-	
-	call nc,Line.Draw
+	inc d
+	inc d
+	ld a,(de)
+	cp c
+	jr c,+
+	ld a,c
 +:
 	
+	sub b
+	jr c,WallPart.SkipStrokeEnd
+	
+	ld e,b
+	ld b,a
+	inc b
+
+	ld a,(Trapezium.End.Column)
+	
+	push bc
+	call ionGetPixel
+	pop bc
+	
+	ld de,12
+	ld c,a
+	
+-:	ld a,(hl)
+	or c
+	ld (hl),a
+	add hl,de
+	djnz -
+
+WallPart.SkipStrokeEnd:
+
 	ret
 
 ; ==========================================================================
