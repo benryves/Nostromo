@@ -20,6 +20,7 @@ Camera.Angle: .db 0
 #include "Sector.asm"
 #include "Trapezium.asm"
 #include "Tree.asm"
+#include "Line.asm"
 
 ; ==========================================================================
 ; Render

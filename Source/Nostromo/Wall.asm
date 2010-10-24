@@ -673,6 +673,9 @@ SkipWall:
 
 	ret
 
+Clip.Default:
+	ret
+
 ; ==========================================================================
 ; DrawWallPart
 ; --------------------------------------------------------------------------
@@ -759,11 +762,7 @@ WallPart.CeilingHeight = $+1
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
-	
-	push bc
-	pop hl
-
-	call nc,lineDraw
+	call nc,Line.Draw
 
 ; --------------------------------------------------------------------------
 ; Draw the top edge of the wall.
@@ -782,10 +781,7 @@ WallPart.CeilingHeight = $+1
 	ld (Clip.g_line16Y2),hl	
 	
 	call Clip.Clip2DLine16Ex
-	
-	push bc
-	pop hl
-	call nc,lineDraw
+	call nc,Line.Draw
 
 ; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the start.
@@ -808,9 +804,7 @@ WallPart.CeilingHeight = $+1
 	
 	call Clip.Clip2DLine16Ex
 	
-	push bc
-	pop hl
-	call nc,lineDraw
+	call nc,Line.Draw
 +:
 
 ; --------------------------------------------------------------------------
@@ -834,9 +828,7 @@ WallPart.CeilingHeight = $+1
 	
 	call Clip.Clip2DLine16Ex
 	
-	push bc
-	pop hl
-	call nc,lineDraw
+	call nc,Line.Draw
 +:
 	
 	ret
