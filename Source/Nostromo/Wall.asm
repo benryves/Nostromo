@@ -12,6 +12,12 @@ ClipFlag.EndOutsideLeft = 2
 ClipFlag.EndOutsideRight = 3
 ClipFlag.Steep = 4
 
+DrawFlags = asm_Flag2
+DrawFlag.StrokeStart = 0
+DrawFlag.StrokeEnd = 1
+DrawFlag.FillUpper = 2
+DrawFlag.FillMiddle = 3
+DrawFlag.FillLower = 4
 
 Start.X: .dw 0
 Start.Y: .dw 0
@@ -26,8 +32,6 @@ Delta.Y: .dw 0
 Delta.AbsY: .dw 0
 
 Gradient: .dw 0
-
-DrawFlags: .db 0
 
 ; ==========================================================================
 ; ClipAndDraw
@@ -153,6 +157,7 @@ ClippedToY:
 	jr c,+
 	dec b
 	set ClipFlag.StartOutsideRight,(iy+ClipFlags)
+	res DrawFlag.StrokeStart,(iy+DrawFlags)
 +:
 
 	; Check the start against Y=-X.
@@ -168,6 +173,7 @@ ClippedToY:
 	jr nc,+
 	dec c
 	set ClipFlag.StartOutsideLeft,(iy+ClipFlags)
+	res DrawFlag.StrokeStart,(iy+DrawFlags)
 +:
 
 	; Check the end against Y=+X.
@@ -184,6 +190,7 @@ ClippedToY:
 	dec b
 	jp z,SkipWall ; Both ends are outside the right - bail out.
 	set ClipFlag.EndOutsideRight,(iy+ClipFlags)
+	res DrawFlag.StrokeEnd,(iy+DrawFlags)
 +:
 
 	; Check the end against Y=-X.
@@ -200,6 +207,7 @@ ClippedToY:
 	dec c
 	jp z,SkipWall ; Both ends are outside the left - bail out.
 	set ClipFlag.EndOutsideLeft,(iy+ClipFlags)
+	res DrawFlag.StrokeEnd,(iy+DrawFlags)
 +:
 
 ; --------------------------------------------------------------------------
@@ -534,7 +542,7 @@ NoViewClippingRequired:
 +:
 
 Project.End.X:
-	ld (Trapezium.Start.Column),a
+	ld (Trapezium.End.Column),a
 
 ; --------------------------------------------------------------------------
 ; Project the start X of the wall.
@@ -573,7 +581,7 @@ Project.End.X:
 +:
 
 Project.Start.X:
-	ld (Trapezium.End.Column),a
+	ld (Trapezium.Start.Column),a
 
 ; --------------------------------------------------------------------------
 ; Are we looking at the back of the wall?
@@ -588,8 +596,8 @@ Project.Start.X:
 ; Fetch the ceiling and floor height for the front sector.
 ; --------------------------------------------------------------------------
 
-	ld a,(Wall.DrawFlags)
-	bit 1,a
+	ld a,(iy+DrawFlags)
+	bit DrawFlag.FillMiddle,a
 	jr nz,Wall.DrawMiddle
 
 Wall.DrawUpperAndLower:
@@ -671,7 +679,7 @@ WallPart.FloorHeight = $+1
 	ld hl,32
 	or a
 	sbc hl,bc
-	ld (Trapezium.End.Floor),hl
+	ld (Trapezium.Start.Floor),hl
 
 ; --------------------------------------------------------------------------
 ; Calculate the height of the end of the wall's floor.
@@ -684,7 +692,7 @@ WallPart.FloorHeight = $+1
 	ld hl,32
 	or a
 	sbc hl,bc
-	ld (Trapezium.Start.Floor),hl
+	ld (Trapezium.End.Floor),hl
 
 ; --------------------------------------------------------------------------
 ; Calculate the height of the start of the wall's ceiling.
@@ -702,7 +710,7 @@ WallPart.CeilingHeight = $+1
 	ld hl,32
 	or a
 	sbc hl,bc
-	ld (Trapezium.End.Ceiling),hl
+	ld (Trapezium.Start.Ceiling),hl
 
 ; --------------------------------------------------------------------------
 ; Calculate the height of the end of the wall's ceiling.
@@ -715,22 +723,22 @@ WallPart.CeilingHeight = $+1
 	ld hl,32
 	or a
 	sbc hl,bc
-	ld (Trapezium.Start.Ceiling),hl
+	ld (Trapezium.End.Ceiling),hl
 
 ; --------------------------------------------------------------------------
 ; Draw the bottom edge of the wall.
 ; --------------------------------------------------------------------------
 	
-	ld a,(Trapezium.End.Column)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Trapezium.End.Floor)
+	ld hl,(Trapezium.Start.Floor)
 	ld (Clip.g_line16Y1),hl
 	
-	ld a,(Trapezium.Start.Column)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,(Trapezium.Start.Floor)
+	ld hl,(Trapezium.End.Floor)
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
@@ -744,16 +752,16 @@ WallPart.CeilingHeight = $+1
 ; Draw the top edge of the wall.
 ; --------------------------------------------------------------------------
 	
-	ld a,(Trapezium.End.Column)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Trapezium.End.Ceiling)
+	ld hl,(Trapezium.Start.Ceiling)
 	ld (Clip.g_line16Y1),hl
 	
-	ld a,(Trapezium.Start.Column)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,(Trapezium.Start.Ceiling)
+	ld hl,(Trapezium.End.Ceiling)
 	ld (Clip.g_line16Y2),hl	
 	
 	call Clip.Clip2DLine16Ex
@@ -766,21 +774,19 @@ WallPart.CeilingHeight = $+1
 ; Draw the lines between the floor and ceiling at the start.
 ; --------------------------------------------------------------------------
 
-	bit ClipFlag.StartOutsideLeft,(iy+ClipFlags)
-	jr nz,+
-	bit ClipFlag.StartOutsideRight,(iy+ClipFlags)
-	jr nz,+
-
-	ld a,(Trapezium.End.Column)
+	bit DrawFlag.StrokeStart,(iy+DrawFlags)
+	jr z,+
+	
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Trapezium.End.Floor)
+	ld hl,(Trapezium.Start.Floor)
 	ld (Clip.g_line16Y1),hl
 
-	ld a,(Trapezium.End.Column)
+	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,(Trapezium.End.Ceiling)
+	ld hl,(Trapezium.Start.Ceiling)
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex
@@ -794,21 +800,19 @@ WallPart.CeilingHeight = $+1
 ; Draw the lines between the floor and ceiling at the end.
 ; --------------------------------------------------------------------------
 
-	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
-	jr nz,+
-	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
-	jr nz,+
-
-	ld a,(Trapezium.Start.Column)
+	bit DrawFlag.StrokeEnd,(iy+DrawFlags)
+	jr z,+
+	
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X1),a
 	
-	ld hl,(Trapezium.Start.Floor)
+	ld hl,(Trapezium.End.Floor)
 	ld (Clip.g_line16Y1),hl
 
-	ld a,(Trapezium.Start.Column)
+	ld a,(Trapezium.End.Column)
 	ld (Clip.g_line16X2),a
 	
-	ld hl,(Trapezium.Start.Ceiling)
+	ld hl,(Trapezium.End.Ceiling)
 	ld (Clip.g_line16Y2),hl
 	
 	call Clip.Clip2DLine16Ex

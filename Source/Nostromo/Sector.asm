@@ -91,7 +91,7 @@ Draw.Loop:
 	ld (Back),de
 	
 	ld a,(hl)
-	ld (Wall.DrawFlags),a
+	ld (iy+Wall.DrawFlags),a
 
 	push ix
 	
