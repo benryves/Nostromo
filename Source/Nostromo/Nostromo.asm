@@ -59,6 +59,34 @@ Render:
 	ld (ColumnsToDraw),a
 
 ; --------------------------------------------------------------------------
+; Set the the per-column clipping ranges.
+; --------------------------------------------------------------------------
+
+	ld hl,TopEdgeClip
+	ld (hl),0
+	ld de,TopEdgeClip+1
+	ld bc,95
+	ldir
+	
+	ld hl,UpdatedTopEdgeClip
+	ld (hl),0
+	ld de,UpdatedTopEdgeClip+1
+	ld bc,95
+	ldir
+
+	ld hl,BottomEdgeClip
+	ld (hl),63
+	ld de,BottomEdgeClip+1
+	ld bc,95
+	ldir
+	
+	ld hl,UpdatedBottomEdgeClip
+	ld (hl),63
+	ld de,UpdatedBottomEdgeClip+1
+	ld bc,95
+	ldir
+
+; --------------------------------------------------------------------------
 ; Transform the vertices.
 ; --------------------------------------------------------------------------
 	
@@ -83,6 +111,22 @@ Render.Finish:
 
 .fill (($+$FF)&$FF00)-$
 CompletedColumns:
+	.fill 96
+
+.fill (($+$FF)&$FF00)-$
+TopEdgeClip:
+	.fill 96
+
+.fill (($+$FF)&$FF00)-$
+UpdatedTopEdgeClip:
+	.fill 96
+
+.fill (($+$FF)&$FF00)-$
+BottomEdgeClip:
+	.fill 96
+
+.fill (($+$FF)&$FF00)-$
+UpdatedBottomEdgeClip:
 	.fill 96
 
 ColumnsToDraw:

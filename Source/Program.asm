@@ -2,8 +2,13 @@
 
 	jp Main
 
-#include "Level.inc"
+Engine:
 #include "Nostromo/Nostromo.asm"
+.echoln strformat("Engine size: {0} bytes.", $-Engine)
+
+Level:
+#include "Level.inc"
+.echoln strformat("Level size: {0} bytes.", $-Level)
 
 Main:
 

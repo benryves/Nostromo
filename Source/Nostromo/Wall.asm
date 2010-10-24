@@ -839,13 +839,32 @@ WallPart.CeilingHeight = $+1
 
 Line.Clip.Default:
 	ld d,h
+	; Has the column been completed?
 	ld h,CompletedColumns >> 8
 	ld a,(hl)
-	ld h,d
 	or a
 	jr z,+
+	ld h,d
 	scf
-+:	ret
+	ret
+
++:	; Can we clip against the top edge?
+	ld a,d
+	inc h
+	cp (hl)
+	jr nc,+
+	ld h,d
+	ret
+	
++:	; Can we clip against the bottom edge?
+
+	inc h
+	inc h
+	cp (hl)
+	ccf
+
++:	ld h,d
+	ret
 
 ; ==========================================================================
 ; ClearColumn
