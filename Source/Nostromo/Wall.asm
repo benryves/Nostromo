@@ -602,11 +602,49 @@ Project.Start.X:
 
 Wall.DrawUpperAndLower:
 	
+; --------------------------------------------------------------------------
+; The upper part uses the back's ceiling height as the floor
+; and the front's ceiling height as the ceiling.
+; --------------------------------------------------------------------------
+	
+	ld hl,Line.Clip.Default
+	ld (WallPart.UpperClipper),hl
+	ld hl,Line.Clip.UpperFloor
+	ld (WallPart.LowerClipper),hl
+	
+	ld hl,(Sector.Back)
+	inc hl
+	inc hl
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.FloorHeight),de
+	ld hl,(Sector.Front)
+	inc hl
+	inc hl
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (WallPart.CeilingHeight),de
+
+	call DrawWallPart
+	
+; --------------------------------------------------------------------------
+; The lower part uses the front's floor height as the floor
+; and the back's floor height as the ceiling.
+; --------------------------------------------------------------------------
+	
+	ld hl,Line.Clip.LowerCeiling
+	ld (WallPart.UpperClipper),hl
+	ld hl,Line.Clip.Default
+	ld (WallPart.LowerClipper),hl
+
 	ld hl,(Sector.Front)
 	ld e,(hl)
 	inc hl
 	ld d,(hl)
 	ld (WallPart.FloorHeight),de
+	
 	ld hl,(Sector.Back)
 	ld e,(hl)
 	inc hl
@@ -615,26 +653,40 @@ Wall.DrawUpperAndLower:
 
 	call DrawWallPart
 
-	ld hl,(Sector.Front)
-	inc hl
-	inc hl
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (WallPart.CeilingHeight),de
-	ld hl,(Sector.Back)
-	inc hl
-	inc hl
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (WallPart.FloorHeight),de
+; --------------------------------------------------------------------------
+; Update the clipped columns.
+; --------------------------------------------------------------------------
 
-	call DrawWallPart
-
+	ld hl,(Trapezium.Start.Column)
+	ld h,TopEdgeClip >> 8
+	ld a,(Trapezium.End.Column)
+	sub l
+	ld b,a
+	inc b
+-:	inc h
+	ld a,(hl)
+	dec h
+	ld (hl),a
+	inc h
+	inc h
+	inc h
+	ld a,(hl)
+	dec h
+	ld (hl),a
+	dec h
+	dec h
++:	inc l
+	djnz -
+	
 	jr Wall.Drawn
 
 Wall.DrawMiddle:
+	
+	; Use the default clipper for upper/lower.
+	ld hl,Line.Clip.Default
+	ld (WallPart.UpperClipper),hl
+	ld (WallPart.LowerClipper),hl
+
 	ld hl,(Sector.Front)
 	ld e,(hl)
 	inc hl
@@ -647,8 +699,11 @@ Wall.DrawMiddle:
 	ld (WallPart.CeilingHeight),de
 	
 	call DrawWallPart
-	
-	; Flag the "middle" columns as being drawn.
+
+; --------------------------------------------------------------------------
+; Flag the "middle" columns as being drawn.
+; --------------------------------------------------------------------------
+
 	ld hl,(Trapezium.Start.Column)
 	ld h,CompletedColumns >> 8
 	ld a,(Trapezium.End.Column)
@@ -673,9 +728,6 @@ SkipWall:
 
 	ret
 
-Clip.Default:
-	ret
-
 ; ==========================================================================
 ; DrawWallPart
 ; --------------------------------------------------------------------------
@@ -683,9 +735,6 @@ Clip.Default:
 ; Multiple parts have differing floor and ceiling heights.
 ; ==========================================================================
 DrawWallPart:
-
-	ld hl,Line.Clip.Default
-	ld (Line.ClipPixel),hl
 
 ; --------------------------------------------------------------------------
 ; Calculate the height of the start of the wall's floor.
@@ -752,6 +801,10 @@ WallPart.CeilingHeight = $+1
 ; --------------------------------------------------------------------------
 ; Draw the bottom edge of the wall.
 ; --------------------------------------------------------------------------
+
+WallPart.LowerClipper = $+1
+	ld hl,Line.Clip.Default
+	ld (Line.ClipPixel),hl
 	
 	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X1),a
@@ -772,6 +825,10 @@ WallPart.CeilingHeight = $+1
 ; Draw the top edge of the wall.
 ; --------------------------------------------------------------------------
 	
+WallPart.UpperClipper = $+1
+	ld hl,Line.Clip.Default
+	ld (Line.ClipPixel),hl
+	
 	ld a,(Trapezium.Start.Column)
 	ld (Clip.g_line16X1),a
 	
@@ -786,6 +843,13 @@ WallPart.CeilingHeight = $+1
 	
 	call Clip.Clip2DLine16Ex
 	call nc,Line.Draw
+
+; --------------------------------------------------------------------------
+; The vertical lines connecting the floor/ceiling use the default clipper.
+; --------------------------------------------------------------------------
+
+	ld hl,Line.Clip.Default
+	ld (Line.ClipPixel),hl
 
 ; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the start.
@@ -837,6 +901,15 @@ WallPart.CeilingHeight = $+1
 	
 	ret
 
+; ==========================================================================
+; Line.Clip.Default
+; --------------------------------------------------------------------------
+; Clips line pixels against the completed columns and the top/bottom bounds.
+; --------------------------------------------------------------------------
+; Inputs:    (L,H): The pixel to clip.
+; Outputs:   Carry set if clipped, cleared if not clipped.
+; Destroyed: AF, D.
+; ==========================================================================
 Line.Clip.Default:
 	ld d,h
 	; Has the column been completed?
@@ -862,6 +935,81 @@ Line.Clip.Default:
 	inc h
 	cp (hl)
 	ccf
+
++:	ld h,d
+	ret
+
+; ==========================================================================
+; Line.Clip.UpperFloor
+; --------------------------------------------------------------------------
+; Clips line pixels against the completed columns and the top bounds. If
+; below the upper bounds, these are amended to clip later lines.
+; --------------------------------------------------------------------------
+; Inputs:    (L,H): The pixel to clip.
+; Outputs:   Carry set if clipped, cleared if not clipped.
+; Destroyed: AF, D.
+; ==========================================================================
+Line.Clip.UpperFloor:
+	ld d,h
+	; Has the column been completed?
+	ld h,CompletedColumns >> 8
+	ld a,(hl)
+	or a
+	jr z,+
+	ld h,d
+	scf
+	ret
+
++:	; Can we clip against the top edge?
+	ld a,d
+	inc h
+	cp (hl)
+	jr c,+
+	
+	inc h
+	ld (hl),d
+	
+	ld h,d
+	ret
+
++:	ld h,d
+	ret
+
+; ==========================================================================
+; Line.Clip.LowerCeiling
+; --------------------------------------------------------------------------
+; Clips line pixels against the completed columns and the bottom bounds. If
+; above the bottom bounds, these are amended to clip later lines.
+; --------------------------------------------------------------------------
+; Inputs:    (L,H): The pixel to clip.
+; Outputs:   Carry set if clipped, cleared if not clipped.
+; Destroyed: AF, D.
+; ==========================================================================
+Line.Clip.LowerCeiling:
+	ld d,h
+	; Has the column been completed?
+	ld h,CompletedColumns >> 8
+	ld a,(hl)
+	or a
+	jr z,+
+	ld h,d
+	scf
+	ret
+
++:	; Can we clip against the bottom edge?
+	ld a,d
+	inc h
+	inc h
+	inc h
+	cp (hl)
+	ccf
+	jr c,+
+	
+	inc h
+	ld (hl),d
+	
+	ld h,d
+	ret
 
 +:	ld h,d
 	ret
