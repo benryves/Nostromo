@@ -19,6 +19,14 @@ DrawFlag.FillUpper = 2
 DrawFlag.FillMiddle = 3
 DrawFlag.FillLower = 4
 
+Trapezium.Start.Column: .db 0
+Trapezium.End.Column: .db 0
+
+Trapezium.Start.Ceiling: .dw 0
+Trapezium.Start.Floor: .dw 0
+Trapezium.End.Ceiling: .dw 0
+Trapezium.End.Floor: .dw 0
+
 Start.X: .dw 0
 Start.Y: .dw 0
 
@@ -821,6 +829,77 @@ WallPart.LowerClipper = $+1
 	call Clip.Clip2DLine16Ex
 	jr c,WallPart.Lower.Culled
 	call Line.Draw
+
+	; Do we need to handle clipped regions of the line?
+	
+	ld a,(Clip.g_line16X2)
+	ld b,a
+	ld a,(Clip.g_line16X1)
+
+	cp b
+	jr c,+
+	ld (Clip.g_line16X2),a
+	ld a,b
+	ld (Clip.g_line16X1),a
++:
+	
+	; Try the start.
+	ld a,(Trapezium.Start.Column)
+	ld b,a
+	ld a,(Clip.g_line16X1)
+	sub b
+	jr z,WallPart.Lower.StartNotClipped
+	
+	; The number of columns to fix.
+	ld b,a
+	inc b
+
+	; The start has been clipped.
+	ld hl,(WallPart.LowerClipper)
+	ld (WallPart.Lower.StartClipper),hl
+	
+	ld hl,(Trapezium.Start.Floor)
+	call Clip16ToRowPlusOne
+	ld h,a
+	ld a,(Trapezium.Start.Column)
+	ld l,a
+	
+-:	
+WallPart.Lower.StartClipper = $+1
+	call Line.Clip.Default
+	inc l
+	djnz -
+	jr WallPart.Lower.Done
+
+WallPart.Lower.StartNotClipped:
+
+	; Try the end.
+	ld a,(Clip.g_line16X2)	
+	ld b,a
+	ld a,(Trapezium.End.Column)
+	sub b
+	jr z,WallPart.Lower.Done
+	
+	; The number of columns to fix.
+	ld b,a
+	inc b
+
+	; The end has been clipped.
+	ld hl,(WallPart.LowerClipper)
+	ld (WallPart.Lower.EndClipper),hl
+	
+	ld hl,(Trapezium.End.Floor)
+	call Clip16ToRowPlusOne
+	ld h,a
+	ld a,(Trapezium.End.Column)
+	ld l,a
+	
+-:	
+WallPart.Lower.EndClipper = $+1
+	call Line.Clip.Default
+	dec l
+	djnz -
+	
 	jr WallPart.Lower.Done
 
 WallPart.Lower.Culled:
