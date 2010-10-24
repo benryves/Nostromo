@@ -88,12 +88,7 @@ SetSteepness:
 	ld a,(Error)
 	ld c,a
 	
-Delta.X = $+2
-Delta.Y = $+1
-	ld de,0
-	
 -:	push hl
-	push de
 	push bc
 	
 	bit LineFlag.Steep,(iy+LineFlags)
@@ -115,9 +110,11 @@ ClipPixel = $+1
 Line.PixelClipped:
 	
 	pop bc
-	pop de
 	pop hl
 
+Delta.X = $+2
+Delta.Y = $+1
+	ld de,0
 	ld a,c
 	sub e
 	jp p,+
