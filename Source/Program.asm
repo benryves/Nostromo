@@ -23,27 +23,10 @@ Main:
 Loop:
 
 ; --------------------------------------------------------------------------
-; Clear the screen.
+; Render the world.
 ; --------------------------------------------------------------------------
 
-	ld hl,plotSScreen
-	ld (hl),0
-	ld de,plotSScreen+1
-	ld bc,767
-	ldir	
-
-; --------------------------------------------------------------------------
-; Transform the vertices.
-; --------------------------------------------------------------------------
-	
-	call TransformVertices	
-	
-; --------------------------------------------------------------------------
-; Walk the BSP tree to render the level.
-; --------------------------------------------------------------------------
-
-	ld ix,Tree
-	call Nostromo.Tree.Walk
+	call Nostromo.Render
 
 ; --------------------------------------------------------------------------
 ; Display the result on the screen.
@@ -228,12 +211,6 @@ Loop:
 
 	jp Loop
 
-
-TransformVertices:
-	ld hl,Vertices
-	ld de,saveSScreen
-	ld bc,Vertices.Count
-	jp Nostromo.Vertices.Transform	
 
 PlotVertices:
 	ld hl,saveSScreen
