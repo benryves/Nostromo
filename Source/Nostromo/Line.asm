@@ -83,7 +83,12 @@ SetSteepness:
 	
 	ld b,a ; b = number of steps.
 	
+Delta.X = $+2
+Delta.Y = $+1
+	ld de,0
+	
 -:	push hl
+	push de
 	push bc
 	
 	bit LineFlag.Steep,(iy+LineFlags)
@@ -99,11 +104,8 @@ SetSteepness:
 	ld (hl),a
 	
 	pop bc
+	pop de
 	pop hl
-
-Delta.X = $+2
-Delta.Y = $+1
-	ld de,0
 
 Error = $+1
 	ld a,0
