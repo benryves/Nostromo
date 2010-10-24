@@ -904,11 +904,14 @@ WallPart.Lower.EndClipper = $+1
 
 WallPart.Lower.Culled:
 
+	jr WallPart.Lower.Done
+
 	ld hl,(WallPart.LowerClipper)
 	ld (WallPart.Lower.Culled.Clipped),hl
 
 	ld hl,(Trapezium.Start.Floor)
 	call Clip16ToRowPlusOne
+	ld a,0 ; FIXME
 	ld h,a
 	ld a,(Trapezium.Start.Column)
 	ld l,a
@@ -1027,6 +1030,7 @@ WallPart.Upper.Culled:
 
 	ld hl,(Trapezium.Start.Ceiling)
 	call Clip16ToRowPlusOne
+	ld a,64 ; FIXME
 	ld h,a
 	ld a,(Trapezium.Start.Column)
 	ld l,a
