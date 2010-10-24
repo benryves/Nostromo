@@ -498,6 +498,45 @@ NoViewClippingRequired:
 	jp z,SkipWall
 
 ; --------------------------------------------------------------------------
+; Project the end X of the wall.
+; --------------------------------------------------------------------------
+
+	; If we clipped to the left, project to the left.
+	xor a
+	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
+	jr nz,Project.End.X
+	
+	; If we clipped to the right , project to the right.
+	ld a,95
+	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
+	jr nz,Project.End.X
+
+	; 48 * X / Y
+	ld de,(End.X)
+	ld bc,48
+	call Maths.Mul.S16S16
+	ld a,e
+	ld b,h
+	ld c,l
+	ld de,(End.Y)
+	call Maths.Div.S24S16
+	
+	; Offset by the centre of the screen.
+	ld a,c
+	add a,48
+	
+	; Clip to the bounds of the screen.
+	jp p,+
+	xor a
++:	cp 96
+	jr c,+
+	ld a,95
++:
+
+Project.End.X:
+	ld (Trapezium.Start.Column),a
+
+; --------------------------------------------------------------------------
 ; Project the start X of the wall.
 ; --------------------------------------------------------------------------
 
@@ -537,50 +576,11 @@ Project.Start.X:
 	ld (Trapezium.End.Column),a
 
 ; --------------------------------------------------------------------------
-; Project the end X of the wall.
-; --------------------------------------------------------------------------
-
-	; If we clipped to the left, project to the left.
-	xor a
-	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
-	jr nz,Project.End.X
-	
-	; If we clipped to the right , project to the right.
-	ld a,95
-	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
-	jr nz,Project.End.X
-
-	; 48 * X / Y
-	ld de,(End.X)
-	ld bc,48
-	call Maths.Mul.S16S16
-	ld a,e
-	ld b,h
-	ld c,l
-	ld de,(End.Y)
-	call Maths.Div.S24S16
-	
-	; Offset by the centre of the screen.
-	ld a,c
-	add a,48
-	
-	; Clip to the bounds of the screen.
-	jp p,+
-	xor a
-+:	cp 96
-	jr c,+
-	ld a,95
-+:
-
-Project.End.X:
-	ld (Trapezium.Start.Column),a
-	
-; --------------------------------------------------------------------------
 ; Are we looking at the back of the wall?
 ; --------------------------------------------------------------------------
 
 	ld b,a
-	ld a,(Trapezium.End.Column)
+	ld a,(Trapezium.Start.Column)
 	cp b
 	jp c,SkipWall
 
