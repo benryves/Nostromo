@@ -21,24 +21,7 @@
 		.loop
 	.endmodule
 
-	.module Mul
-
-		HL128 ; HL = HL*128
-			add hl,hl
-		HL64 ; HL = HL*64
-			add hl,hl
-		HL32 ; HL = HL*32
-			add hl,hl
-		HL16 ; HL = HL*16
-			add hl,hl
-		HL8 ; HL = HL*8
-			add hl,hl
-		HL4 ; HL = HL*4
-			add hl,hl
-		HL2 ; HL = HL*2
-			add hl,hl
-			ret
-			
+	.module Mul			
 
 		U8U8 ; HL = E*A
 			ld hl,0

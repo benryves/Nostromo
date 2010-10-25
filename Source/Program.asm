@@ -6,12 +6,11 @@ Engine:
 #include "Nostromo/Nostromo.asm"
 .echoln strformat("Engine size: {0} bytes.", $-Engine)
 
-Level:
-#include "Level.inc"
-.echoln strformat("Level size: {0} bytes.", $-Level)
-
 MovementTicks:
 	.dw 0
+
+FPS:
+	.db 0
 
 Main:
 
@@ -26,6 +25,9 @@ Main:
 	
 	ld a,$00
 	ld (Nostromo.Camera.Angle),a
+	
+	xor a
+	ld (FPS),a
 
 Loop:
 
@@ -36,11 +38,69 @@ Loop:
 	call Nostromo.Render
 
 ; --------------------------------------------------------------------------
+; Are we displaying the FPS counter?
+; --------------------------------------------------------------------------
+
+	ld hl,57*256
+	ld (penCol),hl
+
+	set textWrite,(iy+sGrFlags)
+	set textEraseBelow,(iy+textFlags)
+	set textInverse,(iy+textFlags)
+	
+	ld a,' '
+	.bcall _VPutMap
+
+	ld a,(FPS)
+	.bcall _SetXXOP1
+	ld a,2
+	.bcall _DispOP1A
+
+	ld hl,FPSString
+	.bcall _VPutS
+
+	
+	res textWrite,(iy+sGrFlags)
+	res textEraseBelow,(iy+textFlags)
+	res textInverse,(iy+textFlags)
+
+	jr SkipFPS
+
+FPSString:
+	.db "FPS",0
+
+SkipFPS:
+
+; --------------------------------------------------------------------------
 ; Display the result on the screen.
 ; --------------------------------------------------------------------------
 
 	call ionFastCopy
+	
+; --------------------------------------------------------------------------
+; Fetch the number of ticks.
+; --------------------------------------------------------------------------
+
+	di
+	ld hl,(Nostromo.Interrupt.Ticks)
+	ld (MovementTicks),hl
+	ld bc,0
+	ld (Nostromo.Interrupt.Ticks),bc
 	ei
+	
+; --------------------------------------------------------------------------
+; Calculate the FPS.
+; --------------------------------------------------------------------------
+
+	ld c,l
+	ld hl,320
+	call Nostromo.Maths.Div.U16U8	
+	ld a,l
+	ld (FPS),a
+
+; --------------------------------------------------------------------------
+; Handle input.
+; --------------------------------------------------------------------------
 	
 	ld a,$FF
 	out (1),a
@@ -65,13 +125,6 @@ Loop:
 	nop
 	in a,(1)
 	ld c,a
-	
-	di
-	ld hl,(Nostromo.Interrupt.Ticks)
-	ld (MovementTicks),hl
-	ld hl,0
-	ld (Nostromo.Interrupt.Ticks),hl
-	ei
 	
 	; Check for Left/Right.
 	
@@ -261,49 +314,11 @@ Loop:
 
 	jp Loop
 
-
-PlotVertices:
-	ld hl,saveSScreen
-	ld b,Vertices.Count
-	
--:	inc hl
-	ld a,(hl)
-	inc hl
-	
-	add a,48
-	ld d,a
-	
-	inc hl
-	ld a,(hl)
-	inc hl
-	
-	neg
-	add a,32
-	ld e,a
-	
-	push bc
-	push hl
-	
-	cp 64
-	jr nc,+
-	
-	ld a,d
-	cp 96
-	jr nc,+
-	
-	call ionGetPixel
-	or (hl)
-	ld (hl),a
-	
-+:
-
-	pop hl
-	pop bc
-	
-	djnz -
-	ret
-
 Forwards.X: .dw 0
 Forwards.Y: .dw 0
+
+Level:
+#include "Level.inc"
+.echoln strformat("Level size: {0} bytes.", $-Level)
 
 .endmodule
