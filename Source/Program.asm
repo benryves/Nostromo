@@ -9,7 +9,7 @@ Engine:
 MovementTicks:
 	.dw 0
 
-FPS:
+FPSCounter:
 	.db 0
 
 Main:
@@ -27,7 +27,7 @@ Main:
 	ld (Nostromo.Camera.Angle),a
 	
 	xor a
-	ld (FPS),a
+	ld (FPSCounter),a
 
 Loop:
 
@@ -38,7 +38,7 @@ Loop:
 	call Nostromo.Render
 
 ; --------------------------------------------------------------------------
-; Are we displaying the FPS counter?
+; Are we displaying the FPSCounter counter?
 ; --------------------------------------------------------------------------
 
 	ld hl,57*256
@@ -51,12 +51,12 @@ Loop:
 	ld a,' '
 	.bcall _VPutMap
 
-	ld a,(FPS)
+	ld a,(FPSCounter)
 	.bcall _SetXXOP1
 	ld a,2
 	.bcall _DispOP1A
 
-	ld hl,FPSString
+	ld hl,FPSCounterString
 	.bcall _VPutS
 
 	
@@ -64,12 +64,12 @@ Loop:
 	res textEraseBelow,(iy+textFlags)
 	res textInverse,(iy+textFlags)
 
-	jr SkipFPS
+	jr SkipFPSCounter
 
-FPSString:
+FPSCounterString:
 	.db "FPS",0
 
-SkipFPS:
+SkipFPSCounter:
 
 ; --------------------------------------------------------------------------
 ; Display the result on the screen.
@@ -89,14 +89,14 @@ SkipFPS:
 	ei
 	
 ; --------------------------------------------------------------------------
-; Calculate the FPS.
+; Calculate the FPSCounter.
 ; --------------------------------------------------------------------------
 
 	ld c,l
 	ld hl,320
 	call Nostromo.Maths.Div.U16U8	
 	ld a,l
-	ld (FPS),a
+	ld (FPSCounter),a
 
 ; --------------------------------------------------------------------------
 ; Handle input.
@@ -115,7 +115,7 @@ SkipFPS:
 	im 1
 	ret
 +:
-	
+
 	ld a,$FF
 	out (1),a
 	nop
