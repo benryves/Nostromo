@@ -93,7 +93,7 @@ SkipFPSCounter:
 ; --------------------------------------------------------------------------
 
 	ld c,l
-	ld hl,320
+	ld hl,335
 	call Nostromo.Maths.Div.U16U8	
 	ld a,l
 	ld (FPSCounter),a
