@@ -37,7 +37,7 @@ Draw.Loop:
 	ld h,0
 	add hl,hl
 	add hl,hl
-	ld de,saveSScreen
+	ld de,TransformedVertices
 	add hl,de
 	
 	ld e,(hl)
@@ -61,7 +61,7 @@ Draw.Loop:
 	ld h,0
 	add hl,hl
 	add hl,hl
-	ld de,saveSScreen
+	ld de,TransformedVertices
 	add hl,de
 	
 	ld e,(hl)

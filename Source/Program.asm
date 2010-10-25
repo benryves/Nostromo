@@ -321,4 +321,7 @@ Level:
 #include "Level.inc"
 .echoln strformat("Level size: {0} bytes.", $-Level)
 
+TransformedVertices:
+.fill Vertices.Count * 4
+
 .endmodule

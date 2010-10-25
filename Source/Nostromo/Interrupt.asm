@@ -1,6 +1,10 @@
 .module Interrupt
 
+.if outputwriteris('ti8x')
 Base = $98
+.else
+Base = $82
+.endif
 Table = (Base << 8) + $200
 Location = Base | (Base << 8)
 

@@ -91,7 +91,7 @@ Render:
 ; --------------------------------------------------------------------------
 	
 	ld hl,Vertices
-	ld de,saveSScreen
+	ld de,TransformedVertices
 	ld bc,Vertices.Count
 	call Vertices.Transform
 	
