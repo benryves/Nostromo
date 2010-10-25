@@ -904,8 +904,6 @@ WallPart.Lower.EndClipper = $+1
 
 WallPart.Lower.Culled:
 
-	jr WallPart.Lower.Done
-
 	ld hl,(WallPart.LowerClipper)
 	ld (WallPart.Lower.Culled.Clipped),hl
 
