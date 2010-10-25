@@ -16,6 +16,9 @@ Error: .db 0
 ; ==========================================================================
 Draw:
 
+	inc c
+	inc e
+
 	; Calculate absolute deltas.
 
 	ld a,b
@@ -126,6 +129,7 @@ Delta.Y.Set:
 	ld e,h
 ++:	
 	
+	dec e
 	call ionGetPixel
 	ld (PixelBufferOffset),hl
 	ld (PixelMask),a

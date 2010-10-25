@@ -1059,6 +1059,7 @@ WallPart.Upper.Done:
 
 	ld hl,(Trapezium.Start.Ceiling)
 	call Clip16ToRow
+	inc a
 	ld b,a
 	
 	inc d
@@ -1070,6 +1071,7 @@ WallPart.Upper.Done:
 	
 	ld hl,(Trapezium.Start.Floor)
 	call Clip16ToRow
+	inc a
 	ld c,a
 	
 	inc d
@@ -1090,6 +1092,7 @@ WallPart.Upper.Done:
 	ld a,(Trapezium.Start.Column)
 	
 	push bc
+	dec e
 	call ionGetPixel
 	pop bc
 	
@@ -1119,6 +1122,7 @@ WallPart.SkipStrokeStart:
 
 	ld hl,(Trapezium.End.Ceiling)
 	call Clip16ToRow
+	inc a
 	ld b,a
 	
 	inc d
@@ -1130,6 +1134,7 @@ WallPart.SkipStrokeStart:
 	
 	ld hl,(Trapezium.End.Floor)
 	call Clip16ToRow
+	inc a
 	ld c,a
 	
 	inc d
@@ -1150,6 +1155,7 @@ WallPart.SkipStrokeStart:
 	ld a,(Trapezium.End.Column)
 	
 	push bc
+	dec e
 	call ionGetPixel
 	pop bc
 	
@@ -1356,20 +1362,20 @@ Clip16ToRow:
 Clip16ToRowPlusOne:
 	bit 7,h
 	jr z,+
-	ld a,0
+	xor a
 	ret
 +:	ld a,h
 	or a
 	jr z,+
-	ld a,64
+	ld a,65
 	ret
 +:	ld a,l
-	cp 64
+	cp 65
 	ret c
-	ld a,0
+	xor a
 	bit 7,l
 	ret nz
-	ld a,64
+	ld a,65
 	ret
 
 ; ==========================================================================

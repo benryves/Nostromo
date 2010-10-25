@@ -63,25 +63,25 @@ Render:
 ; --------------------------------------------------------------------------
 
 	ld hl,TopEdgeClip
-	ld (hl),0
+	ld (hl),1
 	ld de,TopEdgeClip+1
 	ld bc,95
 	ldir
 	
 	ld hl,UpdatedTopEdgeClip
-	ld (hl),0
+	ld (hl),1
 	ld de,UpdatedTopEdgeClip+1
 	ld bc,95
 	ldir
 
 	ld hl,BottomEdgeClip
-	ld (hl),63
+	ld (hl),64
 	ld de,BottomEdgeClip+1
 	ld bc,95
 	ldir
 	
 	ld hl,UpdatedBottomEdgeClip
-	ld (hl),63
+	ld (hl),64
 	ld de,UpdatedBottomEdgeClip+1
 	ld bc,95
 	ldir
