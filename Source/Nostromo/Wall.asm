@@ -860,6 +860,7 @@ WallPart.LowerClipper = $+1
 	
 	ld hl,(Trapezium.Start.Floor)
 	call Clip16ToRowPlusOne
+	inc a
 	ld h,a
 	ld a,(Trapezium.Start.Column)
 	ld l,a
@@ -890,6 +891,7 @@ WallPart.Lower.StartNotClipped:
 	
 	ld hl,(Trapezium.End.Floor)
 	call Clip16ToRowPlusOne
+	inc a
 	ld h,a
 	ld a,(Trapezium.End.Column)
 	ld l,a
@@ -909,7 +911,7 @@ WallPart.Lower.Culled:
 
 	ld hl,(Trapezium.Start.Floor)
 	call Clip16ToRowPlusOne
-	ld a,0 ; FIXME
+	inc a
 	ld h,a
 	ld a,(Trapezium.Start.Column)
 	ld l,a
@@ -979,6 +981,7 @@ WallPart.UpperClipper = $+1
 	
 	ld hl,(Trapezium.Start.Ceiling)
 	call Clip16ToRowPlusOne
+	inc a
 	ld h,a
 	ld a,(Trapezium.Start.Column)
 	ld l,a
@@ -1009,6 +1012,7 @@ WallPart.Upper.StartNotClipped:
 	
 	ld hl,(Trapezium.End.Ceiling)
 	call Clip16ToRowPlusOne
+	inc a
 	ld h,a
 	ld a,(Trapezium.End.Column)
 	ld l,a
@@ -1028,7 +1032,7 @@ WallPart.Upper.Culled:
 
 	ld hl,(Trapezium.Start.Ceiling)
 	call Clip16ToRowPlusOne
-	ld a,64 ; FIXME
+	inc a
 	ld h,a
 	ld a,(Trapezium.Start.Column)
 	ld l,a
@@ -1343,9 +1347,6 @@ Clip16ToRow:
 +:	ld a,l
 	cp 64
 	ret c
-	xor a
-	bit 7,l
-	ret nz
 	ld a,63
 	ret
 
@@ -1362,21 +1363,19 @@ Clip16ToRow:
 Clip16ToRowPlusOne:
 	bit 7,h
 	jr z,+
-	xor a
+	ld a,-1
 	ret
 +:	ld a,h
 	or a
 	jr z,+
-	ld a,65
+	ld a,64
 	ret
 +:	ld a,l
 	cp 65
 	ret c
-	xor a
-	bit 7,l
-	ret nz
-	ld a,65
+	ld a,64
 	ret
+
 
 ; ==========================================================================
 ; GetYIntercept
