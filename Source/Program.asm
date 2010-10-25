@@ -12,6 +12,10 @@ MovementTicks:
 FPSCounter:
 	.db 0
 
+DemoFlags = asm_Flag3
+DemoFlag.FPSCounter = 0
+DemoFlag.YEquHeld = 1
+
 Main:
 
 	call Nostromo.Interrupt.Load
@@ -28,6 +32,9 @@ Main:
 	
 	xor a
 	ld (FPSCounter),a
+	
+	set DemoFlag.FPSCounter,(iy+DemoFlags)
+	set DemoFlag.YEquHeld,(iy+DemoFlags)
 
 Loop:
 
@@ -40,6 +47,13 @@ Loop:
 ; --------------------------------------------------------------------------
 ; Are we displaying the FPSCounter counter?
 ; --------------------------------------------------------------------------
+
+	bit DemoFlag.FPSCounter,(iy+DemoFlags)
+	jr z,SkipFPSCounter
+	
+	ld a,(FPSCounter)
+	or a
+	jr z,SkipFPSCounter
 
 	ld hl,57*256
 	ld (penCol),hl
@@ -275,6 +289,19 @@ SkipFPSCounter:
 	ld (Nostromo.Camera.Y),hl
 	
 +:
+
+	; Check for Y=
+	bit 4,c
+	jr nz,+
+	bit DemoFlag.YEquHeld,(iy+DemoFlags)
+	jr nz,++
+	set DemoFlag.YEquHeld,(iy+DemoFlags)
+	ld a,(iy+DemoFlags)
+	xor 1 << DemoFlag.FPSCounter
+	ld (iy+DemoFlags),a
+	jr ++
++:	res DemoFlag.YEquHeld,(iy+DemoFlags)
+++:
 
 	ld hl,(Nostromo.Camera.Z)
 	ld de,(MovementTicks)
