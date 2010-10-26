@@ -1088,6 +1088,7 @@ WallPart.Upper.Done:
 	
 	sub b
 	jr c,WallPart.SkipStrokeStart
+	jr z,WallPart.SkipStrokeStart
 	
 	ld e,b
 	ld b,a
@@ -1151,6 +1152,7 @@ WallPart.SkipStrokeStart:
 	
 	sub b
 	jr c,WallPart.SkipStrokeEnd
+	jr z,WallPart.SkipStrokeEnd	
 	
 	ld e,b
 	ld b,a
