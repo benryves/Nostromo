@@ -15,9 +15,7 @@ ClipFlag.Steep = 4
 DrawFlags = asm_Flag2
 DrawFlag.StrokeStart = 0
 DrawFlag.StrokeEnd = 1
-DrawFlag.FillUpper = 2
-DrawFlag.FillMiddle = 3
-DrawFlag.FillLower = 4
+DrawFlag.FillMiddle = 2
 
 Trapezium.Start.Column: .db 0
 Trapezium.End.Column: .db 0
