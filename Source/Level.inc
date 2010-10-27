@@ -2,197 +2,204 @@ NodeType.Leaf = 0
 NodeType.VerticalPartition = 1
 NodeType.HorizontalPartition = 2
 
-Sector0: .dw -64, 128
-Sector1: .dw 32, 96
-Sector2: .dw -50, 64
-Sector3: .dw -96, 192
+Sector0: .dw -128, 128
+Sector1: .dw 0, 128
+Sector2: .dw -128, 0
+Sector3: .dw -86, 128
+Sector4: .dw -42, 128
+Sector5: .dw 0, 0
+Sector6: .dw 0, 0
 
 Vertices:
-	.dw 0, 0
-	.dw 1536, 0
-	.dw 2048, 512
-	.dw 3840, 512
-	.dw 4608, 1280
-	.dw 4608, 2816
-	.dw 5120, 3328
-	.dw 5120, 5376
-	.dw 4608, 5888
-	.dw 3840, 5888
-	.dw 3328, 5376
-	.dw 3328, 3328
-	.dw 3840, 2816
-	.dw 3840, 1280
-	.dw 2048, 1280
-	.dw 1536, 1792
-	.dw 0, 1792
-	.dw 4224, 4608
-	.dw 4608, 5376
-	.dw 3840, 5376
-	.dw 5120, 4608
-	.dw 3328, 4608
-	.dw 0, 512
-	.dw 0, 1280
-	.dw -512, 1280
-	.dw -512, 512
-	.dw 1024, 1792
-	.dw 1024, 2304
-	.dw 2048, 2304
-	.dw 2048, 3840
-	.dw -512, 3840
-	.dw -512, 2304
-	.dw 512, 2304
-	.dw 512, 1792
+	.dw 0, -3072
+	.dw 512, -3584
+	.dw 512, -4096
+	.dw 1280, -4096
+	.dw 1280, -3584
+	.dw 1792, -3072
+	.dw 2048, -3072
+	.dw 3072, -3072
+	.dw 3328, -3072
+	.dw 3840, -3584
+	.dw 3840, -4096
+	.dw 4608, -4096
+	.dw 4608, -3584
+	.dw 5120, -3072
+	.dw 5120, -1536
+	.dw 5120, -512
+	.dw 4608, 0
+	.dw 3072, 0
+	.dw 2048, 0
+	.dw 512, 0
+	.dw 0, -512
+	.dw 0, -1536
+	.dw 2048, -1536
+	.dw 3072, -1536
+	.dw 2048, -1024
+	.dw 3072, -1024
+	.dw 2048, -512
+	.dw 3072, -512
 Vertices.Count = ($ - Vertices) / 4
 
 Wall0: .db 0, 1 \ .dw Sector0, Sector0 \ .db 11
-Wall1: .db 1, 2 \ .dw Sector0, Sector0 \ .db 11
-Wall2: .db 2, 3 \ .dw Sector0, Sector0 \ .db 11
-Wall3: .db 3, 4 \ .dw Sector0, Sector0 \ .db 11
+Wall1: .db 1, 2 \ .dw Sector2, Sector2 \ .db 11
+Wall2: .db 2, 3 \ .dw Sector2, Sector2 \ .db 11
+Wall3: .db 3, 4 \ .dw Sector2, Sector2 \ .db 11
 Wall4: .db 4, 5 \ .dw Sector0, Sector0 \ .db 11
-Wall5: .db 5, 6 \ .dw Sector0, Sector0 \ .db 11
-Wall6: .db 6, 7 \ .dw Sector0, Sector0 \ .db 11
-Wall7: .db 7, 8 \ .dw Sector0, Sector0 \ .db 11
+Wall5: .db 5, 6 \ .dw Sector0, Sector0 \ .db 9
+Wall6: .db 6, 7 \ .dw Sector0, Sector0 \ .db 8
+Wall7: .db 7, 8 \ .dw Sector0, Sector0 \ .db 10
 Wall8: .db 8, 9 \ .dw Sector0, Sector0 \ .db 11
-Wall9: .db 9, 10 \ .dw Sector0, Sector0 \ .db 11
-Wall10: .db 10, 11 \ .dw Sector0, Sector0 \ .db 11
-Wall11: .db 11, 12 \ .dw Sector0, Sector0 \ .db 11
+Wall9: .db 9, 10 \ .dw Sector2, Sector2 \ .db 11
+Wall10: .db 10, 11 \ .dw Sector2, Sector2 \ .db 11
+Wall11: .db 11, 12 \ .dw Sector2, Sector2 \ .db 11
 Wall12: .db 12, 13 \ .dw Sector0, Sector0 \ .db 11
-Wall13: .db 13, 14 \ .dw Sector0, Sector0 \ .db 11
-Wall14: .db 14, 15 \ .dw Sector0, Sector0 \ .db 11
-Wall15: .db 15, 16 \ .dw Sector0, Sector0 \ .db 11
-Wall16: .db 16, 0 \ .dw Sector0, Sector0 \ .db 11
-Wall17: .db 18, 17 \ .dw Sector0, Sector0 \ .db 11
-Wall18: .db 19, 18 \ .dw Sector0, Sector0 \ .db 11
-Wall19: .db 17, 19 \ .dw Sector0, Sector0 \ .db 11
-Wall20: .db 20, 7 \ .dw Sector0, Sector0 \ .db 10
-Wall21: .db 10, 21 \ .dw Sector0, Sector0 \ .db 9
-Wall22: .db 6, 20 \ .dw Sector0, Sector0 \ .db 9
-Wall23: .db 21, 11 \ .dw Sector0, Sector0 \ .db 10
-Wall24: .db 22, 0 \ .dw Sector0, Sector0 \ .db 11
-Wall25: .db 23, 22 \ .dw Sector0, Sector1 \ .db 20
-Wall26: .db 16, 23 \ .dw Sector0, Sector0 \ .db 11
-Wall27: .db 23, 24 \ .dw Sector1, Sector0 \ .db 11
-Wall28: .db 24, 25 \ .dw Sector1, Sector0 \ .db 11
-Wall29: .db 25, 22 \ .dw Sector1, Sector0 \ .db 11
-Wall30: .db 33, 16 \ .dw Sector0, Sector0 \ .db 11
-Wall31: .db 26, 33 \ .dw Sector0, Sector2 \ .db 20
-Wall32: .db 15, 26 \ .dw Sector0, Sector0 \ .db 11
-Wall33: .db 26, 27 \ .dw Sector2, Sector0 \ .db 11
-Wall34: .db 27, 28 \ .dw Sector3, Sector0 \ .db 11
-Wall35: .db 28, 29 \ .dw Sector3, Sector0 \ .db 11
-Wall36: .db 29, 30 \ .dw Sector3, Sector0 \ .db 11
-Wall37: .db 30, 31 \ .dw Sector3, Sector0 \ .db 11
-Wall38: .db 31, 32 \ .dw Sector3, Sector0 \ .db 11
-Wall39: .db 32, 33 \ .dw Sector2, Sector0 \ .db 11
-Wall40: .db 33, 26 \ .dw Sector2, Sector2 \ .db 20
-Wall41: .db 32, 27 \ .dw Sector3, Sector2 \ .db 20
-Wall42: .db 27, 32 \ .dw Sector2, Sector2 \ .db 20
+Wall13: .db 13, 14 \ .dw Sector1, Sector1 \ .db 9
+Wall14: .db 14, 15 \ .dw Sector1, Sector1 \ .db 10
+Wall15: .db 15, 16 \ .dw Sector1, Sector1 \ .db 11
+Wall16: .db 16, 17 \ .dw Sector1, Sector1 \ .db 9
+Wall17: .db 17, 18 \ .dw Sector1, Sector1 \ .db 8
+Wall18: .db 18, 19 \ .dw Sector1, Sector1 \ .db 10
+Wall19: .db 19, 20 \ .dw Sector1, Sector1 \ .db 11
+Wall20: .db 20, 21 \ .dw Sector1, Sector1 \ .db 9
+Wall21: .db 21, 0 \ .dw Sector1, Sector1 \ .db 10
+Wall22: .db 1, 4 \ .dw Sector0, Sector2 \ .db 20
+Wall23: .db 4, 1 \ .dw Sector2, Sector0 \ .db 20
+Wall24: .db 9, 12 \ .dw Sector0, Sector2 \ .db 20
+Wall25: .db 12, 9 \ .dw Sector2, Sector0 \ .db 20
+Wall26: .db 0, 22 \ .dw Sector1, Sector0 \ .db 20
+Wall27: .db 22, 0 \ .dw Sector0, Sector1 \ .db 20
+Wall28: .db 23, 13 \ .dw Sector1, Sector0 \ .db 20
+Wall29: .db 13, 23 \ .dw Sector0, Sector1 \ .db 20
+Wall30: .db 23, 22 \ .dw Sector0, Sector3 \ .db 20
+Wall31: .db 22, 23 \ .dw Sector3, Sector0 \ .db 20
+Wall32: .db 25, 24 \ .dw Sector3, Sector4 \ .db 20
+Wall33: .db 24, 25 \ .dw Sector4, Sector3 \ .db 20
+Wall34: .db 27, 26 \ .dw Sector4, Sector1 \ .db 20
+Wall35: .db 26, 27 \ .dw Sector1, Sector4 \ .db 20
+Wall36: .db 22, 26 \ .dw Sector1, Sector0 \ .db 20
+Wall37: .db 26, 24 \ .dw Sector4, Sector1 \ .db 20
+Wall38: .db 24, 22 \ .dw Sector3, Sector1 \ .db 20
+Wall39: .db 27, 23 \ .dw Sector1, Sector0 \ .db 20
+Wall40: .db 23, 25 \ .dw Sector3, Sector1 \ .db 20
+Wall41: .db 25, 27 \ .dw Sector4, Sector1 \ .db 20
 
-SubSector0: .db 9 \ .dw Wall0, Wall1, Wall14, Wall31, Wall30, Wall32, Wall25, Wall24, Wall26
-SubSector1: .db 2 \ .dw Wall2, Wall13
-SubSector2: .db 1 \ .dw Wall3
-SubSector3: .db 2 \ .dw Wall4, Wall12
-SubSector4: .db 4 \ .dw Wall5, Wall22, Wall23, Wall11
-SubSector5: .db 4 \ .dw Wall7, Wall8, Wall9, Wall18
-SubSector6: .db 2 \ .dw Wall21, Wall19
-SubSector7: .db 2 \ .dw Wall17, Wall20
-SubSector8: .db 3 \ .dw Wall27, Wall28, Wall29
-SubSector9: .db 4 \ .dw Wall42, Wall33, Wall39, Wall40
-SubSector10: .db 6 \ .dw Wall41, Wall34, Wall35, Wall36, Wall37, Wall38
+SubSector0: .db 4 \ .dw Wall5, Wall0, Wall4, Wall22
+SubSector1: .db 4 \ .dw Wall1, Wall2, Wall3, Wall23
+SubSector2: .db 4 \ .dw Wall7, Wall8, Wall12, Wall24
+SubSector3: .db 4 \ .dw Wall9, Wall10, Wall11, Wall25
+SubSector4: .db 1 \ .dw Wall27
+SubSector5: .db 6 \ .dw Wall21, Wall36, Wall20, Wall19, Wall18, Wall26
+SubSector6: .db 1 \ .dw Wall29
+SubSector7: .db 6 \ .dw Wall13, Wall39, Wall14, Wall15, Wall16, Wall28
+SubSector8: .db 2 \ .dw Wall30, Wall6
+SubSector9: .db 4 \ .dw Wall31, Wall32, Wall38, Wall40
+SubSector10: .db 4 \ .dw Wall33, Wall34, Wall37, Wall41
+SubSector11: .db 2 \ .dw Wall35, Wall17
 
 Tree:
-.db NodeType.VerticalPartition
-.dw 2048
+.db NodeType.HorizontalPartition
+.dw -3072
 .dw Tree.F
 .dw Tree.B
 
 Tree.F:
-.db NodeType.HorizontalPartition
-.dw 2816
+.db NodeType.VerticalPartition
+.dw 2048
 .dw Tree.F.F
 .dw Tree.F.B
 
 Tree.F.F:
-.db NodeType.HorizontalPartition
-.dw 4608
+.db NodeType.VerticalPartition
+.dw 3072
 .dw Tree.F.F.F
 .dw Tree.F.F.B
 
 Tree.F.F.F:
 .db NodeType.HorizontalPartition
-.dw 5376
+.dw -1536
 .dw Tree.F.F.F.F
 .dw Tree.F.F.F.B
 
 Tree.F.F.F.F:
 .db NodeType.Leaf
-.dw SubSector5
-
-Tree.F.F.F.B:
-.db NodeType.VerticalPartition
-.dw 4224
-.dw Tree.F.F.F.B.F
-.dw Tree.F.F.F.B.B
-
-Tree.F.F.F.B.F:
-.db NodeType.Leaf
 .dw SubSector7
 
-Tree.F.F.F.B.B:
+Tree.F.F.F.B:
 .db NodeType.Leaf
 .dw SubSector6
 
 Tree.F.F.B:
+.db NodeType.HorizontalPartition
+.dw -1024
+.dw Tree.F.F.B.F
+.dw Tree.F.F.B.B
+
+Tree.F.F.B.F:
+.db NodeType.HorizontalPartition
+.dw -512
+.dw Tree.F.F.B.F.F
+.dw Tree.F.F.B.F.B
+
+Tree.F.F.B.F.F:
 .db NodeType.Leaf
-.dw SubSector4
+.dw SubSector11
+
+Tree.F.F.B.F.B:
+.db NodeType.Leaf
+.dw SubSector10
+
+Tree.F.F.B.B:
+.db NodeType.HorizontalPartition
+.dw -1536
+.dw Tree.F.F.B.B.F
+.dw Tree.F.F.B.B.B
+
+Tree.F.F.B.B.F:
+.db NodeType.Leaf
+.dw SubSector9
+
+Tree.F.F.B.B.B:
+.db NodeType.Leaf
+.dw SubSector8
 
 Tree.F.B:
 .db NodeType.HorizontalPartition
-.dw 1280
+.dw -1536
 .dw Tree.F.B.F
 .dw Tree.F.B.B
 
 Tree.F.B.F:
 .db NodeType.Leaf
-.dw SubSector3
+.dw SubSector5
 
 Tree.F.B.B:
-.db NodeType.VerticalPartition
-.dw 1024
-.dw Tree.F.B.B.F
-.dw Tree.F.B.B.B
-
-Tree.F.B.B.F:
 .db NodeType.Leaf
-.dw SubSector2
-
-Tree.F.B.B.B:
-.db NodeType.Leaf
-.dw SubSector1
+.dw SubSector4
 
 Tree.B:
-.db NodeType.HorizontalPartition
-.dw 1792
+.db NodeType.VerticalPartition
+.dw 2560
 .dw Tree.B.F
 .dw Tree.B.B
 
 Tree.B.F:
 .db NodeType.HorizontalPartition
-.dw 2304
+.dw -3584
 .dw Tree.B.F.F
 .dw Tree.B.F.B
 
 Tree.B.F.F:
 .db NodeType.Leaf
-.dw SubSector10
+.dw SubSector2
 
 Tree.B.F.B:
 .db NodeType.Leaf
-.dw SubSector9
+.dw SubSector3
 
 Tree.B.B:
-.db NodeType.VerticalPartition
-.dw 0
+.db NodeType.HorizontalPartition
+.dw -3584
 .dw Tree.B.B.F
 .dw Tree.B.B.B
 
@@ -202,5 +209,9 @@ Tree.B.B.F:
 
 Tree.B.B.B:
 .db NodeType.Leaf
-.dw SubSector8
+.dw SubSector1
 
+Level.Camera.X = 910
+Level.Camera.Y = -4118
+Level.Camera.Z = -71
+Level.Camera.Angle = 0

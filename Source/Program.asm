@@ -20,14 +20,14 @@ Main:
 
 	call Nostromo.Interrupt.Load
 	
-	ld hl,768
+	ld hl,Level.Camera.X
 	ld (Nostromo.Camera.X),hl
-	ld hl,896
+	ld hl,Level.Camera.Y
 	ld (Nostromo.Camera.Y),hl
-	ld hl,0
+	ld hl,Level.Camera.Z
 	ld (Nostromo.Camera.Z),hl
 	
-	ld a,$00
+	ld a,Level.Camera.Angle
 	ld (Nostromo.Camera.Angle),a
 	
 	xor a
