@@ -1,7 +1,3 @@
-NodeType.Leaf = 0
-NodeType.VerticalPartition = 1
-NodeType.HorizontalPartition = 2
-
 Sector0: .dw -128, 192
 Sector1: .dw 0, 192
 Sector2: .dw -128, 64
@@ -98,117 +94,119 @@ SubSector10: .db 4 \ .dw Wall33, Wall34, Wall37, Wall41
 SubSector11: .db 2 \ .dw Wall35, Wall17
 
 Tree:
-.db NodeType.HorizontalPartition
-.dw -3072
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F
 .dw Tree.B
+.dw -3072
 
 Tree.F:
-.db NodeType.VerticalPartition
-.dw 2048
+.db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F
 .dw Tree.F.B
+.dw 2048
 
 Tree.F.F:
-.db NodeType.VerticalPartition
-.dw 3072
+.db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.F
 .dw Tree.F.F.B
+.dw 3072
 
 Tree.F.F.F:
-.db NodeType.HorizontalPartition
-.dw -1536
+.db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.F.F
 .dw Tree.F.F.F.B
+.dw 768
+.dw -192
 
 Tree.F.F.F.F:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector7
 
 Tree.F.F.F.B:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector6
 
 Tree.F.F.B:
-.db NodeType.HorizontalPartition
-.dw -1024
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.F
 .dw Tree.F.F.B.B
+.dw -1024
 
 Tree.F.F.B.F:
-.db NodeType.HorizontalPartition
-.dw -512
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.F.F
 .dw Tree.F.F.B.F.B
+.dw -512
 
 Tree.F.F.B.F.F:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector11
 
 Tree.F.F.B.F.B:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector10
 
 Tree.F.F.B.B:
-.db NodeType.HorizontalPartition
-.dw -1536
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.B.F
 .dw Tree.F.F.B.B.B
+.dw -1536
 
 Tree.F.F.B.B.F:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector9
 
 Tree.F.F.B.B.B:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector8
 
 Tree.F.B:
-.db NodeType.HorizontalPartition
-.dw -1536
+.db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.B.F
 .dw Tree.F.B.B
+.dw -3072
+.dw 192
 
 Tree.F.B.F:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector5
 
 Tree.F.B.B:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector4
 
 Tree.B:
-.db NodeType.VerticalPartition
-.dw 2560
+.db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F
 .dw Tree.B.B
+.dw 2560
 
 Tree.B.F:
-.db NodeType.HorizontalPartition
-.dw -3584
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F
 .dw Tree.B.F.B
+.dw -3584
 
 Tree.B.F.F:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector2
 
 Tree.B.F.B:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector3
 
 Tree.B.B:
-.db NodeType.HorizontalPartition
-.dw -3584
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.F
 .dw Tree.B.B.B
+.dw -3584
 
 Tree.B.B.F:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector0
 
 Tree.B.B.B:
-.db NodeType.Leaf
+.db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector1
 
 Level.Camera.X = 2560
