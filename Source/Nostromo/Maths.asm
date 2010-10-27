@@ -21,107 +21,7 @@
 		.loop
 	.endmodule
 
-	.module Mul			
-
-		U8U8 ; HL = E*A
-			ld hl,0
-			ld d,h
-			.rept 8
-				rrca
-				jp nc,{+}
-				add hl,de
-			+	sla e
-				rl d
-			.loop
-			ret
-
-		S8S8 ; HL = E*B
-
-			ld d,0
-			ld h,d
-			
-			
-			bit 7,e
-			jp z,{+}
-			inc h
-			ld a,e
-			neg
-			ld e,a
-		+
-			ld a,b	
-			bit 7,a
-			jp z,{+}
-			inc h
-			neg
-		+	
-			
-			bit 0,h
-			jp z,U8U8
-			call U8U8
-			dec hl
-			ld a,h \ cpl \ ld h,a
-			ld a,l \ cpl \ ld l,a
-			ret
-			
-		S8U8 ; sHL = sE*uA
-			
-			bit 7,e
-			jp z,U8U8
-
-			ld b,a
-			ld a,e
-			neg
-			ld e,a
-			ld a,b
-			call U8U8
-			dec hl
-			ld a,h \ cpl \ ld h,a
-			ld a,l \ cpl \ ld l,a
-			ret
-		
-		U16U8 ; AHL = uA*uDE
-			ld hl,0
-			ld c,0
-			add a,a
-			jr nc,$+4
-			ld h,d
-			ld l,e
-
-			.rept 7
-				add hl,hl
-				rla
-				jr nc,$+4
-				add hl,de
-				adc a,c
-			.loop
-			ret
-			
-		S16S8 ; AHL = sA*sDE
-			ld h,0
-			bit 7,a
-			jp z,{+}
-			inc h
-			neg
-		+	
-			bit 7,d
-			jp z,{+}
-			inc h
-			push af
-			dec de
-			ld a,d \ cpl \ ld d,a
-			ld a,e \ cpl \ ld e,a
-			pop af
-		+	bit 0,h
-			jp z,U16U8
-			call U16U8
-			ld e,a
-			dec hl
-			ld a,h \ cpl \ ld h,a
-			ld a,l \ cpl \ ld l,a
-			ld a,e
-			neg
-			ret
-			
+	.module Mul
 
 		U16U16 ; DEHL = sDE*sBC
 			ld hl,0
@@ -173,9 +73,7 @@
 			ld a,h \ cpl \ ld h,a
 			ld a,l \ cpl \ ld l,a
 	
-			ret
-		
-		
+			ret		
 		
 	.endmodule
 	
@@ -271,21 +169,20 @@
 		
 		
 		S16S16 ; ABC rHL = HL/(DE/256) (signed)
-
+		
 			ld c,0
-
+			
 			bit 7,h \ jp z,{+} \ inc c \ neg_hl() \+
 			bit 7,d \ jp z,{+} \ inc c \ neg_de() \+	
 			
-
 			bit 0,c
 			
 			ld a,h \ ld b,l
 			ld hl,$0000
 			ld c,h
-
+			
 			jp z,U24U16
-
+			
 			.rept 24
 				sll c
 				rl b
@@ -296,7 +193,7 @@
 				add hl,de
 				dec c
 			.loop
-
+			
 			; Now, negate abc
 			ld l,a
 			cpl_bc()
@@ -306,8 +203,6 @@
 			inc b \ ret nz
 			inc a
 			ret
-
-
-
+			
 	.endmodule
 .endmodule
