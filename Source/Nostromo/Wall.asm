@@ -1268,15 +1268,21 @@ Line.Clip.UpperFloor:
 	ld a,d
 	inc h
 	cp (hl)
-	jr c,+
+	jr c,++
 	
 	inc h
 	ld (hl),d
+
+	; Can we clip against the bottom edge?
+
+	inc h
+	cp (hl)
+	ccf
 	
 	ld h,d
 	ret
 
-+:	ld h,d
+++:	ld h,d
 	ret
 
 ; ==========================================================================
@@ -1306,17 +1312,23 @@ Line.Clip.LowerCeiling:
 	inc h
 	inc h
 	cp (hl)
-	jr z,+
+	jr z,++
 	ccf
-	jr c,+
+	jr c,++
 	
 	inc h
 	ld (hl),d
-	
-	ld h,d
-	ret
+	dec h
 
-+:	ld h,d
++++:
+
+	; Can we clip against the top edge?
+	ld a,d
+	dec h
+	dec h
+	cp (hl)
+
+++:	ld h,d
 	ret
 
 ; ==========================================================================
