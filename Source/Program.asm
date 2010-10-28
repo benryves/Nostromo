@@ -15,9 +15,6 @@ CameraAngleTicksRemainder:
 FPSCounter:
 	.db 0
 
-CameraAngleMul8:
-	.dw 0
-
 DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
 DemoFlag.YEquHeld = 1
@@ -40,6 +37,7 @@ Main:
 	xor a
 	ld (FPSCounter),a
 	ld (Nostromo.Camera.YShear),a
+	ld (CameraAngleTicksRemainder),a
 	
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
 	set DemoFlag.YEquHeld,(iy+DemoFlags)
