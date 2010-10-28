@@ -84,7 +84,7 @@
 				Two binaries are provided; <em>Nostromo.8xp</em> (for the TI-83+) and <em>Nostromo.83p</em> (for the TI-83).
 				Both binaries require an Ion-compatible shell to run.
 			</p>
-			<p>Source code is not currently provided as it is too messy and buggy to be of use.</p>
+			<p>Source code is not currently provided as it is currently too messy and buggy to be of use.</p>
 			<h2>Usage</h2>
 			<p>Select the program from the list in your shell of choice and run it. The following keys can be used to control the demo:</p>
 			<ul id="keys">
@@ -108,7 +108,8 @@
 				</li>
 				<li>Options
 					<ul>
-						<li><strong class="key blue">Y=</strong> Toggle the FPS counter on and off.</li>
+						<li><strong class="key blue">Y=</strong> Toggle the FPS counter on (default) and off.</li>
+						<li><strong class="key blue">Window</strong> Toggles between free up/down movement (default) and snapping to a fixed height above the floor.</li>
 						<li><strong class="key blue">Zoom</strong> Switch between 6MHz (default) and 15MHz (TI-83+ SE or above only) CPU speeds.</li>
 					</ul>
 				</li>
@@ -118,6 +119,7 @@
 				<li>You can walk through walls and ceilings (a current limitation). The world renders incorrectly when you do so (the engine is not designed to handle rendering something sensible when you're outside the map).</li>
 				<li>The binary is excessively large due to several large variables allocated within the binary itself. These should be dynamically allocated.</li>
 				<li>Performance is not especially good at the moment.</li>
+				<li>Some pixels are not rendered when they should be. This is especially noticeable near the ends of steeply sloping wall edges.</li>
 			</ul>
 		</div>
 	</body>
