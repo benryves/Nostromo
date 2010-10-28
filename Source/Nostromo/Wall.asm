@@ -39,6 +39,14 @@ Delta.AbsY: .dw 0
 
 Gradient: .dw 0
 
+UpperLower.FrontCeilingHeight: .dw 0
+UpperLower.BackCeilingHeight: .dw 0
+UpperLower.FrontFloorHeight: .dw 0
+UpperLower.BackFloorHeight: .dw 0
+
+HorizontalEdge.Start.Y: .dw 0
+HorizontalEdge.End.Y: .dw 0
+
 ; ==========================================================================
 ; ClipAndDraw
 ; --------------------------------------------------------------------------
@@ -604,60 +612,160 @@ Project.Start.X:
 
 	ld a,(iy+DrawFlags)
 	bit DrawFlag.FillMiddle,a
-	jr nz,Wall.DrawMiddle
+	jp nz,Wall.DrawMiddle
 
+; --------------------------------------------------------------------------
+; Draw an "upper and lower" wall.
+; --------------------------------------------------------------------------
 Wall.DrawUpperAndLower:
 	
 ; --------------------------------------------------------------------------
-; The upper part uses the back's ceiling height as the floor
-; and the front's ceiling height as the ceiling.
+; Get the front sector floor and ceiling heights.
 ; --------------------------------------------------------------------------
-	
-	ld hl,Line.Clip.Default
-	ld (WallPart.UpperClipper),hl
-	ld hl,Line.Clip.UpperFloor
-	ld (WallPart.LowerClipper),hl
-	
-	ld hl,(Sector.Back)
-	inc hl
-	inc hl
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (WallPart.FloorHeight),de
-	ld hl,(Sector.Front)
-	inc hl
-	inc hl
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (WallPart.CeilingHeight),de
-
-	call DrawWallPart
-	
-; --------------------------------------------------------------------------
-; The lower part uses the front's floor height as the floor
-; and the back's floor height as the ceiling.
-; --------------------------------------------------------------------------
-	
-	ld hl,Line.Clip.LowerCeiling
-	ld (WallPart.UpperClipper),hl
-	ld hl,Line.Clip.Default
-	ld (WallPart.LowerClipper),hl
 
 	ld hl,(Sector.Front)
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (WallPart.FloorHeight),de
 	
-	ld hl,(Sector.Back)
 	ld e,(hl)
 	inc hl
 	ld d,(hl)
-	ld (WallPart.CeilingHeight),de
+	inc hl
+	
+	ld (UpperLower.FrontFloorHeight),de
+	
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	
+	ld (UpperLower.FrontCeilingHeight),de
+	
+; --------------------------------------------------------------------------
+; Get the back sector floor and ceiling heights.
+; --------------------------------------------------------------------------
 
-	call DrawWallPart
+	ld hl,(Sector.Back)
+	
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	inc hl
+	
+	ld (UpperLower.BackFloorHeight),de
+	
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	
+	ld (UpperLower.BackCeilingHeight),de
+
+; --------------------------------------------------------------------------
+; Draw the "upper" (connects ceilings between adjacent sectors).
+; --------------------------------------------------------------------------
+
+	ld hl,(UpperLower.FrontCeilingHeight)
+	ld de,(UpperLower.BackCeilingHeight)
+	
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	jr z,Upper.Done
+	jr c,Upper.FrontCeilingBelowBackCeiling
+
+; --------------------------------------------------------------------------
+; The front sector's ceiling is above the back sector's ceiling.
+; --------------------------------------------------------------------------
+Upper.FrontCeilingAboveBackCeiling:
+	
+	ld hl,(UpperLower.FrontCeilingHeight)
+	ld de,Line.Clip.Default
+	call DrawHorizontalEdge	
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Ceiling),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Ceiling),hl
+
+	ld hl,(UpperLower.BackCeilingHeight)
+	ld de,Line.Clip.UpperFloor
+	call DrawHorizontalEdge
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Floor),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Floor),hl
+	
+	call DrawVerticalEdges
+
+	jr Upper.Done
+
+; --------------------------------------------------------------------------
+; The front sector's ceiling is below the back sector's ceiling.
+; --------------------------------------------------------------------------
+Upper.FrontCeilingBelowBackCeiling:
+
+	ld hl,(UpperLower.FrontCeilingHeight)
+	ld de,Line.Clip.UpperFloor
+	call DrawHorizontalEdge
+
+Upper.Done:
+
+; --------------------------------------------------------------------------
+; Draw the "lower" (connects floors between adjacent sectors).
+; --------------------------------------------------------------------------
+
+	ld hl,(UpperLower.FrontFloorHeight)
+	ld de,(UpperLower.BackFloorHeight)
+	
+	ld a,h \ xor $80 \ ld h,a
+	ld a,d \ xor $80 \ ld d,a
+	or a
+	sbc hl,de
+	
+	jr z,Lower.Done
+	jr nc,Lower.FrontFloorAboveBackFloor
+
+; --------------------------------------------------------------------------
+; The front sector's floor is below the back sector's floor.
+; --------------------------------------------------------------------------
+Lower.FrontFloorBelowBackFloor:
+
+	ld hl,(UpperLower.FrontFloorHeight)
+	ld de,Line.Clip.Default
+	call DrawHorizontalEdge
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Floor),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Floor),hl
+
+	ld hl,(UpperLower.BackFloorHeight)
+	ld de,Line.Clip.LowerCeiling
+	call DrawHorizontalEdge
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Ceiling),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Ceiling),hl
+	
+	call DrawVerticalEdges
+
+	jr Lower.Done
+
+; --------------------------------------------------------------------------
+; The front sector's floor is below the back sector's floor.
+; --------------------------------------------------------------------------
+Lower.FrontFloorAboveBackFloor:
+
+	ld hl,(UpperLower.FrontFloorHeight)
+	ld de,Line.Clip.LowerCeiling
+	call DrawHorizontalEdge
+
+Lower.Done:
 
 ; --------------------------------------------------------------------------
 ; Update the clipped columns.
@@ -686,25 +794,71 @@ Wall.DrawUpperAndLower:
 	
 	jr Wall.Drawn
 
+; --------------------------------------------------------------------------
+; Draw a "middle" wall.
+; --------------------------------------------------------------------------
 Wall.DrawMiddle:
-	
-	; Use the default clipper for upper/lower.
-	ld hl,Line.Clip.Default
-	ld (WallPart.UpperClipper),hl
-	ld (WallPart.LowerClipper),hl
 
-	ld hl,(Sector.Front)
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (WallPart.FloorHeight),de
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (WallPart.CeilingHeight),de
+; --------------------------------------------------------------------------
+; "Middle" walls always use the front subsector for heights.
+; --------------------------------------------------------------------------
 	
-	call DrawWallPart
+	ld hl,(Sector.Front)
+
+; --------------------------------------------------------------------------
+; Draw the "middle" wall's floor edge.
+; --------------------------------------------------------------------------
+
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	inc hl
+	
+	push hl
+	
+	ld hl,Line.Clip.Default
+	ex de,hl
+	call DrawHorizontalEdge
+
+; --------------------------------------------------------------------------
+; Copy over the projected Y coordinates for the floor.
+; --------------------------------------------------------------------------
+	
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Floor),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Floor),hl
+	
+	pop hl
+
+; --------------------------------------------------------------------------
+; Draw the "middle" wall's ceiling edge.
+; --------------------------------------------------------------------------
+
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+
+	ld hl,Line.Clip.Default
+	ex de,hl
+	call DrawHorizontalEdge
+
+; --------------------------------------------------------------------------
+; Copy over the projected Y coordinates for the ceiling.
+; --------------------------------------------------------------------------
+	
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Ceiling),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Ceiling),hl
+
+; --------------------------------------------------------------------------
+; Draw the vertical edges of the wall.
+; --------------------------------------------------------------------------
+
+	call DrawVerticalEdges
 
 ; --------------------------------------------------------------------------
 ; Flag the "middle" columns as being drawn.
@@ -734,101 +888,89 @@ SkipWall:
 
 	ret
 
+
 ; ==========================================================================
-; DrawWallPart
+; DrawHorizontalEdge
 ; --------------------------------------------------------------------------
-; Draws a wall "part".
-; Multiple parts have differing floor and ceiling heights.
+; Draws a horizontal edge of a wall.
+; "Horizontal" refers to a line with constant height in 3D (when projected
+; to 2D it will appear sloped).
+; --------------------------------------------------------------------------
+; Inputs:    HL: Height of the edge.
+;            DE: Pointer to pixel clipping routine.
+; Outputs:   HorizontalEdge.Start.Y, HorizontalEdge.End.Y: Projected Y
+;            coordinates of the ends of the wall edge.
 ; ==========================================================================
-DrawWallPart:
+DrawHorizontalEdge:
 
 ; --------------------------------------------------------------------------
-; Calculate the height of the start of the wall's floor.
+; Set the pixel clipping routine.
 ; --------------------------------------------------------------------------
 
-WallPart.FloorHeight = $+1
-	ld hl,-64
+	ld (Line.ClipPixel),de
+
+; --------------------------------------------------------------------------
+; Calculate the height relative to the camera position.
+; --------------------------------------------------------------------------	
+
 	ld de,(Camera.Z)
 	or a
 	sbc hl,de
-	ld (WallPart.FloorHeight),hl
+
+; --------------------------------------------------------------------------
+; Project the height of the wall start to the screen.
+; --------------------------------------------------------------------------
+
+	push hl
 	ld de,(Start.Y)
 	call Maths.Div.S16S16
 	call Clip24To16
 	ld hl,32
 	or a
 	sbc hl,bc
-	ld (Trapezium.Start.Floor),hl
-
-; --------------------------------------------------------------------------
-; Calculate the height of the end of the wall's floor.
-; --------------------------------------------------------------------------
-
-	ld hl,(WallPart.FloorHeight)
-	ld de,(End.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.End.Floor),hl
-
-; --------------------------------------------------------------------------
-; Calculate the height of the start of the wall's ceiling.
-; --------------------------------------------------------------------------
-
-WallPart.CeilingHeight = $+1
-	ld hl,128
-	ld de,(Camera.Z)
-	or a
-	sbc hl,de
-	ld (WallPart.CeilingHeight),hl
-	ld de,(Start.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.Start.Ceiling),hl
-
-; --------------------------------------------------------------------------
-; Calculate the height of the end of the wall's ceiling.
-; --------------------------------------------------------------------------
-
-	ld hl,(WallPart.CeilingHeight)
-	ld de,(End.Y)
-	call Maths.Div.S16S16
-	call Clip24To16
-	ld hl,32
-	or a
-	sbc hl,bc
-	ld (Trapezium.End.Ceiling),hl
-
-; --------------------------------------------------------------------------
-; Draw the bottom edge of the wall.
-; --------------------------------------------------------------------------
-
-WallPart.LowerClipper = $+1
-	ld hl,Line.Clip.Default
-	ld (Line.ClipPixel),hl
-	
-	ld a,(Trapezium.Start.Column)
-	ld (Clip.g_line16X1),a
-	
-	ld hl,(Trapezium.Start.Floor)
 	ld (Clip.g_line16Y1),hl
-	
-	ld a,(Trapezium.End.Column)
-	ld (Clip.g_line16X2),a
-	
-	ld hl,(Trapezium.End.Floor)
+	ld (HorizontalEdge.Start.Y),hl
+	pop hl
+
+; --------------------------------------------------------------------------
+; Project the height of the wall end to the screen.
+; --------------------------------------------------------------------------
+
+	ld de,(End.Y)
+	call Maths.Div.S16S16
+	call Clip24To16
+	ld hl,32
+	or a
+	sbc hl,bc
 	ld (Clip.g_line16Y2),hl
+	ld (HorizontalEdge.End.Y),hl
 	
+; --------------------------------------------------------------------------
+; Clip the line.
+; --------------------------------------------------------------------------
+
+	ld a,(Trapezium.Start.Column)
+	ld (Clip.g_line16X1),a
+	ld a,(Trapezium.End.Column)
+	ld (Clip.g_line16X2),a	
 	call Clip.Clip2DLine16Ex
-	jr c,WallPart.Lower.Culled
+	
+; --------------------------------------------------------------------------
+; Was it entirely culled?
+; --------------------------------------------------------------------------
+	
+	jr c,HorizontalEdge.Culled
+
+; --------------------------------------------------------------------------
+; The wall was not culled, so draw it.
+; --------------------------------------------------------------------------
+	
 	call Line.Draw
 
-	; Do we need to handle clipped regions of the line?
+; --------------------------------------------------------------------------
+; Do we need to handle clipped regions of the line?
+; --------------------------------------------------------------------------
+
 	
 	ld a,(Clip.g_line16X2)
 	ld b,a
@@ -846,17 +988,17 @@ WallPart.LowerClipper = $+1
 	ld b,a
 	ld a,(Clip.g_line16X1)
 	sub b
-	jr z,WallPart.Lower.StartNotClipped
+	jr z,HorizontalEdge.StartNotClipped
 	
 	; The number of columns to fix.
 	ld b,a
 	inc b
 
 	; The start has been clipped.
-	ld hl,(WallPart.LowerClipper)
-	ld (WallPart.Lower.StartClipper),hl
+	ld hl,(Line.ClipPixel)
+	ld (HorizontalEdge.StartClipper),hl
 	
-	ld hl,(Trapezium.Start.Floor)
+	ld hl,(HorizontalEdge.Start.Y)
 	call Clip16ToRowPlusOne
 	inc a
 	ld h,a
@@ -864,30 +1006,30 @@ WallPart.LowerClipper = $+1
 	ld l,a
 	
 -:	
-WallPart.Lower.StartClipper = $+1
+HorizontalEdge.StartClipper = $+1
 	call Line.Clip.Default
 	inc l
 	djnz -
-	jr WallPart.Lower.Done
+	jr HorizontalEdge.Done
 
-WallPart.Lower.StartNotClipped:
+HorizontalEdge.StartNotClipped:
 
 	; Try the end.
 	ld a,(Clip.g_line16X2)	
 	ld b,a
 	ld a,(Trapezium.End.Column)
 	sub b
-	jr z,WallPart.Lower.Done
+	jr z,HorizontalEdge.Done
 	
 	; The number of columns to fix.
 	ld b,a
 	inc b
 
 	; The end has been clipped.
-	ld hl,(WallPart.LowerClipper)
-	ld (WallPart.Lower.EndClipper),hl
+	ld hl,(Line.ClipPixel)
+	ld (HorizontalEdge.EndClipper),hl
 	
-	ld hl,(Trapezium.End.Floor)
+	ld hl,(HorizontalEdge.End.Y)
 	call Clip16ToRowPlusOne
 	inc a
 	ld h,a
@@ -895,19 +1037,19 @@ WallPart.Lower.StartNotClipped:
 	ld l,a
 	
 -:	
-WallPart.Lower.EndClipper = $+1
+HorizontalEdge.EndClipper = $+1
 	call Line.Clip.Default
 	dec l
 	djnz -
 	
-	jr WallPart.Lower.Done
+	jr HorizontalEdge.Done
 
-WallPart.Lower.Culled:
+HorizontalEdge.Culled:
 
-	ld hl,(WallPart.LowerClipper)
-	ld (WallPart.Lower.Culled.Clipped),hl
+	ld hl,(Line.ClipPixel)
+	ld (HorizontalEdge.Culled.Clipper),hl
 
-	ld hl,(Trapezium.Start.Floor)
+	ld hl,(HorizontalEdge.Start.Y)
 	call Clip16ToRowPlusOne
 	inc a
 	ld h,a
@@ -918,133 +1060,20 @@ WallPart.Lower.Culled:
 	ld b,a
 	inc b
 -:	
-WallPart.Lower.Culled.Clipped = $+1
+HorizontalEdge.Culled.Clipper = $+1
 	call Line.Clip.Default
 	inc l
 	djnz -
 
-WallPart.Lower.Done:
+HorizontalEdge.Done:
+	ret
 
+; ==========================================================================
+; DrawVerticalEdges
 ; --------------------------------------------------------------------------
-; Draw the top edge of the wall.
-; --------------------------------------------------------------------------
-	
-WallPart.UpperClipper = $+1
-	ld hl,Line.Clip.Default
-	ld (Line.ClipPixel),hl
-	
-	ld a,(Trapezium.Start.Column)
-	ld (Clip.g_line16X1),a
-	
-	ld hl,(Trapezium.Start.Ceiling)
-	ld (Clip.g_line16Y1),hl
-	
-	ld a,(Trapezium.End.Column)
-	ld (Clip.g_line16X2),a
-	
-	ld hl,(Trapezium.End.Ceiling)
-	ld (Clip.g_line16Y2),hl	
-	
-	call Clip.Clip2DLine16Ex
-	jr c,WallPart.Upper.Culled
-	call Line.Draw
-	
-	; Do we need to handle clipped regions of the line?
-	
-	ld a,(Clip.g_line16X2)
-	ld b,a
-	ld a,(Clip.g_line16X1)
-
-	cp b
-	jr c,+
-	ld (Clip.g_line16X2),a
-	ld a,b
-	ld (Clip.g_line16X1),a
-+:
-	
-	; Try the start.
-	ld a,(Trapezium.Start.Column)
-	ld b,a
-	ld a,(Clip.g_line16X1)
-	sub b
-	jr z,WallPart.Upper.StartNotClipped
-	
-	; The number of columns to fix.
-	ld b,a
-	inc b
-
-	; The start has been clipped.
-	ld hl,(WallPart.UpperClipper)
-	ld (WallPart.Upper.StartClipper),hl
-	
-	ld hl,(Trapezium.Start.Ceiling)
-	call Clip16ToRowPlusOne
-	inc a
-	ld h,a
-	ld a,(Trapezium.Start.Column)
-	ld l,a
-	
--:	
-WallPart.Upper.StartClipper = $+1
-	call Line.Clip.Default
-	inc l
-	djnz -
-	jr WallPart.Upper.Done
-
-WallPart.Upper.StartNotClipped:
-
-	; Try the end.
-	ld a,(Clip.g_line16X2)	
-	ld b,a
-	ld a,(Trapezium.End.Column)
-	sub b
-	jr z,WallPart.Upper.Done
-	
-	; The number of columns to fix.
-	ld b,a
-	inc b
-
-	; The end has been clipped.
-	ld hl,(WallPart.UpperClipper)
-	ld (WallPart.Upper.EndClipper),hl
-	
-	ld hl,(Trapezium.End.Ceiling)
-	call Clip16ToRowPlusOne
-	inc a
-	ld h,a
-	ld a,(Trapezium.End.Column)
-	ld l,a
-	
--:	
-WallPart.Upper.EndClipper = $+1
-	call Line.Clip.Default
-	dec l
-	djnz -
-	
-	jr WallPart.Upper.Done
-
-WallPart.Upper.Culled:
-
-	ld hl,(WallPart.UpperClipper)
-	ld (WallPart.Upper.Culled.Clipper),hl
-
-	ld hl,(Trapezium.Start.Ceiling)
-	call Clip16ToRowPlusOne
-	inc a
-	ld h,a
-	ld a,(Trapezium.Start.Column)
-	ld l,a
-	ld a,(Trapezium.End.Column)
-	sub l
-	ld b,a
-	inc b
--:	
-WallPart.Upper.Culled.Clipper = $+1
-	call Line.Clip.Default
-	inc l
-	djnz -
-
-WallPart.Upper.Done:
+; Draws the vertical edges of a wall.
+; ==========================================================================
+DrawVerticalEdges:
 
 ; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the start.

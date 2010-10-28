@@ -1,10 +1,8 @@
-Sector0: .dw -128, 192
-Sector1: .dw 0, 192
+Sector0: .dw -128, 256
+Sector1: .dw 0, 256
 Sector2: .dw -128, 64
-Sector3: .dw -86, 192
-Sector4: .dw -42, 192
-Sector5: .dw 0, 0
-Sector6: .dw 0, 0
+Sector3: .dw -86, 256
+Sector4: .dw -42, 256
 
 Vertices:
 	.dw 0, -3072
