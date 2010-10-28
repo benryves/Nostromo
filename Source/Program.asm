@@ -187,6 +187,7 @@ SkipFPSCounter:
 	jr nz,+	
 	im 1
 	
+.if outputwriteris('ti8x')
 	; Reset speed.
 	in a,($02)
 	bit 7,a
@@ -194,6 +195,8 @@ SkipFPSCounter:
 	xor a
 	out ($20),a
 ++:
+.endif
+
 	ret
 +:
 
@@ -382,6 +385,7 @@ SkipFPSCounter:
 +:	res DemoFlag.YEquHeld,(iy+DemoFlags)
 ++:
 
+.if outputwriteris('ti8x')
 	; Check for Zoom
 	bit 2,c
 	jr nz,+
@@ -401,6 +405,7 @@ SkipFPSCounter:
 	jr ++
 +:	res DemoFlag.ZoomHeld,(iy+DemoFlags)
 ++:
+.endif
 
 	; Check for Window
 	bit 3,c
