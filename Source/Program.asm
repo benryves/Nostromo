@@ -15,6 +15,7 @@ FPSCounter:
 DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
 DemoFlag.YEquHeld = 1
+DemoFlag.ZoomHeld = 2
 
 Main:
 
@@ -36,6 +37,7 @@ Main:
 	
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
 	set DemoFlag.YEquHeld,(iy+DemoFlags)
+	set DemoFlag.ZoomHeld,(iy+DemoFlags)
 
 Loop:
 
@@ -96,9 +98,13 @@ SkipFPSCounter:
 ; Fetch the number of ticks.
 ; --------------------------------------------------------------------------
 
+
 	di
-	ld hl,(Nostromo.Interrupt.Ticks)
+	ld hl,(MovementTicks)
+	ld de,(Nostromo.Interrupt.Ticks)
+	add hl,de
 	ld (MovementTicks),hl
+	
 	ld bc,0
 	ld (Nostromo.Interrupt.Ticks),bc
 	ei
@@ -107,7 +113,8 @@ SkipFPSCounter:
 ; Calculate the FPSCounter.
 ; --------------------------------------------------------------------------
 
-	ld c,l
+	ld b,0
+	ld c,e
 	ld hl,335
 	call Nostromo.Maths.Div.U16U8	
 	ld a,l
@@ -130,6 +137,13 @@ SkipFPSCounter:
 	im 1
 	ret
 +:
+
+	ld hl,(MovementTicks)
+	ld de,8
+	or a
+	sbc hl,de
+	jp c,SkipMovementInput
+
 
 	ld a,$FF
 	out (1),a
@@ -304,6 +318,26 @@ SkipFPSCounter:
 +:	res DemoFlag.YEquHeld,(iy+DemoFlags)
 ++:
 
+	; Check for Zoom
+	bit 2,c
+	jr nz,+
+	bit DemoFlag.ZoomHeld,(iy+DemoFlags)
+	jr nz,++
+	set DemoFlag.ZoomHeld,(iy+DemoFlags)
+	
+	; Toggle speed.
+	in a,($02)
+	bit 7,a
+	jr z,++
+	
+	in a,($20)
+	xor 1
+	out ($20),a
+	
+	jr ++
++:	res DemoFlag.ZoomHeld,(iy+DemoFlags)
+++:
+
 	ld hl,(Nostromo.Camera.Z)
 	ld de,(MovementTicks)
 	sra d \ rr e
@@ -392,6 +426,11 @@ SkipFPSCounter:
 	ld a,d
 	sub 32
 	ld (Nostromo.Camera.YShear),a
+
+	ld hl,0
+	ld (MovementTicks),hl
+
+SkipMovementInput:
 
 	jp Loop
 
