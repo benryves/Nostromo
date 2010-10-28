@@ -78,18 +78,18 @@ Wall39: .db 27, 23 \ .dw Sector1, Sector0 \ .db 0
 Wall40: .db 23, 25 \ .dw Sector3, Sector1 \ .db 1
 Wall41: .db 25, 27 \ .dw Sector4, Sector1 \ .db 2
 
-SubSector0: .db 4 \ .dw Wall5, Wall0, Wall4, Wall22
-SubSector1: .db 4 \ .dw Wall1, Wall2, Wall3, Wall23
-SubSector2: .db 4 \ .dw Wall7, Wall8, Wall12, Wall24
-SubSector3: .db 4 \ .dw Wall9, Wall10, Wall11, Wall25
-SubSector4: .db 1 \ .dw Wall27
-SubSector5: .db 6 \ .dw Wall21, Wall36, Wall20, Wall19, Wall18, Wall26
-SubSector6: .db 1 \ .dw Wall29
-SubSector7: .db 6 \ .dw Wall13, Wall39, Wall14, Wall15, Wall16, Wall28
-SubSector8: .db 2 \ .dw Wall30, Wall6
-SubSector9: .db 4 \ .dw Wall31, Wall32, Wall38, Wall40
-SubSector10: .db 4 \ .dw Wall33, Wall34, Wall37, Wall41
-SubSector11: .db 2 \ .dw Wall35, Wall17
+SubSector0: .dw Sector0 \ .db 4 \ .dw Wall5, Wall0, Wall4, Wall22
+SubSector1: .dw Sector2 \ .db 4 \ .dw Wall1, Wall2, Wall3, Wall23
+SubSector2: .dw Sector0 \ .db 4 \ .dw Wall7, Wall8, Wall12, Wall24
+SubSector3: .dw Sector2 \ .db 4 \ .dw Wall9, Wall10, Wall11, Wall25
+SubSector4: .dw Sector0 \ .db 1 \ .dw Wall27
+SubSector5: .dw Sector1 \ .db 6 \ .dw Wall21, Wall36, Wall20, Wall19, Wall18, Wall26
+SubSector6: .dw Sector0 \ .db 1 \ .dw Wall29
+SubSector7: .dw Sector1 \ .db 6 \ .dw Wall13, Wall39, Wall14, Wall15, Wall16, Wall28
+SubSector8: .dw Sector0 \ .db 2 \ .dw Wall30, Wall6
+SubSector9: .dw Sector3 \ .db 4 \ .dw Wall31, Wall32, Wall38, Wall40
+SubSector10: .dw Sector4 \ .db 4 \ .dw Wall33, Wall34, Wall37, Wall41
+SubSector11: .dw Sector1 \ .db 2 \ .dw Wall35, Wall17
 
 Tree:
 .db Nostromo.Tree.Node.Type.HorizontalPartition

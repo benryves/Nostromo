@@ -13,6 +13,9 @@ Back: .dw 0
 ; ==========================================================================
 Draw:
 
+	inc ix
+	inc ix
+
 	ld a,(ix) ; Number of walls in the sector.
 	or a
 	ret z

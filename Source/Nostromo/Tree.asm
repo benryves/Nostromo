@@ -23,15 +23,27 @@ Node.Type.HorizontalPartition = 2
 Node.Type.ShallowSlopePartition = 3
 Node.Type.SteepSlopePartition = 4
 
+Walker.X: .dw 0
+Walker.Y: .dw 0
+
 ; ==========================================================================
 ; Walk
 ; --------------------------------------------------------------------------
-; Walks the BSP tree and renders it on the display.
+; Walks the BSP tree.
 ; --------------------------------------------------------------------------
 ; Inputs:    IX: Pointer to the BSP tree node.
+;            HL: X coordinate of the thing walking the tree.
+;            DE: Y coordinate of the thing walking the tree.
+;            BC: Pointer to the function to execute when a leaf is reached.
 ; Destroyed: AF, BC, DE, HL, IX.
 ; ==========================================================================
 Walk:
+
+	ld (Walker.X),hl
+	ld (Walker.Y),de
+	ld (Walker.Function),bc
+
+Walk.SkipInit:
 
 ; --------------------------------------------------------------------------
 ; What type is the node?
@@ -42,14 +54,12 @@ Walk:
 	jr nz,Walk.Partition
 
 ; --------------------------------------------------------------------------
-; We've encountered a leaf, so render it.
+; We've encountered a leaf, so operate some function on it.
 ; --------------------------------------------------------------------------
 Walk.Leaf:
-	ld l,(ix+Node.Leaf+0)
-	ld h,(ix+Node.Leaf+1)
-	push hl
-	pop ix
-	jp Nostromo.Sector.Draw
+
+Walker.Function = $+1
+	jp 0
 
 ; --------------------------------------------------------------------------
 ; We've encountered a partition, so work out which side we're on.
@@ -70,7 +80,7 @@ Walk.Partition:
 Walk.VerticalPartition:
 	ld l,(ix+Node.PartitionPosition+0)
 	ld h,(ix+Node.PartitionPosition+1)
-	ld de,(Camera.X)
+	ld de,(Walker.X)
 	jr Walk.CheckPartitionSide
 
 ; --------------------------------------------------------------------------
@@ -79,7 +89,7 @@ Walk.VerticalPartition:
 Walk.HorizontalPartition:
 	ld l,(ix+Node.PartitionPosition+0)
 	ld h,(ix+Node.PartitionPosition+1)
-	ld de,(Camera.Y)
+	ld de,(Walker.Y)
 	jr Walk.CheckPartitionSide
 
 ; --------------------------------------------------------------------------
@@ -88,14 +98,14 @@ Walk.HorizontalPartition:
 Walk.ShallowSlopePartition:
 	ld e,(ix+Node.PartitionGradient+0)
 	ld d,(ix+Node.PartitionGradient+1)
-	ld bc,(Camera.X)
+	ld bc,(Walker.X)
 	call Maths.Mul.S16S16
 	ld d,e
 	ld e,h
 	ld l,(ix+Node.PartitionPosition+0)
 	ld h,(ix+Node.PartitionPosition+1)
 	add hl,de
-	ld de,(Camera.Y)
+	ld de,(Walker.Y)
 	jr Walk.CheckPartitionSide
 
 ; --------------------------------------------------------------------------
@@ -104,14 +114,14 @@ Walk.ShallowSlopePartition:
 Walk.SteepSlopePartition:
 	ld e,(ix+Node.PartitionGradient+0)
 	ld d,(ix+Node.PartitionGradient+1)
-	ld bc,(Camera.Y)
+	ld bc,(Walker.Y)
 	call Maths.Mul.S16S16
 	ld d,e
 	ld e,h
 	ld l,(ix+Node.PartitionPosition+0)
 	ld h,(ix+Node.PartitionPosition+1)
 	add hl,de
-	ld de,(Camera.X)
+	ld de,(Walker.X)
 	jr Walk.CheckPartitionSide
 
 ; --------------------------------------------------------------------------
@@ -134,7 +144,7 @@ Walk.InFrontOfPartition:
 	ld h,(ix+Node.FrontNode+1)
 	push hl
 	pop ix
-	call Walk
+	call Walk.SkipInit
 	
 	; Walk the node behind the partition afterwards.
 	
@@ -143,7 +153,7 @@ Walk.InFrontOfPartition:
 	ld h,(ix+Node.BackNode+1)
 	push hl
 	pop ix
-	jp Walk
+	jp Walk.SkipInit
 
 ; --------------------------------------------------------------------------
 ; We're behind the partition, so walk the node behind it first.
@@ -155,7 +165,7 @@ Walk.BehindPartition:
 	ld h,(ix+Node.BackNode+1)
 	push hl
 	pop ix
-	call Walk
+	call Walk.SkipInit
 	
 	; Walk the node in front of the partition afterwards.
 	
@@ -164,6 +174,6 @@ Walk.BehindPartition:
 	ld h,(ix+Node.FrontNode+1)
 	push hl
 	pop ix
-	jp Walk
+	jp Walk.SkipInit
 	
 .endmodule

@@ -123,12 +123,27 @@ Render:
 	ld (Render.Finish+1),sp
 
 	ld ix,Tree
+	ld hl,(Camera.X)
+	ld de,(Camera.Y)
+	ld bc,Render.RenderTreeNodeFunction
 	call Tree.Walk
 
 Render.Finish:
 	ld sp,0
 	
 	ret
+
+; ==========================================================================
+; Render.RenderTreeNodeFunction
+; --------------------------------------------------------------------------
+; Renders a tree node.
+; ==========================================================================
+Render.RenderTreeNodeFunction:
+	ld l,(ix+Tree.Node.Leaf+0)
+	ld h,(ix+Tree.Node.Leaf+1)
+	push hl
+	pop ix
+	jp Nostromo.Sector.Draw
 
 .fill (($+$FF)&$FF00)-$
 CompletedColumns:

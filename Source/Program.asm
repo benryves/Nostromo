@@ -19,6 +19,8 @@ DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
 DemoFlag.YEquHeld = 1
 DemoFlag.ZoomHeld = 2
+DemoFlag.WindowHeld = 3
+DemoFlag.SnapToFloor = 4
 
 Main:
 
@@ -42,8 +44,53 @@ Main:
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
 	set DemoFlag.YEquHeld,(iy+DemoFlags)
 	set DemoFlag.ZoomHeld,(iy+DemoFlags)
+	set DemoFlag.WindowHeld,(iy+DemoFlags)
+	res DemoFlag.SnapToFloor,(iy+DemoFlags)
 
 Loop:
+
+; --------------------------------------------------------------------------
+; Are we snapped to the floor?
+; --------------------------------------------------------------------------
+
+	bit DemoFlag.SnapToFloor,(iy+DemoFlags)
+	jr z,NotSnappedToFloor
+
+	ld (FindFloorHeightFunction.SP),sp
+	ld ix,Tree
+	ld hl,(Nostromo.Camera.X)
+	ld de,(Nostromo.Camera.Y)
+	ld bc,FindFloorHeightFunction
+	call Nostromo.Tree.Walk
+
+FindFloorHeightFunction:
+FindFloorHeightFunction.SP = $+1
+	ld sp,0
+	
+	; Leaf offset.
+	ld l,(ix+Nostromo.Tree.Node.Leaf+0)
+	ld h,(ix+Nostromo.Tree.Node.Leaf+1)
+	
+	; Sector address.
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	
+	ex de,hl
+	
+	; Floor height.
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	
+	; Give the player some height.
+	ld hl,96
+	add hl,de
+	
+	; Set the camera height.
+	ld (Nostromo.Camera.Z),hl
+
+NotSnappedToFloor:
 
 ; --------------------------------------------------------------------------
 ; Render the world.
@@ -346,6 +393,22 @@ SkipFPSCounter:
 	jr ++
 +:	res DemoFlag.ZoomHeld,(iy+DemoFlags)
 ++:
+
+	; Check for Window
+	bit 3,c
+	jr nz,+
+	bit DemoFlag.WindowHeld,(iy+DemoFlags)
+	jr nz,++
+	set DemoFlag.WindowHeld,(iy+DemoFlags)
+	
+	ld a,(iy+DemoFlags)
+	xor 1 << DemoFlag.SnapToFloor
+	ld (iy+DemoFlags),a
+	
+	jr ++
++:	res DemoFlag.WindowHeld,(iy+DemoFlags)
+++:
+
 
 	ld hl,(Nostromo.Camera.Z)
 	ld de,(MovementTicks)
