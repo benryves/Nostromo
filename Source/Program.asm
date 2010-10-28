@@ -9,8 +9,14 @@ Engine:
 MovementTicks:
 	.dw 0
 
+CameraAngleTicksRemainder:
+	.db 0
+
 FPSCounter:
 	.db 0
+
+CameraAngleMul8:
+	.dw 0
 
 DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
@@ -157,27 +163,32 @@ SkipFPSCounter:
 	
 	; Check for Left/Right.
 	
-	ld hl,Nostromo.Camera.Angle	
+	ld hl,(MovementTicks)
+	ld de,(CameraAngleTicksRemainder)
+	ld d,0
+	add hl,de
+	ld a,l
+	and 7
+	ld (CameraAngleTicksRemainder),a
+	ld a,l
+	sra a
+	sra a
+	sra a
+	ld e,a
+	
+	ld hl,Nostromo.Camera.Angle
 	
 	bit 1,c
 	jr nz,+
-	ld a,(MovementTicks)
-	sra a
-	sra a
-	sra a
-	jr z,+
+	ld a,e
 	add a,(hl)
 	ld (hl),a
 +:
 
 	bit 2,c
 	jr nz,+
-	ld a,(MovementTicks)
+	ld a,e
 	neg
-	sra a
-	sra a
-	sra a
-	jr z,+
 	add a,(hl)
 	ld (hl),a
 +:
@@ -340,7 +351,6 @@ SkipFPSCounter:
 
 	ld hl,(Nostromo.Camera.Z)
 	ld de,(MovementTicks)
-	sra d \ rr e
 	sra d \ rr e
 
 	; Check for Del
