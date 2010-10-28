@@ -5,49 +5,120 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 		<title>Nostromo</title>
 		<style type="text/css">
+		html, body {
+			padding: 0;
+		}
+		html {
+			height: 100%;
+			margin: 0;
+			background-color: #CCC;
+		}
 		body {
+			min-height: 100%;
+			margin: 10px auto;
 			font-family: verdana, sans-serif;
 			font-size: 75%;
-			max-width: 800px;
+			max-width: 780px;
+			background-color: white;
+			border: 10px solid #369;
+		}
+		#banner {
+			background-color: #369;
+			color: white;
+			text-align: center;
+		}
+		#banner * {
+			color: white;
+			margin: 0;
+		}
+		#banner h1 {
+			padding: 1em 0;
+		}
+		#banner p {
+			padding-bottom: 2em;
+		}
+		#content {
+			padding: 0.5em 2em;
+		}
+		#keys {
+			list-style: none;
+			margin-left: 0;
+			padding-left: 0;
+		}
+		#keys li {
+			font-weight: bold;
+			line-height: 24px;
+		}
+		#keys li ul li {
+			font-weight: normal;
+		}
+		.key {
+			color: white;
+			background-color: #333;
+			border: 2px outset #666;
+			padding: 0 2px;
+			line-height: 20px;
+			font-size: 9px;
+			text-transform: uppercase;
+			font-weight: bold;
+		}
+		.key.blue {
+			background-color: #039;
+			border-color: #03C;
 		}
 		</style>
+	</head>
 	<body>
-		<h1>Nostromo</h1>
-		<p>A project by <a href="http://benryves.com/">Ben Ryves<a> for <a href="http://maxcoderz.org/">MaxCoderz</a>.</p>
-		<h2>Demo 2</h2>
-		<p>This is an experimental 3D engine for the TI-83 and TI-83+ graphical calculators.</p>
-		<p>
-			As it is an experiment it is not desperately useful, and it is likely to contain bugs that may crash your calculator.
-			<strong>Please back up any important files before running this program.</strong>
-		</p>
-		<p>
-			Two binaries are provided; <em>Nostromo.8xp</em> (for the TI-83+) and <em>Nostromo.83p</em> (for the TI-83).
-			Both binaries require an Ion-compatible shell to run.
-		</p>
-		<p>Source code is not currently provided as it is too messy and buggy to be of use.</p>
-		<h2>Usage</h2>
-		<p>Select the program from the list in your shell of choice and run it. The following keys can be used to control the demo:</p>
-		<ul>
-			<li><strong>Up/Down:</strong> Move forwards/backwards.</li>
-			<li><strong>Left/Right:</strong> Look left/right.</li>
-			<li><strong>Trace/Graph:</strong> Strafe left/right.</li>
-			<li><strong>Del/Stat:</strong> Move up/down.</li>
-			<li><strong>Y=:</strong> Toggle the FPS counter on and off.</li>
-			<li><strong>Clear:</strong> Exit.</li>
-		</ul>
-		<h2>Known issues</h2>
-		<ul>
-			<li>You can walk through walls (a current limitation). The world renders incorrectly when you do so (this is by design).</li>
-			<li>If the camera goes above the ceiling or below the floor some walls can render strangely.</li>
-			<li>The edges of walls may disappear or flicker when you're inside the tunnel between the starting room and the small cuboid room with the low floor or near the entrance to the tunnel.</li>
-			<li>Walls above the top edge of the screen are clipped to Y=0 rather than Y=-1, which can cause small dots to appear at the top of the display.</li>
-			<li>The binary is excessively large due to several large variables allocated within the binary itself. These should be dynamically allocated.</li>
-		</ul>
-		<h2>Statistics</h2>
-		<ul>
-			<li>Rendering technique: 2D BSP with variable-height sectors.</li>
-			<li>Map size: 645 bytes.</li>
-			<li>Geometry count: 34 vertices, 43 walls, 11 subsectors, 21 nodes.</li>
-		</ul>
+		<div id="banner">
+			<h1>Nostromo</h1>
+			<p>A project by <a href="http://benryves.com/">Ben Ryves</a> for <a href="http://maxcoderz.org/">MaxCoderz</a>.</p>
+		</div>
+		<div id="content">
+			<h2>Demo 3</h2>
+			<p>This is an experimental 3D engine for the TI-83 and TI-83+ graphical calculators.</p>
+			<p>
+				As it is an experiment it is not desperately useful, and it is likely to contain bugs that may crash your calculator.
+				<strong>Please back up any important files before running this program.</strong>
+			</p>
+			<p>
+				Two binaries are provided; <em>Nostromo.8xp</em> (for the TI-83+) and <em>Nostromo.83p</em> (for the TI-83).
+				Both binaries require an Ion-compatible shell to run.
+			</p>
+			<p>Source code is not currently provided as it is too messy and buggy to be of use.</p>
+			<h2>Usage</h2>
+			<p>Select the program from the list in your shell of choice and run it. The following keys can be used to control the demo:</p>
+			<ul id="keys">
+				<li>General
+					<ul>
+						<li><strong class="key">Clear</strong> Exit.</li>
+					</ul>
+				</li>
+				<li>Movement
+					<ul>
+						<li><strong class="key blue">&#x25B2;</strong> / <strong class="key blue">&#x25BC;</strong> Move forwards/backwards.</li>
+						<li><strong class="key blue">Trace</strong> / <strong class="key blue">Graph</strong> Strafe left/right.</li>
+						<li><strong class="key">Del</strong> / <strong class="key">Stat</strong> Move up/down.</li>
+					</ul>
+				</li>
+				<li>Looking
+					<ul>
+						<li><strong class="key blue">&#x25C0;</strong> / <strong class="key blue">&#x25B6;</strong> Look left/right.</li>
+						<li><strong class="key">Mode</strong> / <strong class="key">X,T,&Theta;,n</strong> Look up/down.</li>
+					</ul>
+				</li>
+				<li>Options
+					<ul>
+						<li><strong class="key blue">Y=</strong> Toggle the FPS counter on and off.</li>
+						<li><strong class="key blue">Zoom</strong> Switch between 6MHz (default) and 15MHz (TI-83+ SE or above only) CPU speeds.</li>
+					</ul>
+				</li>
+			</ul>
+			<h2>Known issues</h2>
+			<ul>
+				<li>You can walk through walls and ceilings (a current limitation). The world renders incorrectly when you do so (the engine is not designed to handle rendering something sensible when you're outside the map).</li>
+				<li>The binary is excessively large due to several large variables allocated within the binary itself. These should be dynamically allocated.</li>
+				<li>Performance is not especially good at the moment.</li>
+			</ul>
+		</div>
 	</body>
 </html>
