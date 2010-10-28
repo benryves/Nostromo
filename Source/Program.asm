@@ -186,6 +186,14 @@ SkipFPSCounter:
 	bit 6,a
 	jr nz,+	
 	im 1
+	
+	; Reset speed.
+	in a,($02)
+	bit 7,a
+	jr z,++
+	xor a
+	out ($20),a
+++:
 	ret
 +:
 
