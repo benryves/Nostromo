@@ -913,9 +913,8 @@ DrawHorizontalEdge:
 ; Calculate the height relative to the camera position.
 ; --------------------------------------------------------------------------	
 
-	ld de,(Camera.Z)
-	or a
-	sbc hl,de
+	ld de,(Render.Camera.Z)
+	add hl,de
 
 ; --------------------------------------------------------------------------
 ; Project the height of the wall start to the screen.
@@ -925,7 +924,7 @@ DrawHorizontalEdge:
 	ld de,(Start.Y)
 	call Maths.Div.S16S16
 	call Clip24To16
-	ld hl,32
+	ld hl,(Render.Camera.YShear)
 	or a
 	sbc hl,bc
 	ld (Clip.g_line16Y1),hl
@@ -939,7 +938,7 @@ DrawHorizontalEdge:
 	ld de,(End.Y)
 	call Maths.Div.S16S16
 	call Clip24To16
-	ld hl,32
+	ld hl,(Render.Camera.YShear)
 	or a
 	sbc hl,bc
 	ld (Clip.g_line16Y2),hl

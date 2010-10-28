@@ -4,6 +4,7 @@ Camera.X: .dw 768
 Camera.Y: .dw 896
 Camera.Z: .dw 0
 Camera.Angle: .db 0
+Camera.YShear: .db 0
 
 #define neg_hl() ld a,h \ cpl \ ld h,a \ ld a,l \ cpl \ ld l,a \ inc hl
 #define neg_de() ld a,d \ cpl \ ld d,a \ ld a,e \ cpl \ ld e,a \ inc de
@@ -21,6 +22,9 @@ Camera.Angle: .db 0
 #include "Tree.asm"
 #include "Line.asm"
 #include "Interrupt.asm"
+
+Render.Camera.Z: .dw 0
+Render.Camera.YShear: .dw 0
 
 ; ==========================================================================
 ; Render
@@ -85,6 +89,23 @@ Render:
 	ld de,UpdatedBottomEdgeClip+1
 	ld bc,95
 	ldir
+
+; --------------------------------------------------------------------------
+; Adjust the camera variables for the "render" versions.
+; --------------------------------------------------------------------------
+
+	ld hl,(Camera.Z)
+	neg_hl()
+	ld (Render.Camera.Z),hl
+	
+	ld a,(Camera.YShear)
+	ld l,a
+	add a,32
+	sbc a,a
+	ld h,a
+	ld de,32
+	add hl,de
+	ld (Render.Camera.YShear),hl
 
 ; --------------------------------------------------------------------------
 ; Transform the vertices.

@@ -32,6 +32,7 @@ Main:
 	
 	xor a
 	ld (FPSCounter),a
+	ld (Nostromo.Camera.YShear),a
 	
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
 	set DemoFlag.YEquHeld,(iy+DemoFlags)
@@ -338,6 +339,59 @@ SkipFPSCounter:
 +:
 	
 	ld (Nostromo.Camera.Z),hl
+	
+	
+	ld a,(Nostromo.Camera.YShear)
+	add a,32
+	
+	ld de,(MovementTicks)
+	sra d \ rr e
+	sra d \ rr e
+	sra d \ rr e
+	ld d,a
+
+	; Check for Mode
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$BF
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 6,a
+	jr nz,+
+	ld a,d
+	add a,e
+	cp 64
+	jr c,++
+	ld a,64
+++:
+	ld d,a
++:
+
+	; Check for XT0n
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$EF
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 7,a
+	jr nz,+
+	ld a,d
+	sub e
+	jp p,++
+	xor a
+++:
+	ld d,a
++:
+	
+	ld a,d
+	sub 32
+	ld (Nostromo.Camera.YShear),a
 
 	jp Loop
 
