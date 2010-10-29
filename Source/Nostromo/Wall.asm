@@ -834,24 +834,19 @@ Lower.Done:
 ; --------------------------------------------------------------------------
 
 	ld hl,(Trapezium.Start.Column)
-	ld h,TopEdgeClip >> 8
 	ld a,(Trapezium.End.Column)
 	sub l
 	ld b,a
 	inc b
--:	inc h
-	ld a,(hl)
-	dec h
-	ld (hl),a
-	inc h
-	inc h
-	inc h
+-:	ld h,UpdatedBottomEdgeClip >> 8
 	ld a,(hl)
 	dec h
 	ld (hl),a
 	dec h
+	ld a,(hl)
 	dec h
-+:	inc l
+	ld (hl),a
+	inc l
 	djnz -
 	
 	jr Wall.Drawn
@@ -1296,8 +1291,7 @@ Line.Clip.Default:
 	
 +:	; Can we clip against the bottom edge?
 
-	inc h
-	inc h
+	ld h,BottomEdgeClip >> 8
 	cp (hl)
 	jr z,+
 	ccf
@@ -1370,9 +1364,7 @@ Line.Clip.LowerCeiling:
 
 +:	; Can we clip against the bottom edge?
 	ld a,d
-	inc h
-	inc h
-	inc h
+	ld h,BottomEdgeClip >> 8
 	cp (hl)
 	jr z,++
 	ccf
@@ -1386,8 +1378,7 @@ Line.Clip.LowerCeiling:
 
 	; Can we clip against the top edge?
 	ld a,d
-	dec h
-	dec h
+	ld h,TopEdgeClip >> 8
 	cp (hl)
 
 ++:	ld h,d
