@@ -16,6 +16,7 @@ DrawFlags = asm_Flag2
 DrawFlag.StrokeStart = 0
 DrawFlag.StrokeEnd = 1
 DrawFlag.FillMiddle = 2
+DrawFlag.DrawnThisFrame = 7
 
 Trapezium.Start.Column: .db 0
 Trapezium.End.Column: .db 0
@@ -596,6 +597,25 @@ Project.End.X:
 
 Project.Start.X:
 	ld (Trapezium.Start.Column),a
+
+	; Run-on to the draw function.
+
+; ==========================================================================
+; Draw
+; --------------------------------------------------------------------------
+; Draws the wall.
+; --------------------------------------------------------------------------
+; Inputs:    DrawFlags: Flags to control drawing.
+;            Trapezium.Start.Column: X coordinate of the projected start
+;                of the wall.
+;            Trapezium.End.Column: X coordinate of the projected end of the
+;                wall.
+;            Start.Y: Y coordinate of the wall's start vertex.
+;            End.Y: Y coordinate of the wall's end vertex.
+;            Sector.Front: Pointer to the sector in front of the wall.
+;            Sector.Back: Pointer to the sector behind the wall.
+; ==========================================================================
+Draw:
 
 ; --------------------------------------------------------------------------
 ; Are we looking at the back of the wall?

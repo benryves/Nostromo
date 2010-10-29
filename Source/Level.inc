@@ -35,48 +35,50 @@ Vertices:
 	.dw 3072, -512
 Vertices.Count = ($ - Vertices) / 4
 
-Wall0: .db 0, 1 \ .dw Sector0, Sector0 \ .db 7
-Wall1: .db 1, 2 \ .dw Sector2, Sector2 \ .db 7
-Wall2: .db 2, 3 \ .dw Sector2, Sector2 \ .db 7
-Wall3: .db 3, 4 \ .dw Sector2, Sector2 \ .db 7
-Wall4: .db 4, 5 \ .dw Sector0, Sector0 \ .db 7
-Wall5: .db 5, 6 \ .dw Sector0, Sector0 \ .db 5
-Wall6: .db 6, 7 \ .dw Sector0, Sector0 \ .db 4
-Wall7: .db 7, 8 \ .dw Sector0, Sector0 \ .db 6
-Wall8: .db 8, 9 \ .dw Sector0, Sector0 \ .db 7
-Wall9: .db 9, 10 \ .dw Sector2, Sector2 \ .db 7
-Wall10: .db 10, 11 \ .dw Sector2, Sector2 \ .db 7
-Wall11: .db 11, 12 \ .dw Sector2, Sector2 \ .db 7
-Wall12: .db 12, 13 \ .dw Sector0, Sector0 \ .db 7
-Wall13: .db 13, 15 \ .dw Sector1, Sector1 \ .db 7
-Wall14: .db 14, 15 \ .dw Sector1, Sector1 \ .db 6
-Wall15: .db 15, 16 \ .dw Sector1, Sector1 \ .db 7
-Wall16: .db 16, 17 \ .dw Sector1, Sector1 \ .db 5
-Wall17: .db 17, 18 \ .dw Sector1, Sector1 \ .db 4
-Wall18: .db 18, 19 \ .dw Sector1, Sector1 \ .db 6
-Wall19: .db 19, 20 \ .dw Sector1, Sector1 \ .db 7
-Wall20: .db 20, 0 \ .dw Sector1, Sector1 \ .db 7
-Wall21: .db 21, 0 \ .dw Sector1, Sector1 \ .db 6
-Wall22: .db 1, 4 \ .dw Sector0, Sector2 \ .db 3
-Wall23: .db 4, 1 \ .dw Sector2, Sector0 \ .db 3
-Wall24: .db 9, 12 \ .dw Sector0, Sector2 \ .db 3
-Wall25: .db 12, 9 \ .dw Sector2, Sector0 \ .db 3
-Wall26: .db 0, 22 \ .dw Sector1, Sector0 \ .db 3
-Wall27: .db 22, 0 \ .dw Sector0, Sector1 \ .db 3
-Wall28: .db 23, 13 \ .dw Sector1, Sector0 \ .db 3
-Wall29: .db 13, 23 \ .dw Sector0, Sector1 \ .db 3
-Wall30: .db 23, 22 \ .dw Sector0, Sector3 \ .db 3
-Wall31: .db 22, 23 \ .dw Sector3, Sector0 \ .db 3
-Wall32: .db 25, 24 \ .dw Sector3, Sector4 \ .db 3
-Wall33: .db 24, 25 \ .dw Sector4, Sector3 \ .db 0
-Wall34: .db 27, 26 \ .dw Sector4, Sector1 \ .db 3
-Wall35: .db 26, 27 \ .dw Sector1, Sector4 \ .db 0
-Wall36: .db 22, 26 \ .dw Sector1, Sector0 \ .db 0
-Wall37: .db 26, 24 \ .dw Sector4, Sector1 \ .db 1
-Wall38: .db 24, 22 \ .dw Sector3, Sector1 \ .db 2
-Wall39: .db 27, 23 \ .dw Sector1, Sector0 \ .db 0
-Wall40: .db 23, 25 \ .dw Sector3, Sector1 \ .db 1
-Wall41: .db 25, 27 \ .dw Sector4, Sector1 \ .db 2
+Walls:
+	Wall0: .db 7 \ .db 0, 1 \ .dw Sector0, Sector0
+	Wall1: .db 7 \ .db 1, 2 \ .dw Sector2, Sector2
+	Wall2: .db 7 \ .db 2, 3 \ .dw Sector2, Sector2
+	Wall3: .db 7 \ .db 3, 4 \ .dw Sector2, Sector2
+	Wall4: .db 7 \ .db 4, 5 \ .dw Sector0, Sector0
+	Wall5: .db 5 \ .db 5, 6 \ .dw Sector0, Sector0
+	Wall6: .db 4 \ .db 6, 7 \ .dw Sector0, Sector0
+	Wall7: .db 6 \ .db 7, 8 \ .dw Sector0, Sector0
+	Wall8: .db 7 \ .db 8, 9 \ .dw Sector0, Sector0
+	Wall9: .db 7 \ .db 9, 10 \ .dw Sector2, Sector2
+	Wall10: .db 7 \ .db 10, 11 \ .dw Sector2, Sector2
+	Wall11: .db 7 \ .db 11, 12 \ .dw Sector2, Sector2
+	Wall12: .db 7 \ .db 12, 13 \ .dw Sector0, Sector0
+	Wall13: .db 7 \ .db 13, 15 \ .dw Sector1, Sector1
+	Wall14: .db 6 \ .db 14, 15 \ .dw Sector1, Sector1
+	Wall15: .db 7 \ .db 15, 16 \ .dw Sector1, Sector1
+	Wall16: .db 5 \ .db 16, 17 \ .dw Sector1, Sector1
+	Wall17: .db 4 \ .db 17, 18 \ .dw Sector1, Sector1
+	Wall18: .db 6 \ .db 18, 19 \ .dw Sector1, Sector1
+	Wall19: .db 7 \ .db 19, 20 \ .dw Sector1, Sector1
+	Wall20: .db 7 \ .db 20, 0 \ .dw Sector1, Sector1
+	Wall21: .db 6 \ .db 21, 0 \ .dw Sector1, Sector1
+	Wall22: .db 3 \ .db 1, 4 \ .dw Sector0, Sector2
+	Wall23: .db 3 \ .db 4, 1 \ .dw Sector2, Sector0
+	Wall24: .db 3 \ .db 9, 12 \ .dw Sector0, Sector2
+	Wall25: .db 3 \ .db 12, 9 \ .dw Sector2, Sector0
+	Wall26: .db 3 \ .db 0, 22 \ .dw Sector1, Sector0
+	Wall27: .db 3 \ .db 22, 0 \ .dw Sector0, Sector1
+	Wall28: .db 3 \ .db 23, 13 \ .dw Sector1, Sector0
+	Wall29: .db 3 \ .db 13, 23 \ .dw Sector0, Sector1
+	Wall30: .db 3 \ .db 23, 22 \ .dw Sector0, Sector3
+	Wall31: .db 3 \ .db 22, 23 \ .dw Sector3, Sector0
+	Wall32: .db 3 \ .db 25, 24 \ .dw Sector3, Sector4
+	Wall33: .db 0 \ .db 24, 25 \ .dw Sector4, Sector3
+	Wall34: .db 3 \ .db 27, 26 \ .dw Sector4, Sector1
+	Wall35: .db 0 \ .db 26, 27 \ .dw Sector1, Sector4
+	Wall36: .db 0 \ .db 22, 26 \ .dw Sector1, Sector0
+	Wall37: .db 1 \ .db 26, 24 \ .dw Sector4, Sector1
+	Wall38: .db 2 \ .db 24, 22 \ .dw Sector3, Sector1
+	Wall39: .db 0 \ .db 27, 23 \ .dw Sector1, Sector0
+	Wall40: .db 1 \ .db 23, 25 \ .dw Sector3, Sector1
+	Wall41: .db 2 \ .db 25, 27 \ .dw Sector4, Sector1
+Walls.Count = ($ - Walls) / 7
 
 SubSector0: .dw Sector0 \ .db 4 \ .dw Wall5, Wall0, Wall4, Wall22
 SubSector1: .dw Sector2 \ .db 4 \ .dw Wall1, Wall2, Wall3, Wall23

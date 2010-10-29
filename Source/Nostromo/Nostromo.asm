@@ -115,7 +115,18 @@ Render:
 	ld de,TransformedVertices
 	ld bc,Vertices.Count
 	call Vertices.Transform
-	
+
+; --------------------------------------------------------------------------
+; Mark all walls as not drawn this frame.
+; --------------------------------------------------------------------------
+
+	ld hl,Walls
+	ld de,7 ; size of a wall.
+	ld b,Walls.Count
+-:	res Wall.DrawFlag.DrawnThisFrame,(hl)
+	add hl,de
+	djnz -
+
 ; --------------------------------------------------------------------------
 ; Walk the BSP tree to render the level.
 ; --------------------------------------------------------------------------
