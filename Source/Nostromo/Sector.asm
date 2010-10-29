@@ -15,11 +15,8 @@ Draw:
 
 	inc ix
 	inc ix
-
-	ld a,(ix) ; Number of walls in the sector.
-	or a
-	ret z
-	ld b,a
+	
+	ld b,(ix)
 	inc ix
 
 Draw.Loop:
@@ -58,6 +55,8 @@ Draw.Loop:
 	set Wall.DrawFlag.DrawnThisFrame,(hl)
 	inc hl
 	
+	push bc
+	
 ; --------------------------------------------------------------------------
 ; Read the start vertex information.
 ; --------------------------------------------------------------------------
@@ -68,8 +67,8 @@ Draw.Loop:
 	ld h,0
 	add hl,hl
 	add hl,hl
-	ld de,TransformedVertices
-	add hl,de
+	ld bc,TransformedVertices
+	add hl,bc
 	
 	ld e,(hl)
 	inc hl
@@ -94,8 +93,7 @@ Draw.Loop:
 	ld h,0
 	add hl,hl
 	add hl,hl
-	ld de,TransformedVertices
-	add hl,de
+	add hl,bc
 	
 	ld e,(hl)
 	inc hl
@@ -127,7 +125,6 @@ Draw.Loop:
 ; Clip and draw the wall.
 ; --------------------------------------------------------------------------
 
-	push bc
 	push ix
 	
 	call Wall.ClipAndDraw
