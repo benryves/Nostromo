@@ -51,11 +51,11 @@ Walls:
 	Wall12: .db 7 \ .db 12, 13 \ .dw Sector0, Sector0
 	Wall13: .db 7 \ .db 13, 15 \ .dw Sector1, Sector1
 	Wall14: .db 6 \ .db 14, 15 \ .dw Sector1, Sector1
-	Wall15: .db 7 \ .db 15, 16 \ .dw Sector1, Sector1
+	Wall15: .db 4 \ .db 15, 16 \ .dw Sector1, Sector1
 	Wall16: .db 5 \ .db 16, 17 \ .dw Sector1, Sector1
 	Wall17: .db 4 \ .db 17, 18 \ .dw Sector1, Sector1
 	Wall18: .db 6 \ .db 18, 19 \ .dw Sector1, Sector1
-	Wall19: .db 7 \ .db 19, 20 \ .dw Sector1, Sector1
+	Wall19: .db 4 \ .db 19, 20 \ .dw Sector1, Sector1
 	Wall20: .db 7 \ .db 20, 0 \ .dw Sector1, Sector1
 	Wall21: .db 6 \ .db 21, 0 \ .dw Sector1, Sector1
 	Wall22: .db 3 \ .db 1, 4 \ .dw Sector0, Sector2
@@ -85,9 +85,9 @@ SubSector1: .dw Sector2 \ .db 4 \ .dw Wall1, Wall2, Wall3, Wall23
 SubSector2: .dw Sector0 \ .db 4 \ .dw Wall7, Wall8, Wall12, Wall24
 SubSector3: .dw Sector2 \ .db 4 \ .dw Wall9, Wall10, Wall11, Wall25
 SubSector4: .dw Sector0 \ .db 1 \ .dw Wall26
-SubSector5: .dw Sector1 \ .db 6 \ .dw Wall37, Wall38, Wall20, Wall19, Wall18, Wall26
+SubSector5: .dw Sector1 \ .db 6 \ .dw Wall37, Wall38, Wall20, Wall18, Wall26, Wall19
 SubSector6: .dw Sector0 \ .db 1 \ .dw Wall28
-SubSector7: .dw Sector1 \ .db 6 \ .dw Wall13, Wall40, Wall41, Wall15, Wall16, Wall28
+SubSector7: .dw Sector1 \ .db 6 \ .dw Wall13, Wall40, Wall41, Wall16, Wall28, Wall15
 SubSector8: .dw Sector0 \ .db 2 \ .dw Wall30, Wall6
 SubSector9: .dw Sector3 \ .db 4 \ .dw Wall30, Wall32, Wall38, Wall40
 SubSector10: .dw Sector4 \ .db 4 \ .dw Wall32, Wall34, Wall37, Wall41
