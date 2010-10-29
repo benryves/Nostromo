@@ -604,14 +604,56 @@ Project.Start.X:
 	ld b,a
 	ld a,(Trapezium.End.Column)
 	cp b
-	jp c,SkipWall
+	jp nc,StartDrawing
 
 ; --------------------------------------------------------------------------
-; Fetch the ceiling and floor height for the front sector.
+; We are looking at the back of the wall. Is it a middle wall? If so, skip.
 ; --------------------------------------------------------------------------
 
+	bit DrawFlag.FillMiddle,(iy+DrawFlags)
+	jp nz,SkipWall
+
+; --------------------------------------------------------------------------
+; It's a middle wall. Swap over the ends before rendering.
+; --------------------------------------------------------------------------
+
+	ld hl,(Start.Y)
+	ld de,(End.Y)
+	ld (End.Y),hl
+	ld (Start.Y),de
+	
+	ld a,(Trapezium.Start.Column)
+	ld b,a
+	ld a,(Trapezium.End.Column)
+	ld (Trapezium.Start.Column),a
+	ld a,b
+	ld (Trapezium.End.Column),a
+	
+	ld hl,(Sector.Front)
+	ld de,(Sector.Back)
+	ld (Sector.Back),hl
+	ld (Sector.Front),de
+	
 	ld a,(iy+DrawFlags)
-	bit DrawFlag.FillMiddle,a
+	and (1 << DrawFlag.StrokeStart) | (1 << DrawFlag.StrokeEnd)
+	jr z,+
+	cp (1 << DrawFlag.StrokeStart) | (1 << DrawFlag.StrokeEnd)
+	jr z,+
+	xor (1 << DrawFlag.StrokeStart) | (1 << DrawFlag.StrokeEnd)
+	ld (iy+DrawFlags),a
++:
+
+; --------------------------------------------------------------------------
+; Begin drawing the wall.
+; --------------------------------------------------------------------------
+
+StartDrawing:
+
+; --------------------------------------------------------------------------
+; Are we drawing a "middle" or an "upper/lower" wall type?
+; --------------------------------------------------------------------------
+
+	bit DrawFlag.FillMiddle,(iy+DrawFlags)
 	jp nz,Wall.DrawMiddle
 
 ; --------------------------------------------------------------------------
