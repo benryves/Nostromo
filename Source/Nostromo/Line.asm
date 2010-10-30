@@ -87,11 +87,6 @@ Shallow.Delta.Y.Positive:
 	ld hl,+12
 	ld (Shallow.AdvanceY.Shallow.Stride),hl
 
-	ld a,$0F ; rrca
-	ld (Shallow.AdvanceY.Steep.Shift),a
-	ld a,$23 ; inc hl
-	ld (Shallow.AdvanceY.Steep.Increment),a
-	
 	jr Shallow.Delta.Y.Set
 
 Shallow.Delta.Y.Negative:
@@ -103,11 +98,6 @@ Shallow.Delta.Y.Negative:
 	
 	ld hl,-12
 	ld (Shallow.AdvanceY.Shallow.Stride),hl
-
-	ld a,$07 ; rlca
-	ld (Shallow.AdvanceY.Steep.Shift),a
-	ld a,$2B ; dec hl
-	ld (Shallow.AdvanceY.Steep.Increment),a
 
 Shallow.Delta.Y.Set:
 
@@ -130,14 +120,8 @@ Shallow.Delta.Y.Set:
 	push hl
 	push bc
 	
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,+
 	ld a,h
 	ld e,l
-	jr ++
-+:	ld a,l
-	ld e,h
-++:	
 	
 	dec e
 	call ionGetPixel
@@ -150,11 +134,8 @@ Shallow.Delta.Y.Set:
 -:	push hl
 	push bc
 	
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,+
 	ld a,h \ ld h,l \ ld l,a
-+:
-
+	
 Shallow.ClipPixel = $+1
 	call NoClip
 	jr c,Shallow.Line.PixelClipped
@@ -171,10 +152,6 @@ Shallow.PixelMask = $+1
 Shallow.Line.PixelClipped:
 
 	; Advance X.
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,Shallow.AdvanceX.Steep
-
-Shallow.AdvanceX.Shallow:
 	ld a,(Shallow.PixelMask)
 	rrca
 	ld (Shallow.PixelMask),a
@@ -183,15 +160,6 @@ Shallow.AdvanceX.Shallow:
 	inc hl
 	ld (Shallow.PixelBufferOffset),hl
 +:
-	jr Shallow.AdvanceX.Done
-
-Shallow.AdvanceX.Steep:
-	ld hl,(Shallow.PixelBufferOffset)
-	ld bc,12
-	add hl,bc
-	ld (Shallow.PixelBufferOffset),hl
-
-Shallow.AdvanceX.Done:
 	
 	pop bc
 	pop hl
@@ -204,10 +172,6 @@ Shallow.Delta.Y = $+1
 	jp p,Shallow.NoAdvanceY
 	
 	; Advance Y.
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,Shallow.AdvanceY.Steep
-
-Shallow.AdvanceY.Shallow:
 	push hl
 	push bc
 	ld hl,(Shallow.PixelBufferOffset)
@@ -217,25 +181,6 @@ Shallow.AdvanceY.Shallow.Stride = $+1
 	ld (Shallow.PixelBufferOffset),hl
 	pop bc
 	pop hl
-	jr Shallow.AdvanceY.Done
-
-Shallow.AdvanceY.Steep:
-	push af
-	ld a,(Shallow.PixelMask)
-Shallow.AdvanceY.Steep.Shift:
-	rrca
-	ld (Shallow.PixelMask),a
-	jr nc,+
-	push hl
-	ld hl,(Shallow.PixelBufferOffset)
-Shallow.AdvanceY.Steep.Increment:
-	inc hl
-	ld (Shallow.PixelBufferOffset),hl
-	pop hl
-+:
-	pop af
-
-Shallow.AdvanceY.Done:
 	
 Shallow.YStep:
 	inc l
