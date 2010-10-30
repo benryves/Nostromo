@@ -74,22 +74,10 @@ Render:
 	ld de,TopEdgeClip+1
 	ld bc,95
 	ldir
-	
-	ld hl,UpdatedTopEdgeClip
-	ld (hl),1
-	ld de,UpdatedTopEdgeClip+1
-	ld bc,95
-	ldir
 
 	ld hl,BottomEdgeClip
 	ld (hl),64
 	ld de,BottomEdgeClip+1
-	ld bc,95
-	ldir
-	
-	ld hl,UpdatedBottomEdgeClip
-	ld (hl),64
-	ld de,UpdatedBottomEdgeClip+1
 	ld bc,95
 	ldir
 
@@ -168,15 +156,7 @@ TopEdgeClip:
 	.fill 96
 
 .fill (($+$FF)&$FF00)-$
-UpdatedTopEdgeClip:
-	.fill 96
-
-.fill (($+$FF)&$FF00)-$
 BottomEdgeClip:
-	.fill 96
-
-.fill (($+$FF)&$FF00)-$
-UpdatedBottomEdgeClip:
 	.fill 96
 
 ColumnsToDraw:

@@ -864,26 +864,6 @@ Lower.FrontFloorAboveBackFloor:
 
 Lower.Done:
 
-; --------------------------------------------------------------------------
-; Update the clipped columns.
-; --------------------------------------------------------------------------
-
-;	ld hl,(Trapezium.Start.Column)
-;	ld a,(Trapezium.End.Column)
-;	sub l
-;	ld b,a
-;	inc b
-;-:	ld h,UpdatedBottomEdgeClip >> 8
-;	ld a,(hl)
-;	dec h
-;	ld (hl),a
-;	dec h
-;	ld a,(hl)
-;	dec h
-;	ld (hl),a
-;	inc l
-;	djnz -
-	
 	jr Wall.Drawn
 
 ; --------------------------------------------------------------------------
@@ -1218,7 +1198,6 @@ DrawVerticalEdges:
 	ld c,a
 	
 	inc d
-	inc d
 	ld a,(de)
 	cp c
 	jr c,+
@@ -1265,6 +1244,7 @@ WallPart.SkipStrokeStart:
 	jr nz,WallPart.SkipStrokeEnd
 
 	ld hl,(Trapezium.End.Ceiling)
+	inc hl
 	call Clip16ToRow
 	inc a
 	ld b,a
@@ -1277,11 +1257,11 @@ WallPart.SkipStrokeStart:
 +:	
 	
 	ld hl,(Trapezium.End.Floor)
+	dec hl
 	call Clip16ToRow
 	inc a
 	ld c,a
 	
-	inc d
 	inc d
 	ld a,(de)
 	cp c
@@ -1346,7 +1326,7 @@ Line.Clip.Default:
 	
 +:	; Can we clip against the bottom edge?
 
-	ld h,BottomEdgeClip >> 8
+	inc h
 	cp (hl)
 	jr z,+
 	ccf
@@ -1385,7 +1365,6 @@ Line.Clip.UpperFloor:
 
 	; Can we clip against the bottom edge?
 
-	inc h
 	inc h
 	cp (hl)
 	ccf
@@ -1430,7 +1409,7 @@ Line.Clip.LowerCeiling:
 
 	; Can we clip against the top edge?
 	ld a,d
-	ld h,TopEdgeClip >> 8
+	dec h
 	cp (hl)
 
 ++:	ld h,d
