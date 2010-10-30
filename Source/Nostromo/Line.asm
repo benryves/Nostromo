@@ -75,7 +75,7 @@ Draw.Shallow:
 Shallow.Delta.Y.Positive:
 	ld (Shallow.Delta.Y),a
 	
-	ld a,$2C ; inc l
+	ld a,$24 ; inc l
 	ld (Shallow.YStep),a
 	
 	ld hl,+12
@@ -87,7 +87,7 @@ Shallow.Delta.Y.Negative:
 	neg
 	ld (Shallow.Delta.Y),a
 	
-	ld a,$2D ; dec l
+	ld a,$25 ; dec h
 	ld (Shallow.YStep),a
 	
 	ld hl,-12
@@ -124,11 +124,12 @@ Shallow.Delta.Y.Set:
 	
 	pop bc
 	pop hl
+
+	; Swap H and L.
+	ld a,h \ ld h,l \ ld l,a
 	
 -:	push hl
 	push bc
-	
-	ld a,h \ ld h,l \ ld l,a
 	
 Shallow.ClipPixel = $+1
 	call NoClip
@@ -177,13 +178,13 @@ Shallow.AdvanceY.Shallow.Stride = $+1
 	pop hl
 	
 Shallow.YStep:
-	inc l
+	inc h
 	add a,d	
 	
 Shallow.NoAdvanceY:
 	ld c,a
 
-	inc h ; ++x
+	inc l ; ++x
 	djnz -
 	ret
 
