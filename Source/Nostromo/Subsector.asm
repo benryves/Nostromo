@@ -1,14 +1,11 @@
-.module Sector
-
-Front: .dw 0
-Back: .dw 0
+.module Subsector
 
 ; ==========================================================================
 ; Draw
 ; --------------------------------------------------------------------------
-; Draws a complete sector on the screen.
+; Draws a complete subsector on the screen.
 ; --------------------------------------------------------------------------
-; Inputs:    IX: Pointer to the sector data.
+; Inputs:    IX: Pointer to the subsector data.
 ; Destroyed: AF, BC, DE, HL, IX.
 ; ==========================================================================
 Draw:
@@ -113,13 +110,13 @@ Draw.Loop:
 	inc hl
 	ld d,(hl)
 	inc hl
-	ld (Front),de
+	ld (Sector.Front),de
 	
 	ld e,(hl)
 	inc hl
 	ld d,(hl)
 	inc hl
-	ld (Back),de
+	ld (Sector.Back),de
 
 ; --------------------------------------------------------------------------
 ; Clip and draw the wall.

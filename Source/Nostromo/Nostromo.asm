@@ -18,13 +18,16 @@ Camera.YShear: .db 0
 #include "Vertices.asm"
 #include "Wall.asm"
 #include "Clip.asm"
-#include "Sector.asm"
+#include "Subsector.asm"
 #include "Tree.asm"
 #include "Line.asm"
 #include "Interrupt.asm"
 
 Render.Camera.Z: .dw 0
 Render.Camera.YShear: .dw 0
+
+Sector.Front: .dw 0
+Sector.Back: .dw 0
 
 ; ==========================================================================
 ; Render
@@ -154,7 +157,7 @@ Render.RenderTreeNodeFunction:
 	ld h,(ix+Tree.Node.Leaf+1)
 	push hl
 	pop ix
-	jp Nostromo.Sector.Draw
+	jp Subsector.Draw
 
 .fill (($+$FF)&$FF00)-$
 CompletedColumns:
