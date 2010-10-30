@@ -737,29 +737,45 @@ Wall.DrawUpperAndLower:
 ; --------------------------------------------------------------------------
 ; The front sector's ceiling is above the back sector's ceiling.
 ; --------------------------------------------------------------------------
-Upper.FrontCeilingAboveBackCeiling:
-	
-	ld hl,(UpperLower.FrontCeilingHeight)
-	ld de,Line.Clip.Default
-	call DrawHorizontalEdge	
-
-	ld hl,(HorizontalEdge.Start.Y)
-	ld (Trapezium.Start.Ceiling),hl
-	
-	ld hl,(HorizontalEdge.End.Y)
-	ld (Trapezium.End.Ceiling),hl
+Upper.FrontCeilingAboveBackCeiling:	
 
 	ld hl,(UpperLower.BackCeilingHeight)
-	ld de,Line.Clip.UpperFloor
-	call DrawHorizontalEdge
+	call ProjectHorizontalEdge
 
 	ld hl,(HorizontalEdge.Start.Y)
 	ld (Trapezium.Start.Floor),hl
+	push hl
 	
 	ld hl,(HorizontalEdge.End.Y)
 	ld (Trapezium.End.Floor),hl
+	push hl
+
+	ld hl,(UpperLower.FrontCeilingHeight)
+	call ProjectHorizontalEdge
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Ceiling),hl
+	push hl
 	
-	call DrawVerticalEdges
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Ceiling),hl
+	push hl
+	
+	call DrawVerticalEdges	
+	
+	pop hl
+	ld (HorizontalEdge.End.Y),hl
+	pop hl
+	ld (HorizontalEdge.Start.Y),hl
+	ld de,Line.Clip.Default
+	call DrawHorizontalEdge
+
+	pop hl
+	ld (HorizontalEdge.End.Y),hl
+	pop hl
+	ld (HorizontalEdge.Start.Y),hl
+	ld de,Line.Clip.UpperFloor
+	call DrawHorizontalEdge
 
 	jr Upper.Done
 
@@ -769,6 +785,8 @@ Upper.FrontCeilingAboveBackCeiling:
 Upper.FrontCeilingBelowBackCeiling:
 
 	ld hl,(UpperLower.FrontCeilingHeight)
+	
+	call ProjectHorizontalEdge
 	ld de,Line.Clip.UpperFloor
 	call DrawHorizontalEdge
 
@@ -794,27 +812,43 @@ Upper.Done:
 ; --------------------------------------------------------------------------
 Lower.FrontFloorBelowBackFloor:
 
-	ld hl,(UpperLower.FrontFloorHeight)
-	ld de,Line.Clip.Default
-	call DrawHorizontalEdge
-
-	ld hl,(HorizontalEdge.Start.Y)
-	ld (Trapezium.Start.Floor),hl
-	
-	ld hl,(HorizontalEdge.End.Y)
-	ld (Trapezium.End.Floor),hl
-
 	ld hl,(UpperLower.BackFloorHeight)
-	ld de,Line.Clip.LowerCeiling
-	call DrawHorizontalEdge
+	call ProjectHorizontalEdge
 
 	ld hl,(HorizontalEdge.Start.Y)
 	ld (Trapezium.Start.Ceiling),hl
+	push hl
 	
 	ld hl,(HorizontalEdge.End.Y)
 	ld (Trapezium.End.Ceiling),hl
+	push hl
+
+	ld hl,(UpperLower.FrontFloorHeight)
+	call ProjectHorizontalEdge
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Trapezium.Start.Floor),hl
+	push hl
 	
-	call DrawVerticalEdges
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Trapezium.End.Floor),hl
+	push hl
+	
+	call DrawVerticalEdges	
+	
+	pop hl
+	ld (HorizontalEdge.End.Y),hl
+	pop hl
+	ld (HorizontalEdge.Start.Y),hl
+	ld de,Line.Clip.Default
+	call DrawHorizontalEdge
+
+	pop hl
+	ld (HorizontalEdge.End.Y),hl
+	pop hl
+	ld (HorizontalEdge.Start.Y),hl
+	ld de,Line.Clip.LowerCeiling
+	call DrawHorizontalEdge
 
 	jr Lower.Done
 
@@ -824,6 +858,7 @@ Lower.FrontFloorBelowBackFloor:
 Lower.FrontFloorAboveBackFloor:
 
 	ld hl,(UpperLower.FrontFloorHeight)
+	call ProjectHorizontalEdge
 	ld de,Line.Clip.LowerCeiling
 	call DrawHorizontalEdge
 
@@ -833,21 +868,21 @@ Lower.Done:
 ; Update the clipped columns.
 ; --------------------------------------------------------------------------
 
-	ld hl,(Trapezium.Start.Column)
-	ld a,(Trapezium.End.Column)
-	sub l
-	ld b,a
-	inc b
--:	ld h,UpdatedBottomEdgeClip >> 8
-	ld a,(hl)
-	dec h
-	ld (hl),a
-	dec h
-	ld a,(hl)
-	dec h
-	ld (hl),a
-	inc l
-	djnz -
+;	ld hl,(Trapezium.Start.Column)
+;	ld a,(Trapezium.End.Column)
+;	sub l
+;	ld b,a
+;	inc b
+;-:	ld h,UpdatedBottomEdgeClip >> 8
+;	ld a,(hl)
+;	dec h
+;	ld (hl),a
+;	dec h
+;	ld a,(hl)
+;	dec h
+;	ld (hl),a
+;	inc l
+;	djnz -
 	
 	jr Wall.Drawn
 
@@ -873,8 +908,9 @@ Wall.DrawMiddle:
 	
 	push hl
 	
-	ld hl,Line.Clip.Default
 	ex de,hl
+	call ProjectHorizontalEdge
+	ld de,Line.Clip.Default
 	call DrawHorizontalEdge
 
 ; --------------------------------------------------------------------------
@@ -897,8 +933,9 @@ Wall.DrawMiddle:
 	inc hl
 	ld d,(hl)
 
-	ld hl,Line.Clip.Default
 	ex de,hl
+	call ProjectHorizontalEdge
+	ld de,Line.Clip.Default
 	call DrawHorizontalEdge
 
 ; --------------------------------------------------------------------------
@@ -947,24 +984,17 @@ SkipWall:
 
 
 ; ==========================================================================
-; DrawHorizontalEdge
+; ProjectHorizontalEdge
 ; --------------------------------------------------------------------------
-; Draws a horizontal edge of a wall.
+; Projects a horizontal edge to the screen.
 ; "Horizontal" refers to a line with constant height in 3D (when projected
 ; to 2D it will appear sloped).
 ; --------------------------------------------------------------------------
 ; Inputs:    HL: Height of the edge.
-;            DE: Pointer to pixel clipping routine.
 ; Outputs:   HorizontalEdge.Start.Y, HorizontalEdge.End.Y: Projected Y
 ;            coordinates of the ends of the wall edge.
 ; ==========================================================================
-DrawHorizontalEdge:
-
-; --------------------------------------------------------------------------
-; Set the pixel clipping routine.
-; --------------------------------------------------------------------------
-
-	ld (Line.ClipPixel),de
+ProjectHorizontalEdge:
 
 ; --------------------------------------------------------------------------
 ; Calculate the height relative to the camera position.
@@ -998,9 +1028,35 @@ DrawHorizontalEdge:
 	ld hl,(Render.Camera.YShear)
 	or a
 	sbc hl,bc
-	ld (Clip.g_line16Y2),hl
 	ld (HorizontalEdge.End.Y),hl
 	
+	ret
+	
+; ==========================================================================
+; DrawHorizontalEdge
+; --------------------------------------------------------------------------
+; Draws a horizontal edge of a wall.
+; "Horizontal" refers to a line with constant height in 3D (when projected
+; to 2D it will appear sloped).
+; --------------------------------------------------------------------------
+; Inputs:    DE: Pointer to pixel clipping routine.
+; Outputs:   HorizontalEdge.Start.Y, HorizontalEdge.End.Y: Projected Y
+;            coordinates of the ends of the wall edge.
+; ==========================================================================
+DrawHorizontalEdge:
+
+	ld hl,(HorizontalEdge.Start.Y)
+	ld (Clip.g_line16Y1),hl
+	
+	ld hl,(HorizontalEdge.End.Y)
+	ld (Clip.g_line16Y2),hl
+
+; --------------------------------------------------------------------------
+; Set the pixel clipping routine.
+; --------------------------------------------------------------------------
+
+	ld (Line.ClipPixel),de
+
 ; --------------------------------------------------------------------------
 ; Clip the line.
 ; --------------------------------------------------------------------------
@@ -1319,16 +1375,17 @@ Line.Clip.UpperFloor:
 	ret
 
 +:	; Can we clip against the top edge?
+
 	ld a,d
 	inc h
 	cp (hl)
 	jr c,++
 	
-	inc h
 	ld (hl),d
 
 	; Can we clip against the bottom edge?
 
+	inc h
 	inc h
 	cp (hl)
 	ccf
@@ -1367,9 +1424,7 @@ Line.Clip.LowerCeiling:
 	ccf
 	jr c,++
 	
-	inc h
 	ld (hl),d
-	dec h
 
 +++:
 
