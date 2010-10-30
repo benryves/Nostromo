@@ -38,19 +38,13 @@ Draw:
 	ld l,a
 	ld a,(Delta.X)
 	sub l
-	jr nc,NotSteep
+	jr nc,Draw.Shallow
 	
 Steep:
-	set LineFlag.Steep,(iy+LineFlags)
 	ld a,b \ ld b,c \ ld c,a
 	ld a,d \ ld d,e \ ld e,a
 	jp Draw.Steep
 	
-NotSteep:
-	res LineFlag.Steep,(iy+LineFlags)
-	jp Draw.Shallow
-	
-
 ; --------------------------------------------------------------------------
 ; Draw a shallow line (|dX| > |dY|)
 ; --------------------------------------------------------------------------
@@ -225,9 +219,6 @@ Steep.Delta.Y.Positive:
 	
 	ld a,$2C ; inc l
 	ld (Steep.YStep),a
-	
-	ld hl,+12
-	ld (Steep.AdvanceY.Shallow.Stride),hl
 
 	ld a,$0F ; rrca
 	ld (Steep.AdvanceY.Steep.Shift),a
@@ -242,9 +233,6 @@ Steep.Delta.Y.Negative:
 	
 	ld a,$2D ; dec l
 	ld (Steep.YStep),a
-	
-	ld hl,-12
-	ld (Steep.AdvanceY.Shallow.Stride),hl
 
 	ld a,$07 ; rlca
 	ld (Steep.AdvanceY.Steep.Shift),a
@@ -272,14 +260,8 @@ Steep.Delta.Y.Set:
 	push hl
 	push bc
 	
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,+
-	ld a,h
-	ld e,l
-	jr ++
-+:	ld a,l
+	ld a,l
 	ld e,h
-++:	
 	
 	dec e
 	call ionGetPixel
@@ -292,11 +274,6 @@ Steep.Delta.Y.Set:
 -:	push hl
 	push bc
 	
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,+
-	ld a,h \ ld h,l \ ld l,a
-+:
-
 Steep.ClipPixel = $+1
 	call NoClip
 	jr c,Steep.Line.PixelClipped
@@ -313,28 +290,11 @@ Steep.PixelMask = $+1
 Steep.Line.PixelClipped:
 
 	; Advance X.
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,Steep.AdvanceX.Steep
-
-Steep.AdvanceX.Shallow:
-	ld a,(Steep.PixelMask)
-	rrca
-	ld (Steep.PixelMask),a
-	jr nc,+
-	ld hl,(Steep.PixelBufferOffset)
-	inc hl
-	ld (Steep.PixelBufferOffset),hl
-+:
-	jr Steep.AdvanceX.Done
-
-Steep.AdvanceX.Steep:
 	ld hl,(Steep.PixelBufferOffset)
 	ld bc,12
 	add hl,bc
 	ld (Steep.PixelBufferOffset),hl
 
-Steep.AdvanceX.Done:
-	
 	pop bc
 	pop hl
 
@@ -346,22 +306,6 @@ Steep.Delta.Y = $+1
 	jp p,Steep.NoAdvanceY
 	
 	; Advance Y.
-	bit LineFlag.Steep,(iy+LineFlags)
-	jr nz,Steep.AdvanceY.Steep
-
-Steep.AdvanceY.Shallow:
-	push hl
-	push bc
-	ld hl,(Steep.PixelBufferOffset)
-Steep.AdvanceY.Shallow.Stride = $+1
-	ld bc,12
-	add hl,bc
-	ld (Steep.PixelBufferOffset),hl
-	pop bc
-	pop hl
-	jr Steep.AdvanceY.Done
-
-Steep.AdvanceY.Steep:
 	push af
 	ld a,(Steep.PixelMask)
 Steep.AdvanceY.Steep.Shift:
@@ -377,8 +321,6 @@ Steep.AdvanceY.Steep.Increment:
 +:
 	pop af
 
-Steep.AdvanceY.Done:
-	
 Steep.YStep:
 	inc l
 	add a,d	
