@@ -1275,10 +1275,9 @@ Line.Clip.Default:
 	; Has the column been completed?
 	ld h,CompletedColumns >> 8
 	ld a,(hl)
-	or a
-	jr z,+
+	add a,a
+	jr nc,+
 	ld h,d
-	scf
 	ret
 
 +:	; Can we clip against the top edge?
@@ -1314,10 +1313,9 @@ Line.Clip.UpperFloor:
 	; Has the column been completed?
 	ld h,CompletedColumns >> 8
 	ld a,(hl)
-	or a
-	jr z,+
+	add a,a
+	jr nc,+
 	ld h,d
-	scf
 	ret
 
 +:	; Can we clip against the top edge?
@@ -1356,10 +1354,9 @@ Line.Clip.LowerCeiling:
 	; Has the column been completed?
 	ld h,CompletedColumns >> 8
 	ld a,(hl)
-	or a
-	jr z,+
+	add a,a
+	jr nc,+
 	ld h,d
-	scf
 	ret
 
 +:	; Can we clip against the bottom edge?
