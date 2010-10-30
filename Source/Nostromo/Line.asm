@@ -217,7 +217,7 @@ Steep.Delta.Y.Positive:
 
 	ld a,$0F ; rrca
 	ld (Steep.AdvanceY.Steep.Shift),a
-	ld a,$23 ; inc hl
+	ld a,$13 ; inc de
 	ld (Steep.AdvanceY.Steep.Increment),a
 	
 	jr Steep.Delta.Y.Set
@@ -231,7 +231,7 @@ Steep.Delta.Y.Negative:
 
 	ld a,$07 ; rlca
 	ld (Steep.AdvanceY.Steep.Shift),a
-	ld a,$2B ; dec hl
+	ld a,$1B ; dec de
 	ld (Steep.AdvanceY.Steep.Increment),a
 
 Steep.Delta.Y.Set:
@@ -267,7 +267,6 @@ Steep.Delta.Y.Set:
 	pop hl
 	
 -:	push hl
-	push bc
 	
 Steep.ClipPixel = $+1
 	call NoClip
@@ -286,11 +285,10 @@ Steep.Line.PixelClipped:
 
 	; Advance X.
 	ld hl,(Steep.PixelBufferOffset)
-	ld bc,12
-	add hl,bc
+	ld de,12
+	add hl,de
 	ld (Steep.PixelBufferOffset),hl
 
-	pop bc
 	pop hl
 
 Steep.Delta.X = $+2
@@ -301,24 +299,27 @@ Steep.Delta.Y = $+1
 	jp p,Steep.NoAdvanceY
 	
 	; Advance Y.
-	push af
+	
+	add a,d
+	ld c,a
+	
 	ld a,(Steep.PixelMask)
 Steep.AdvanceY.Steep.Shift:
 	rrca
 	ld (Steep.PixelMask),a
 	jr nc,+
-	push hl
-	ld hl,(Steep.PixelBufferOffset)
+	ld de,(Steep.PixelBufferOffset)
 Steep.AdvanceY.Steep.Increment:
-	inc hl
-	ld (Steep.PixelBufferOffset),hl
-	pop hl
+	inc de
+	ld (Steep.PixelBufferOffset),de
 +:
-	pop af
 
 Steep.YStep:
 	inc l
-	add a,d	
+	
+	inc h ; ++x
+	djnz -
+	ret
 	
 Steep.NoAdvanceY:
 	ld c,a
