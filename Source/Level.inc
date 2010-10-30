@@ -4,10 +4,10 @@ Sector2: .dw -128, 64
 Sector3: .dw -86, 256
 Sector4: .dw -42, 256
 Sector5: .dw -128, 64
-Sector6: .dw -192, 64
+Sector6: .dw -160, 64
 Sector7: .dw -96, 64
-Sector8: .dw -96, 32
-Sector9: .dw -96, 32
+Sector8: .dw -112, 48
+Sector9: .dw -112, 48
 
 Vertices:
 	.dw 0, -3072
