@@ -128,21 +128,19 @@ Shallow.Delta.Y.Set:
 	; Swap H and L.
 	ld a,h \ ld h,l \ ld l,a
 	
--:	push hl
-	push bc
-	
+-:		
 Shallow.ClipPixel = $+1
 	call NoClip
 	jr c,Shallow.Line.PixelClipped
 
 Shallow.PixelBufferOffset = $+1
-	ld hl,0
+	ld de,0
 	
-	ld a,(hl)
+	ld a,(de)
 Shallow.PixelMask = $+1
 	or 0	
 	
-	ld (hl),a
+	ld (de),a
 	
 Shallow.Line.PixelClipped:
 
@@ -151,13 +149,10 @@ Shallow.Line.PixelClipped:
 	rrca
 	ld (Shallow.PixelMask),a
 	jr nc,+
-	ld hl,(Shallow.PixelBufferOffset)
-	inc hl
-	ld (Shallow.PixelBufferOffset),hl
+	ld de,(Shallow.PixelBufferOffset)
+	inc de
+	ld (Shallow.PixelBufferOffset),de
 +:
-	
-	pop bc
-	pop hl
 
 Shallow.Delta.X = $+2
 Shallow.Delta.Y = $+1
@@ -165,21 +160,20 @@ Shallow.Delta.Y = $+1
 	ld a,c
 	sub e
 	jp p,Shallow.NoAdvanceY
+
+	add a,d
 	
 	; Advance Y.
 	push hl
-	push bc
 	ld hl,(Shallow.PixelBufferOffset)
 Shallow.AdvanceY.Shallow.Stride = $+1
-	ld bc,12
-	add hl,bc
+	ld de,12
+	add hl,de
 	ld (Shallow.PixelBufferOffset),hl
-	pop bc
 	pop hl
 	
 Shallow.YStep:
 	inc h
-	add a,d	
 	
 Shallow.NoAdvanceY:
 	ld c,a
