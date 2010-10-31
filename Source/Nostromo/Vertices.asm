@@ -10,7 +10,7 @@
 SinA: .dw 0
 CosA: .dw 0
 
-Transform
+Transform:
 
 	; Temp variables
 	
@@ -112,9 +112,7 @@ VertexCount = $+1
 	
 	ld a,h
 	or l
-	jp nz,TransformLoop
-
-	
+	jp nz,TransformLoop	
 	ret	
 
 .endmodule

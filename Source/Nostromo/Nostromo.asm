@@ -29,6 +29,10 @@ Render.Camera.YShear: .dw 0
 Sector.Front: .dw 0
 Sector.Back: .dw 0
 
+Previous.Camera.X: .dw 0
+Previous.Camera.Y: .dw 0
+Previous.Camera.Angle: .db 0
+
 ; ==========================================================================
 ; Render
 ; --------------------------------------------------------------------------
@@ -102,10 +106,34 @@ Render:
 ; Transform the vertices.
 ; --------------------------------------------------------------------------
 	
+	ld a,(Previous.Camera.Angle)
+	ld b,a
+	ld a,(Camera.Angle)
+	cp b
+	jr z,+
+	ld (Previous.Camera.Angle),a
+	jr TransformVertices
++:	ld hl,(Previous.Camera.X)
+	ld de,(Camera.X)
+	or a
+	sbc hl,de
+	jr z,+
+	ld (Previous.Camera.X),de
+	jr TransformVertices
++:	ld hl,(Previous.Camera.Y)
+	ld de,(Camera.Y)
+	or a
+	sbc hl,de
+	jr z,SkipTransformVertices
+	ld (Previous.Camera.Y),de
+	
+TransformVertices:
 	ld hl,Vertices
 	ld de,TransformedVertices
 	ld bc,Vertices.Count
 	call Vertices.Transform
+
+SkipTransformVertices:
 
 ; --------------------------------------------------------------------------
 ; Mark all walls as not drawn this frame.
