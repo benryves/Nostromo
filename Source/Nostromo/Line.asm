@@ -1,7 +1,7 @@
 .module Line
 
 LineFlags = asm_Flag1
-LineFlag.Steep = 7
+LineFlag.TopDown = 7
 
 Error: .db 0
 
@@ -193,35 +193,52 @@ Draw.Steep:
 
 Draw.Steep.PositiveDX:
 
+Draw.Steep.PositiveDX.TopDown:
+
 	ld (Steep.Delta.X),a
+	
+	bit LineFlag.TopDown,(iy+LineFlags)
+	jr nz,Draw.Steep.Draw.TopDown
+	
+	ld a,b \ ld b,d \ ld d,a
+	ld a,c \ ld c,e \ ld e,a
+	
+	jr Draw.Steep.Draw.BottomUp
+
+Draw.Steep.NegativeDX:
+
+	neg
+	ld (Steep.Delta.X),a
+	
+	bit LineFlag.TopDown,(iy+LineFlags)
+	jr z,Draw.Steep.Draw.BottomUp
+	
+	ld a,b \ ld b,d \ ld d,a
+	ld a,c \ ld c,e \ ld e,a
+	
+	jr Draw.Steep.Draw.TopDown
+
+
+Draw.Steep.Draw.TopDown:
 
 	ld hl,+12
 	ld (Steep.AdvanceX.Stride),hl
 	ld a,$24 ; inc h
 	ld (Steep.AdvanceY.AdvanceY),a
 	ld (Steep.NoAdvanceY.AdvanceY),a
-
+	
 	jr Draw.Steep.Draw
 
-Draw.Steep.NegativeDX:
-
-	neg
-	ld (Steep.Delta.X),a
-
+Draw.Steep.Draw.BottomUp:
+	
 	ld hl,-12
 	ld (Steep.AdvanceX.Stride),hl
 	ld a,$25 ; dec h
 	ld (Steep.AdvanceY.AdvanceY),a
 	ld (Steep.NoAdvanceY.AdvanceY),a
-
-	;ld l,a
-	;ld a,b \ ld b,d \ ld d,a
-	;ld a,c \ ld c,e \ ld e,a
-	;ld a,l
-	jr Draw.Steep.Draw
-
-Draw.Steep.Draw:
 	
+Draw.Steep.Draw:
+
 	; error = dx / 2
 	ld a,(Steep.Delta.X)
 	srl a

@@ -775,6 +775,7 @@ Upper.FrontCeilingAboveBackCeiling:
 	pop hl
 	ld (HorizontalEdge.Start.Y),hl
 	ld de,Line.Clip.UpperFloor
+	set Line.LineFlag.TopDown,(iy+Line.LineFlags)
 	call DrawHorizontalEdge
 
 	jr Upper.Done
@@ -788,6 +789,7 @@ Upper.FrontCeilingBelowBackCeiling:
 	
 	call ProjectHorizontalEdge
 	ld de,Line.Clip.UpperFloor
+	set Line.LineFlag.TopDown,(iy+Line.LineFlags)
 	call DrawHorizontalEdge
 
 Upper.Done:
@@ -848,6 +850,7 @@ Lower.FrontFloorBelowBackFloor:
 	pop hl
 	ld (HorizontalEdge.Start.Y),hl
 	ld de,Line.Clip.LowerCeiling
+	res Line.LineFlag.TopDown,(iy+Line.LineFlags)
 	call DrawHorizontalEdge
 
 	jr Lower.Done
@@ -860,6 +863,7 @@ Lower.FrontFloorAboveBackFloor:
 	ld hl,(UpperLower.FrontFloorHeight)
 	call ProjectHorizontalEdge
 	ld de,Line.Clip.LowerCeiling
+	res Line.LineFlag.TopDown,(iy+Line.LineFlags)
 	call DrawHorizontalEdge
 
 Lower.Done:
