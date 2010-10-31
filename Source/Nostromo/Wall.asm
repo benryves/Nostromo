@@ -1328,10 +1328,8 @@ Line.Clip.Default:
 
 	inc h
 	cp (hl)
-	jr z,+
 	ccf
-
-+:	ld h,d
+	ld h,d
 	ret
 
 ; ==========================================================================
@@ -1359,7 +1357,7 @@ Line.Clip.UpperFloor:
 	ld a,d
 	inc h
 	cp (hl)
-	jr c,++
+	jr c,+
 	
 	ld (hl),d
 
@@ -1368,11 +1366,8 @@ Line.Clip.UpperFloor:
 	inc h
 	cp (hl)
 	ccf
-	
-	ld h,d
-	ret
 
-++:	ld h,d
++:	ld h,d
 	ret
 
 ; ==========================================================================
@@ -1399,20 +1394,17 @@ Line.Clip.LowerCeiling:
 	ld a,d
 	ld h,BottomEdgeClip >> 8
 	cp (hl)
-	jr z,++
 	ccf
-	jr c,++
+	jr c,+
 	
 	ld (hl),d
-
-+++:
 
 	; Can we clip against the top edge?
 	ld a,d
 	dec h
 	cp (hl)
 
-++:	ld h,d
++:	ld h,d
 	ret
 
 ; ==========================================================================
