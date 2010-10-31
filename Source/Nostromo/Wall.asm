@@ -1220,7 +1220,7 @@ DrawVerticalEdges:
 	
 	push bc
 	dec e
-	call ionGetPixel
+	call Pixel.GetInformation
 	pop bc
 	
 	ld de,12
@@ -1285,7 +1285,7 @@ WallPart.SkipStrokeStart:
 	
 	push bc
 	dec e
-	call ionGetPixel
+	call Pixel.GetInformation
 	pop bc
 	
 	ld de,12

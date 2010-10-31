@@ -23,8 +23,8 @@ DemoFlag.WindowHeld = 3
 DemoFlag.SnapToFloor = 4
 
 Main:
-
-	call Nostromo.Interrupt.Load
+	call Nostromo.Initialise
+	ret c
 	
 	ld hl,Level.Camera.X
 	ld (Nostromo.Camera.X),hl
@@ -143,7 +143,7 @@ SkipFPSCounter:
 ; Display the result on the screen.
 ; --------------------------------------------------------------------------
 
-	call ionFastCopy
+	call Nostromo.Screen.Copy
 	
 ; --------------------------------------------------------------------------
 ; Fetch the number of ticks.
@@ -184,8 +184,7 @@ SkipFPSCounter:
 	nop
 	in a,(1)
 	bit 6,a
-	jr nz,+	
-	im 1
+	jr nz,+
 	
 .if outputwriteris('ti8x')
 	; Reset speed.
@@ -197,6 +196,7 @@ SkipFPSCounter:
 ++:
 .endif
 
+	call Nostromo.ShutDown
 	ret
 +:
 
@@ -528,4 +528,5 @@ Level:
 TransformedVertices:
 .fill Vertices.Count * 4
 
+.include "Nostromo/End.asm"
 .endmodule

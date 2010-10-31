@@ -118,7 +118,7 @@ Shallow.Delta.Y.Set:
 	ld e,l
 	
 	dec e
-	call ionGetPixel
+	call Pixel.GetInformation
 	ld (Shallow.PixelBufferOffset),hl
 	ld (Shallow.PixelMask),a
 	
@@ -299,7 +299,7 @@ Steep.Delta.Y.Set:
 	ld e,h
 	
 	dec e
-	call ionGetPixel
+	call Pixel.GetInformation
 	ld (Steep.PixelBufferOffset),hl
 	ld (Steep.PixelMask),a
 	

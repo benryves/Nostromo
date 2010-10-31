@@ -22,6 +22,8 @@ Camera.YShear: .db 0
 #include "Tree.asm"
 #include "Line.asm"
 #include "Interrupt.asm"
+#include "Pixel.asm"
+#include "Screen.asm"
 
 Render.Camera.Z: .dw 0
 Render.Camera.YShear: .dw 0
@@ -32,6 +34,91 @@ Sector.Back: .dw 0
 Previous.Camera.X: .dw 0
 Previous.Camera.Y: .dw 0
 Previous.Camera.Angle: .db 0
+
+AllocatedTableMemory: .dw 0
+ClipTableAddress: .dw 0
+
+; ==========================================================================
+; Initialise
+; --------------------------------------------------------------------------
+; Initialises the engine.
+; --------------------------------------------------------------------------
+; Outputs:   Carry flag set on failure.
+; Destroyed: AF, BC, DE, HL, IX.
+; ==========================================================================
+Initialise:
+
+; --------------------------------------------------------------------------
+; We need to use page-aligned memory.
+; --------------------------------------------------------------------------
+
+	ld de,End
+	ld a,e
+	or a
+	jr z,+
+	inc d
+	ld e,0
++:	ld (ClipTableAddress),de
+
+; --------------------------------------------------------------------------
+; The table is 768 bytes long.
+; --------------------------------------------------------------------------
+	
+	ld hl,768
+	add hl,de
+
+; --------------------------------------------------------------------------
+; And so, how many bytes do we need to allocate?
+; --------------------------------------------------------------------------
+
+	ld de,End
+	or a
+	sbc hl,de
+	ld (AllocatedTableMemory),hl
+
+; --------------------------------------------------------------------------
+; Do we have enough memory?
+; --------------------------------------------------------------------------
+
+	.bcall _EnoughMem
+	ret c
+
+; --------------------------------------------------------------------------
+; Allocate the memory.
+; --------------------------------------------------------------------------
+
+	ex de,hl
+	ld de,End
+	
+	.bcall _InsertMem
+
+; --------------------------------------------------------------------------
+; Load the interrupt service routine.
+; --------------------------------------------------------------------------
+
+	call Nostromo.Interrupt.Load
+
+; --------------------------------------------------------------------------
+; All is well, so return safely.
+; --------------------------------------------------------------------------
+
+	or a
+	ret
+
+; ==========================================================================
+; ShutDown
+; --------------------------------------------------------------------------
+; Shuts down the engine.
+; --------------------------------------------------------------------------
+; Destroyed: AF, BC, DE, HL, IX.
+; ==========================================================================
+ShutDown:
+	im 1
+	; Deallocate memory used for look-up tables.
+	ld hl,End
+	ld de,(AllocatedTableMemory)
+	.bcall _DelMem
+	ret
 
 ; ==========================================================================
 ; Render
@@ -175,17 +262,6 @@ Render.RenderTreeNodeFunction:
 	pop ix
 	jp Subsector.Draw
 
-.fill (($+$FF)&$FF00)-$
-CompletedColumns:
-	.fill 96
-
-.fill (($+$FF)&$FF00)-$
-TopEdgeClip:
-	.fill 96
-
-.fill (($+$FF)&$FF00)-$
-BottomEdgeClip:
-	.fill 96
 
 ColumnsToDraw:
 	.db 0
