@@ -80,7 +80,7 @@ Render:
 	ldir
 
 	ld hl,BottomEdgeClip
-	ld (hl),64
+	ld (hl),65
 	ld de,BottomEdgeClip+1
 	ld bc,95
 	ldir
