@@ -25,20 +25,13 @@ DemoFlag.SnapToFloor = 4
 Main:
 	call Nostromo.Initialise
 	ret c
-	
-	ld hl,Level.Camera.X
-	ld (Nostromo.Camera.X),hl
-	ld hl,Level.Camera.Y
-	ld (Nostromo.Camera.Y),hl
-	ld hl,Level.Camera.Z
-	ld (Nostromo.Camera.Z),hl
-	
-	ld a,Level.Camera.Angle
-	ld (Nostromo.Camera.Angle),a
+
+	ld hl,Level
+	call Nostromo.Level.Load
+	jp c,Exit.ShutDownNostromo
 	
 	xor a
 	ld (FPSCounter),a
-	ld (Nostromo.Camera.YShear),a
 	ld (CameraAngleTicksRemainder),a
 	
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
@@ -57,7 +50,7 @@ Loop:
 	jr z,NotSnappedToFloor
 
 	ld (FindFloorHeightFunction.SP),sp
-	ld ix,Tree
+	ld ix,Nostromo.Level.Tree
 	ld hl,(Nostromo.Camera.X)
 	ld de,(Nostromo.Camera.Y)
 	ld bc,FindFloorHeightFunction
@@ -175,6 +168,8 @@ SkipFPSCounter:
 ; Handle input.
 ; --------------------------------------------------------------------------
 	
+	; Check for Clear.
+	
 	ld a,$FF
 	out (1),a
 	nop
@@ -184,21 +179,7 @@ SkipFPSCounter:
 	nop
 	in a,(1)
 	bit 6,a
-	jr nz,+
-	
-.if outputwriteris('ti8x')
-	; Reset speed.
-	in a,($02)
-	bit 7,a
-	jr z,++
-	xor a
-	out ($20),a
-++:
-.endif
-
-	call Nostromo.ShutDown
-	ret
-+:
+	jp z,Exit.UnloadLevel
 
 	ld hl,(MovementTicks)
 	ld de,8
@@ -521,12 +502,27 @@ SkipMovementInput:
 Forwards.X: .dw 0
 Forwards.Y: .dw 0
 
+Exit.UnloadLevel:
+	call Nostromo.Level.Unload
+
+Exit.ShutDownNostromo:
+	call Nostromo.ShutDown
+
+.if outputwriteris('ti8x')
+	; Reset speed.
+	in a,($02)
+	bit 7,a
+	jr z,++
+	xor a
+	out ($20),a
+++:
+.endif
+	
+	ret
+
 Level:
 #include "Level.inc"
 .echoln strformat("Level size: {0} bytes.", $-Level)
-
-TransformedVertices:
-.fill Vertices.Count * 4
 
 .include "Nostromo/End.asm"
 .endmodule

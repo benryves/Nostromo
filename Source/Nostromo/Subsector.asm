@@ -64,7 +64,7 @@ Draw.Loop:
 	ld h,0
 	add hl,hl
 	add hl,hl
-	ld bc,TransformedVertices
+	ld bc,(Level.TransformedVertices)
 	add hl,bc
 	
 	ld e,(hl)

@@ -1,10 +1,12 @@
 .module Nostromo
 
+CameraVariables:
 Camera.X: .dw 768
 Camera.Y: .dw 896
 Camera.Z: .dw 0
 Camera.Angle: .db 0
 Camera.YShear: .db 0
+CameraVariables.Size = $ - CameraVariables
 
 #define neg_hl() ld a,h \ cpl \ ld h,a \ ld a,l \ cpl \ ld l,a \ inc hl
 #define neg_de() ld a,d \ cpl \ ld d,a \ ld a,e \ cpl \ ld e,a \ inc de
@@ -24,6 +26,7 @@ Camera.YShear: .db 0
 #include "Interrupt.asm"
 #include "Pixel.asm"
 #include "Screen.asm"
+#include "Level.asm"
 
 Render.Camera.Z: .dw 0
 Render.Camera.YShear: .dw 0
@@ -66,6 +69,12 @@ Initialise:
 	
 	ld hl,768
 	add hl,de
+
+; --------------------------------------------------------------------------
+; The level's dynamic memory will appear after our tables.
+; --------------------------------------------------------------------------
+
+	ld (Level.DynamicMemory),hl
 
 ; --------------------------------------------------------------------------
 ; And so, how many bytes do we need to allocate?
@@ -215,9 +224,9 @@ Render:
 	ld (Previous.Camera.Y),de
 	
 TransformVertices:
-	ld hl,Vertices
-	ld de,TransformedVertices
-	ld bc,Vertices.Count
+	ld hl,(Level.Vertices)
+	ld de,(Level.TransformedVertices)
+	ld bc,(Level.Vertices.Count)
 	call Vertices.Transform
 
 SkipTransformVertices:
@@ -226,12 +235,18 @@ SkipTransformVertices:
 ; Mark all walls as not drawn this frame.
 ; --------------------------------------------------------------------------
 
-	ld hl,Walls
+	ld hl,(Level.Walls)
 	ld de,7 ; size of a wall.
-	ld b,Walls.Count
+	ld bc,(Level.Walls.Count)
+	ld a,b
+	ld b,c
+	ld c,a
+	inc c
 -:	res Wall.DrawFlag.DrawnThisFrame,(hl)
 	add hl,de
 	djnz -
+	dec c
+	jr nz,-
 
 ; --------------------------------------------------------------------------
 ; Walk the BSP tree to render the level.
@@ -239,7 +254,7 @@ SkipTransformVertices:
 
 	ld (Render.Finish+1),sp
 
-	ld ix,Tree
+	ld ix,(Level.Tree)
 	ld hl,(Camera.X)
 	ld de,(Camera.Y)
 	ld bc,Render.RenderTreeNodeFunction
