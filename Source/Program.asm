@@ -50,7 +50,7 @@ Loop:
 	jr z,NotSnappedToFloor
 
 	ld (FindFloorHeightFunction.SP),sp
-	ld ix,Nostromo.Level.Tree
+	ld ix,(Nostromo.Level.Tree)
 	ld hl,(Nostromo.Camera.X)
 	ld de,(Nostromo.Camera.Y)
 	ld bc,FindFloorHeightFunction
