@@ -29,6 +29,8 @@ Projected.Y.Top.Clipped: .db 0
 
 Projected.Width: .db 0
 
+Projected.Height: .db 0
+
 ; ==========================================================================
 ; SubSectorStack.Push
 ; --------------------------------------------------------------------------
@@ -261,10 +263,11 @@ Draw.Loop:
 	call Maths.Div.S16S16
 	call Wall.Clip24To16
 	ld a,c
+	ld (Projected.Height),a
 	srl a
 	ld (Projected.Width),a
 	or a
-	jr z,Draw.Skip
+	jp z,Draw.Skip
 	ld hl,(Projected.Y.Bottom)
 	sbc hl,bc
 	ld (Projected.Y.Top),hl
@@ -272,8 +275,25 @@ Draw.Loop:
 	inc a
 	ld (Projected.Y.Top.Clipped),a
 
+	ld a,(Projected.Height)
+	ld (Delta.DestinationHeight),a
+	
+	ld a,(Projected.Width)
+	ld (Delta.DestinationWidth),a
+	
+	ld a,32
+	ld (Delta.SourceHeight),a
+	
+	ld a,16
+	ld (Delta.SourceWidth),a
+	ld (MaximumWidth),a
+
+	ld a,(Delta.DestinationWidth)
+	srl a
+	ld (ColumnError),a
+
 ; --------------------------------------------------------------------------
-; Clip and draw a column.
+; Draw the thing.
 ; --------------------------------------------------------------------------
 
 	ld a,(Projected.X)
@@ -287,14 +307,28 @@ Draw.Loop:
 	add a,l
 	ld l,a
 
+; --------------------------------------------------------------------------
+; Initialise the per-row source offset.
+; --------------------------------------------------------------------------
+	
+	ld de,Sprite
+	ld (SourceRowOffset),de
+
+; --------------------------------------------------------------------------
+; Draw a column.
+; --------------------------------------------------------------------------
 ColumnLoop:
 	push hl
 	
+; --------------------------------------------------------------------------
+; Is the column on the screen?
+; --------------------------------------------------------------------------
+
 	ld a,l
 	or a
 	jp m,SkipColumn
 	cp 96
-	jr nc,SkipColumn
+	jp nc,SkipColumn
 
 	ld a,(Projected.Y.Top.Clipped)
 	ld h,TopEdgeClip >> 8
@@ -335,23 +369,122 @@ ColumnLoop:
 	ld e,c
 	
 	call Pixel.GetInformation
+	ld (DestinationPixelMask),a
+	ld (DestinationOffset),hl
+	
+	ld a,%10000000
+	ld (SourcePixelMask),a
+	
+	ld a,(Delta.DestinationHeight)
+	srl a
+	ld (RowError),a
 
+SourceRowOffset = $+1
+	ld hl,0
+	ld (SourceOffset),hl
+	
+	ld a,(Projected.Height)
+	srl a
+	ld (RowError),a
+	
 	pop bc
 	
-	ld c,a
-	ld de,12
+RowLoop:
 
--:	ld a,c
-	or (hl)
+SourceOffset = $+1
+	ld hl,0
+	ld a,(hl)
+SourcePixelMask = $+1
+	and 0
+	jr z,SkipPixel
+
+SetPixel:
+
+DestinationOffset = $+1
+	ld hl,0
+	ld a,(hl)
+DestinationPixelMask = $+1
+	or 0
 	ld (hl),a
-	add hl,de
-	djnz -
 
+SkipPixel:
+	ld hl,(DestinationOffset)
+	ld de,12
+	add hl,de
+	ld (DestinationOffset),hl
+
+RowError = $+1
+	ld a,0
+
+Delta.DestinationHeight = $+1
+Delta.SourceHeight = $+2
+	ld de,0
+	sub d
+	jp p,NoAdvanceRow
+
+AdvanceRow:
+
+AdvanceRowLoop:
+	ld c,a
+
+	ld a,(SourcePixelMask)
+	rrca
+	jr nc,+
+	ld hl,(SourceOffset)
+	inc hl
+	ld (SourceOffset),hl
++:	ld (SourcePixelMask),a
+	
+	ld a,c
+	add a,e
+	jp m,AdvanceRowLoop
+
+NoAdvanceRow:
+
+	ld (RowError),a
+	
+	djnz RowLoop
+	
 SkipColumn:
+
+
+ColumnError = $+1
+	ld a,0
+
+Delta.DestinationWidth = $+1
+Delta.SourceWidth = $+2
+	ld de,0
+	sub d
+	jp p,NoAdvanceColumn
+	
+	ld b,a
+MaximumWidth = $+1
+	ld a,0
+	dec a
+	jr nz,+
+	pop hl
+	jr Draw.Skip
++:	ld (MaximumWidth),a
+	ld a,b
+
+	ld hl,(SourceRowOffset)
+	ld bc,4
+
+-:	add hl,bc	
+	add a,e
+	jp m,-
+
+	ld (SourceRowOffset),hl	
+
+NoAdvanceColumn:
+
+	ld (ColumnError),a
+	
+
 	pop hl
 	inc l
 	dec h
-	jr nz,ColumnLoop
+	jp nz,ColumnLoop
 
 Draw.Skip:
 
@@ -360,5 +493,23 @@ Draw.Skip:
 	ret
 +:	jp Draw.Loop
 
+
+Sprite:
+.db %00000000, %10000000, %00000000, %00000000
+.db %00001111, %11000000, %00000000, %00000111
+.db %00111111, %11110000, %00000000, %00000111
+.db %00001111, %11111000, %00000000, %00001111
+.db %00000000, %10011100, %00000000, %00001111
+.db %00000010, %00001110, %00000000, %01111111
+.db %00111111, %11111111, %11111111, %11111111
+.db %11111111, %11111111, %11111111, %11111111
+.db %00111111, %11111111, %11111111, %11111111
+.db %00000010, %00001110, %00000000, %01111111
+.db %00000000, %10011100, %00000000, %00001111
+.db %00001111, %11111000, %00000000, %00001111
+.db %00111111, %11110000, %00000000, %00000111
+.db %00001111, %11000000, %00000000, %00000111
+.db %00000000, %10000000, %00000000, %00000000
+.db %00000000, %00000000, %00000000, %00000000
 
 .endmodule
