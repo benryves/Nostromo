@@ -953,6 +953,14 @@ Wall.DrawMiddle:
 	jr nz,+
 	dec a
 	ld (hl),a
+	
+	inc h
+	ld (hl),64
+	inc h
+	ld (hl),0
+	
+	ld h,CompletedColumns >> 8
+	
 	ld a,(ColumnsToDraw)
 	dec a
 	jp z,Render.Finish ; Quickly bail out if we've finished.

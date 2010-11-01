@@ -70,6 +70,8 @@ Load:
 	ld hl,(Vertices.Count)
 	add hl,hl
 	add hl,hl
+	ld de,Things.SubSectorStack.EntrySize*3 ; Three thing stack entries.
+	add hl,de
 	ld (AllocatedMemory),hl
 
 ; --------------------------------------------------------------------------
@@ -88,6 +90,15 @@ Load:
 	ld (TransformedVertices),de
 	
 	.bcall _InsertMem
+
+; --------------------------------------------------------------------------
+; Update variables pointing to memory as appropriate.
+; --------------------------------------------------------------------------
+
+	ld hl,(DynamicMemory)
+	ld de,(AllocatedMemory)
+	add hl,de
+	ld (Things.SubSectorStack.Top),hl
 
 ; --------------------------------------------------------------------------
 ; Return successfully.

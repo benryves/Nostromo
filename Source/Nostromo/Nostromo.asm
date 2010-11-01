@@ -27,6 +27,7 @@ CameraVariables.Size = $ - CameraVariables
 #include "Pixel.asm"
 #include "Screen.asm"
 #include "Level.asm"
+#include "Things.asm"
 
 Render.Camera.Z: .dw 0
 Render.Camera.YShear: .dw 0
@@ -249,6 +250,16 @@ SkipTransformVertices:
 	jr nz,-
 
 ; --------------------------------------------------------------------------
+; Reset the thing subsector stack.
+; --------------------------------------------------------------------------
+
+	ld hl,(Things.SubSectorStack.Top)
+	ld (Things.SubSectorStack.Current),hl
+	
+	ld a,(Things.SubSectorStack.MaximumCapacity)
+	ld (Things.SubSectorStack.EntriesFree),a
+
+; --------------------------------------------------------------------------
 ; Walk the BSP tree to render the level.
 ; --------------------------------------------------------------------------
 
@@ -262,6 +273,12 @@ SkipTransformVertices:
 
 Render.Finish:
 	ld sp,0
+
+; --------------------------------------------------------------------------
+; Draw all things.
+; --------------------------------------------------------------------------
+
+	call Things.Draw
 	
 	ret
 

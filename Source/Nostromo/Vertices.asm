@@ -10,6 +10,10 @@
 SinA: .dw 0
 CosA: .dw 0
 
+TransformSingle:
+
+	ld bc,1
+
 Transform:
 
 	; Temp variables

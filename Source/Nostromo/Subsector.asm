@@ -10,9 +10,36 @@
 ; ==========================================================================
 Draw:
 
-	inc ix
-	inc ix
+; --------------------------------------------------------------------------
+; How many things do we have to draw?
+; --------------------------------------------------------------------------
 	
+	ld a,(ix+2)
+	or a
+	jr z,NoThings
+
+; --------------------------------------------------------------------------
+; We will have a number of things to draw, so push the subsector and current
+; clipping information onto thing stack.
+; --------------------------------------------------------------------------
+
+	call Things.SubSectorStack.Push
+
+; --------------------------------------------------------------------------
+; Skip past the things to draw in the subsector definition before drawing
+; the walls.
+; --------------------------------------------------------------------------
+
+	ld l,(ix+2)
+	ld h,0
+	add hl,hl
+	ex de,hl
+	add ix,de
+
+NoThings:
+	inc ix
+	inc ix
+	inc ix
 	ld b,(ix)
 	inc ix
 
@@ -133,8 +160,7 @@ Draw.Loop:
 ; Advance to the next wall.
 ; --------------------------------------------------------------------------
 AlreadyDrawnWall:
-	djnz Draw.Loop
-	
+	djnz Draw.Loop	
 	ret
 	
 
