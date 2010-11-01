@@ -249,24 +249,27 @@ Draw.Loop:
 	or a
 	sbc hl,bc
 	ld (Projected.Y.Bottom),hl
-	call Wall.Clip16ToRow
+	call Wall.Clip16ToRowPlusOne
+	inc a
 	ld (Projected.Y.Bottom.Clipped),a
 
 ; --------------------------------------------------------------------------
-; Calculate the height and therefore bottom.
+; Calculate the height and therefore top.
 ; --------------------------------------------------------------------------
 
-	ld hl,64
+	ld hl,128
 	call Maths.Div.S16S16
 	call Wall.Clip24To16
 	ld a,c
+	srl a
 	ld (Projected.Width),a
 	or a
 	jr z,Draw.Skip
 	ld hl,(Projected.Y.Bottom)
 	sbc hl,bc
 	ld (Projected.Y.Top),hl
-	call Wall.Clip16ToRow
+	call Wall.Clip16ToRowPlusOne
+	inc a
 	ld (Projected.Y.Top.Clipped),a
 
 ; --------------------------------------------------------------------------
@@ -293,8 +296,7 @@ ColumnLoop:
 	cp 96
 	jr nc,SkipColumn
 
-	ld a,(Projected.Y.Top)
-	
+	ld a,(Projected.Y.Top.Clipped)
 	ld h,TopEdgeClip >> 8
 	cp (hl)
 	jr nc,+
@@ -305,11 +307,10 @@ ColumnLoop:
 	jr c,+
 	ld a,(hl)
 +:
-
+	dec a
 	ld c,a
 
-	ld a,(Projected.Y.Bottom)
-	
+	ld a,(Projected.Y.Bottom.Clipped)
 	ld h,TopEdgeClip >> 8
 	cp (hl)
 	jr nc,+
@@ -320,10 +321,8 @@ ColumnLoop:
 	jr c,+
 	ld a,(hl)
 +:
-
+	dec a
 	ld b,a
-
-	; C = ceiling, B = bottom.
 	
 	sub c
 	jr c,SkipColumn

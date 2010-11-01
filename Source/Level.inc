@@ -114,7 +114,7 @@ SubSector5: .dw Sector1
 	.db 6 \ .dw Wall37, Wall38, Wall20, Wall18, Wall26, Wall19
 
 SubSector6: .dw Sector0
-	.db 0
+	.db 1 \ .dw Thing2
 	.db 1 \ .dw Wall28
 
 SubSector7: .dw Sector1
@@ -141,6 +141,7 @@ SubSector11: .dw Sector1
 Things:
 Thing0: .dw 1024, -1280
 Thing1: .dw 2816, -768
+Thing2: .dw 4096, -2816
 
 Tree:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
