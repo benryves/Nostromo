@@ -20,8 +20,12 @@ Transformed.X: .dw 0
 Transformed.Y: .dw 0
 
 Projected.X: .db 0
+
 Projected.Y.Bottom: .dw 0
+Projected.Y.Bottom.Clipped: .db 0
+
 Projected.Y.Top: .dw 0
+Projected.Y.Top.Clipped: .db 0
 
 ; ==========================================================================
 ; SubSectorStack.Push
@@ -243,9 +247,11 @@ Draw.Loop:
 	or a
 	sbc hl,bc
 	ld (Projected.Y.Bottom),hl
+	call Wall.Clip16ToRow
+	ld (Projected.Y.Bottom.Clipped),a
 
 ; --------------------------------------------------------------------------
-; Calculate the height.
+; Calculate the height and therefore bottom.
 ; --------------------------------------------------------------------------
 
 	ld hl,32
@@ -255,12 +261,71 @@ Draw.Loop:
 	or a
 	sbc hl,bc
 	ld (Projected.Y.Top),hl
+	call Wall.Clip16ToRow
+	ld (Projected.Y.Top.Clipped),a
+
+; --------------------------------------------------------------------------
+; Clip and draw a column.
+; --------------------------------------------------------------------------
+
+	ld a,(Projected.X)
+	ld l,a
+
+	ld a,(Projected.Y.Top)
+	
+	ld h,TopEdgeClip >> 8
+	cp (hl)
+	jr nc,+
+	ld a,(hl)
++:	
+	inc h
+	cp (hl)
+	jr c,+
+	ld a,(hl)
++:
+
+	ld c,a
 
 
-	call Draw.SinglePixel
-	ld hl,(Projected.Y.Bottom)
-	call Draw.SinglePixel
+	ld a,(Projected.Y.Bottom)
+	
+	ld h,TopEdgeClip >> 8
+	cp (hl)
+	jr nc,+
+	ld a,(hl)
++:	
+	inc h
+	cp (hl)
+	jr c,+
+	ld a,(hl)
++:
 
+	ld b,a
+
+	; C = ceiling, B = bottom.
+	
+	sub c
+	jr c,Draw.Skip
+	jr z,Draw.Skip
+	
+	ld b,a
+	push bc
+	
+	ld a,(Projected.X)
+	ld e,c
+	
+	call Pixel.GetInformation
+
+	pop bc
+	
+	ld c,a
+	ld de,12
+
+-:	ld a,c
+	or (hl)
+	ld (hl),a
+	add hl,de
+	djnz -
 
 Draw.Skip:
 
@@ -269,24 +334,5 @@ Draw.Skip:
 	ret
 +:	jp Draw.Loop
 
-Draw.SinglePixel:
-	call Wall.Clip16ToRowPlusOne
-	inc a
-	ld hl,(Projected.X)	
-
-	ld h,TopEdgeClip >> 8
-	cp (hl)
-	jr c,+
-	inc h
-	cp (hl)
-	jr nc,+
-
-	dec a
-	ld e,a
-	ld a,l
-	call Pixel.GetInformation
-	or (hl)
-	ld (hl),a
-+:	ret
 
 .endmodule
