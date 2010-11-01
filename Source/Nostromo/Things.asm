@@ -27,6 +27,8 @@ Projected.Y.Bottom.Clipped: .db 0
 Projected.Y.Top: .dw 0
 Projected.Y.Top.Clipped: .db 0
 
+Projected.Width: .db 0
+
 ; ==========================================================================
 ; SubSectorStack.Push
 ; --------------------------------------------------------------------------
@@ -254,11 +256,14 @@ Draw.Loop:
 ; Calculate the height and therefore bottom.
 ; --------------------------------------------------------------------------
 
-	ld hl,32
+	ld hl,64
 	call Maths.Div.S16S16
 	call Wall.Clip24To16
-	ld hl,(Projected.Y.Bottom)
+	ld a,c
+	ld (Projected.Width),a
 	or a
+	jr z,Draw.Skip
+	ld hl,(Projected.Y.Bottom)
 	sbc hl,bc
 	ld (Projected.Y.Top),hl
 	call Wall.Clip16ToRow
@@ -270,6 +275,23 @@ Draw.Loop:
 
 	ld a,(Projected.X)
 	ld l,a
+	
+	ld a,(Projected.Width)
+	ld h,a
+	
+	srl a
+	neg
+	add a,l
+	ld l,a
+
+ColumnLoop:
+	push hl
+	
+	ld a,l
+	or a
+	jp m,SkipColumn
+	cp 96
+	jr nc,SkipColumn
 
 	ld a,(Projected.Y.Top)
 	
@@ -285,7 +307,6 @@ Draw.Loop:
 +:
 
 	ld c,a
-
 
 	ld a,(Projected.Y.Bottom)
 	
@@ -305,13 +326,13 @@ Draw.Loop:
 	; C = ceiling, B = bottom.
 	
 	sub c
-	jr c,Draw.Skip
-	jr z,Draw.Skip
+	jr c,SkipColumn
+	jr z,SkipColumn
 	
 	ld b,a
 	push bc
 	
-	ld a,(Projected.X)
+	ld a,l
 	ld e,c
 	
 	call Pixel.GetInformation
@@ -326,6 +347,12 @@ Draw.Loop:
 	ld (hl),a
 	add hl,de
 	djnz -
+
+SkipColumn:
+	pop hl
+	inc l
+	dec h
+	jr nz,ColumnLoop
 
 Draw.Skip:
 
