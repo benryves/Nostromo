@@ -286,10 +286,8 @@ Draw.Loop:
 	
 	ld a,16
 	ld (Delta.SourceWidth),a
-	ld (MaximumWidth),a
 
 	ld a,(Delta.DestinationWidth)
-	srl a
 	ld (ColumnError),a
 
 ; --------------------------------------------------------------------------
@@ -442,7 +440,6 @@ Delta.SourceHeight = $+2
 	ld b,a
 	
 	ld a,e
-	srl a
 	
 	ld c,%10000000
 
@@ -469,7 +466,6 @@ TopNotClipped:
 ; --------------------------------------------------------------------------
 
 	ld a,e
-	srl a
 
 ; --------------------------------------------------------------------------
 ; Start from the first pixel in the source row.
@@ -581,16 +577,6 @@ Delta.SourceWidth = $+2
 	sub d
 	jp p,NoAdvanceColumn
 	
-	ld b,a
-MaximumWidth = $+1
-	ld a,0
-	dec a
-	jr nz,+
-	pop hl
-	jr Draw.Skip
-+:	ld (MaximumWidth),a
-	ld a,b
-
 	ld hl,(SourceRowOffset)
 	ld bc,8
 
