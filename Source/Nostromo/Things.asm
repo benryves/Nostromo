@@ -490,17 +490,17 @@ RowLoop:
 	ex af,af'
 	ld a,(hl)
 	and c
-	jr z,SkipPixel
+	jr z,Pixel.Skip
 	
 	rrc c
 	ld a,(hl)
 	and c
-	jr nz,SetPixel
+	jr nz,Pixel.Set
 
 ; --------------------------------------------------------------------------
 ; Clears the pixel (white).
 ; --------------------------------------------------------------------------
-ClearPixel:
+Pixel.Clear:
 	rlc c
 	exx
 	ld a,c
@@ -509,12 +509,12 @@ ClearPixel:
 	ld (hl),a
 	add hl,de
 	exx
-	jr DrawnPixel
+	jr Pixel.Drawn
 
 ; --------------------------------------------------------------------------
 ; Sets the pixel (black).
 ; --------------------------------------------------------------------------
-SetPixel:
+Pixel.Set:
 	rlc c
 	exx
 	ld a,(hl)
@@ -522,12 +522,12 @@ SetPixel:
 	ld (hl),a
 	add hl,de
 	exx
-	jr DrawnPixel
+	jr Pixel.Drawn
 
 ; --------------------------------------------------------------------------
 ; Skips the pixel (transparent).
 ; --------------------------------------------------------------------------
-SkipPixel:
+Pixel.Skip:
 	exx
 	add hl,de
 	exx
@@ -535,7 +535,7 @@ SkipPixel:
 ; --------------------------------------------------------------------------
 ; We have drawn the pixel.
 ; --------------------------------------------------------------------------
-DrawnPixel:
+Pixel.Drawn:
 
 	ex af,af'
 
