@@ -132,6 +132,7 @@
 				<li>You can walk through walls and ceilings (a current limitation). The world renders incorrectly when you do so (the engine is not designed to handle rendering something sensible when you're outside the map).</li>
 				<li>Performance is not especially good at the moment.</li>
 				<li>Some pixels are not rendered when they should be. This is especially noticeable near the ends of steeply sloping wall edges.</li>
+				<li>When you are very close to the edge of a wall it may get projected incorrectly (integer overflow) and you will see either a vertical line flash into view then out again or a region of the screen will appear blank.</li>
 			</ul>
 		</div>
 	</body>
