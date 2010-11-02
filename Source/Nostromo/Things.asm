@@ -453,9 +453,11 @@ Delta.SourceHeight = $+2
 	jp m,-
 ++:	djnz --
 	
+	ex af,af'
 	ld a,c
 	pop bc
 	ld c,a
+	ex af,af'
 	
 	jr RowLoop
 
