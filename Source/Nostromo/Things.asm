@@ -421,10 +421,53 @@ Delta.SourceHeight = $+2
 	ld de,0
 
 ; --------------------------------------------------------------------------
-; Initialise the error.
+; Is the top of the thing clipped?
+; --------------------------------------------------------------------------
+
+	ld a,c
+	xor $80
+	ld c,a
+	ld a,(Projected.Y.Top)
+	xor $80
+	sub c
+	jr nc,TopNotClipped
+	
+; --------------------------------------------------------------------------
+; The top of the thing is clipped, so advance source pointer accordingly.
 ; --------------------------------------------------------------------------
 	
-	ld a,(Projected.Height)
+	push bc
+	
+	neg
+	ld b,a
+	
+	ld a,e
+	srl a
+	
+	ld c,%10000000
+
+--:	sub d
+	jp p,++
+-:	rrc c
+	jr nc,+
+	inc hl
++:	add a,e
+	jp m,-
+++:	djnz --
+	
+	ld a,c
+	pop bc
+	ld c,a
+	
+	jr RowLoop
+
+TopNotClipped:
+
+; --------------------------------------------------------------------------
+; Initialise the error.
+; --------------------------------------------------------------------------
+
+	ld a,e
 	srl a
 
 ; --------------------------------------------------------------------------
