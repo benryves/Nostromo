@@ -408,7 +408,7 @@ SkipFPSCounter:
 	ld de,(MovementTicks)
 	sra d \ rr e
 
-	; Check for Del
+	; Check for Mode
 	ld a,$FF
 	out (1),a
 	nop
@@ -417,16 +417,16 @@ SkipFPSCounter:
 	nop
 	nop
 	in a,(1)
-	bit 7,a
+	bit 6,a
 	jr nz,+
 	add hl,de
 +:
 
-	; Check for Stat
+	; Check for XT0n
 	ld a,$FF
 	out (1),a
 	nop
-	ld a,$F7
+	ld a,$EF
 	out (1),a
 	nop
 	nop
@@ -449,7 +449,7 @@ SkipFPSCounter:
 	sra d \ rr e
 	ld d,a
 
-	; Check for Mode
+	; Check for Del
 	ld a,$FF
 	out (1),a
 	nop
@@ -458,7 +458,7 @@ SkipFPSCounter:
 	nop
 	nop
 	in a,(1)
-	bit 6,a
+	bit 7,a
 	jr nz,+
 	ld a,d
 	add a,e
@@ -469,11 +469,11 @@ SkipFPSCounter:
 	ld d,a
 +:
 
-	; Check for XT0n
+	; Check for Stat
 	ld a,$FF
 	out (1),a
 	nop
-	ld a,$EF
+	ld a,$F7
 	out (1),a
 	nop
 	nop
