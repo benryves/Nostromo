@@ -23,7 +23,8 @@ Draw:
 ; clipping information onto thing stack.
 ; --------------------------------------------------------------------------
 
-	call Things.SubSectorStack.Push
+	bit RenderFlag.DrawThings,(iy+RenderFlags)
+	call nz,Things.SubSectorStack.Push
 
 ; --------------------------------------------------------------------------
 ; Skip past the things to draw in the subsector definition before drawing

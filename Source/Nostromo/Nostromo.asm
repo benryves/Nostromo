@@ -42,6 +42,9 @@ Previous.Camera.Angle: .db 0
 AllocatedTableMemory: .dw 0
 ClipTableAddress: .dw 0
 
+RenderFlags = asm_Flag1
+RenderFlag.DrawThings = 6
+
 ; ==========================================================================
 ; Initialise
 ; --------------------------------------------------------------------------
@@ -107,6 +110,13 @@ Initialise:
 ; --------------------------------------------------------------------------
 
 	call Nostromo.Interrupt.Load
+
+; --------------------------------------------------------------------------
+; Set default flags.
+; --------------------------------------------------------------------------
+
+	ld a,1<<RenderFlag.DrawThings
+	ld (iy+RenderFlags),a
 
 ; --------------------------------------------------------------------------
 ; All is well, so return safely.
@@ -278,7 +288,8 @@ Render.Finish:
 ; Draw all things.
 ; --------------------------------------------------------------------------
 
-	call Things.Draw
+	bit RenderFlag.DrawThings,(iy+RenderFlags)
+	call nz,Things.Draw
 	
 	ret
 

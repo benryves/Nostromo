@@ -21,6 +21,7 @@ DemoFlag.YEquHeld = 1
 DemoFlag.ZoomHeld = 2
 DemoFlag.WindowHeld = 3
 DemoFlag.SnapToFloor = 4
+DemoFlag.VarsHeld = 5
 
 Main:
 	call Nostromo.Initialise
@@ -38,6 +39,7 @@ Main:
 	set DemoFlag.YEquHeld,(iy+DemoFlags)
 	set DemoFlag.ZoomHeld,(iy+DemoFlags)
 	set DemoFlag.WindowHeld,(iy+DemoFlags)
+	set DemoFlag.VarsHeld,(iy+DemoFlags)
 	res DemoFlag.SnapToFloor,(iy+DemoFlags)
 
 Loop:
@@ -403,6 +405,28 @@ SkipFPSCounter:
 +:	res DemoFlag.WindowHeld,(iy+DemoFlags)
 ++:
 
+	; Check for Vars
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$FB
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 6,a
+	jr nz,+
+	bit DemoFlag.VarsHeld,(iy+DemoFlags)
+	jr nz,++
+	set DemoFlag.VarsHeld,(iy+DemoFlags)
+	
+	ld a,(iy+Nostromo.RenderFlags)
+	xor 1 << Nostromo.RenderFlag.DrawThings
+	ld (iy+Nostromo.RenderFlags),a
+	
+	jr ++
++:	res DemoFlag.VarsHeld,(iy+DemoFlags)
+++:
 
 	ld hl,(Nostromo.Camera.Z)
 	ld de,(MovementTicks)
@@ -491,7 +515,6 @@ SkipFPSCounter:
 	ld a,d
 	sub 32
 	ld (Nostromo.Camera.YShear),a
-
 	ld hl,0
 	ld (MovementTicks),hl
 
