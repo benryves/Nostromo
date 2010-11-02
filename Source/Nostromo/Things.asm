@@ -28,7 +28,6 @@ Projected.Y.Top: .dw 0
 Projected.Y.Top.Clipped: .db 0
 
 Projected.Width: .db 0
-
 Projected.Height: .db 0
 
 ; ==========================================================================
@@ -262,7 +261,12 @@ Draw.Loop:
 	ld hl,128
 	call Maths.Div.S16S16
 	call Wall.Clip24To16
+	ld a,b
+	or a
+	jp nz,Draw.Skip
 	ld a,c
+	or a
+	jp m,Draw.Skip
 	ld (Projected.Height),a
 	srl a
 	ld (Projected.Width),a
