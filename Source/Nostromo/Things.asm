@@ -330,6 +330,10 @@ ColumnLoop:
 	cp 96
 	jp nc,SkipColumn
 
+; --------------------------------------------------------------------------
+; Clip to the top edge.
+; --------------------------------------------------------------------------
+
 	ld a,(Projected.Y.Top.Clipped)
 	ld h,TopEdgeClip >> 8
 	cp (hl)
@@ -344,6 +348,10 @@ ColumnLoop:
 	dec a
 	ld c,a
 
+; --------------------------------------------------------------------------
+; Clip to the bottom edge.
+; --------------------------------------------------------------------------
+
 	ld a,(Projected.Y.Bottom.Clipped)
 	ld h,TopEdgeClip >> 8
 	cp (hl)
@@ -357,10 +365,18 @@ ColumnLoop:
 +:
 	dec a
 	ld b,a
-	
+
+; --------------------------------------------------------------------------
+; Is the height <= 0?
+; --------------------------------------------------------------------------
+
 	sub c
 	jr c,SkipColumn
 	jr z,SkipColumn
+	
+; --------------------------------------------------------------------------
+; Store the number of rows to render to the stack.
+; --------------------------------------------------------------------------
 	
 	ld b,a
 	push bc
@@ -368,86 +384,130 @@ ColumnLoop:
 	ld a,l
 	ld e,c
 	
+; --------------------------------------------------------------------------
+; Calculate where on the screen the first pixel should go.
+; --------------------------------------------------------------------------
+	
 	call Pixel.GetInformation
-	ld (DestinationPixelMask),a
-	ld (DestinationOffset),hl
+	ld c,a
+	push hl
+	push bc
 	
-	ld a,%10000000
-	ld (SourcePixelMask),a
+	exx
+	pop bc
+	pop hl
+	ld de,12
+	exx
+
+; --------------------------------------------------------------------------
+; Restore the height, ready to draw row-by-row.
+; --------------------------------------------------------------------------
+
+	pop bc
 	
-	ld a,(Delta.DestinationHeight)
-	srl a
-	ld (RowError),a
+; --------------------------------------------------------------------------
+; Load the offset to the source row.
+; --------------------------------------------------------------------------
 
 SourceRowOffset = $+1
 	ld hl,0
-	ld (SourceOffset),hl
-	
-	ld a,(Projected.Height)
-	srl a
-	ld (RowError),a
-	
-	pop bc
-	
-RowLoop:
 
-SourceOffset = $+1
-	ld hl,0
-	ld a,(hl)
-SourcePixelMask = $+1
-	and 0
-	jr z,SkipPixel
-
-SetPixel:
-
-DestinationOffset = $+1
-	ld hl,0
-	ld a,(hl)
-DestinationPixelMask = $+1
-	or 0
-	ld (hl),a
-
-SkipPixel:
-	ld hl,(DestinationOffset)
-	ld de,12
-	add hl,de
-	ld (DestinationOffset),hl
-
-RowError = $+1
-	ld a,0
+; --------------------------------------------------------------------------
+; Load the scale factor into DE.
+; --------------------------------------------------------------------------
 
 Delta.DestinationHeight = $+1
 Delta.SourceHeight = $+2
 	ld de,0
+
+; --------------------------------------------------------------------------
+; Initialise the error.
+; --------------------------------------------------------------------------
+	
+	ld a,(Projected.Height)
+	srl a
+
+; --------------------------------------------------------------------------
+; Start from the first pixel in the source row.
+; --------------------------------------------------------------------------
+
+	ld c,%10000000
+
+; --------------------------------------------------------------------------
+; Draw all of the rows of the sprite.
+; --------------------------------------------------------------------------
+
+RowLoop:
+
+; --------------------------------------------------------------------------
+; Are we drawing a pixel?
+; --------------------------------------------------------------------------
+
+	ex af,af'
+	ld a,(hl)
+	and c
+	jr z,SkipPixel
+
+; --------------------------------------------------------------------------
+; Sets the pixel (black).
+; --------------------------------------------------------------------------
+SetPixel:
+
+	exx
+	ld a,(hl)
+	or c
+	ld (hl),a
+	add hl,de
+	exx
+	jr DrawnPixel
+
+; --------------------------------------------------------------------------
+; Skips the pixel (transparent).
+; --------------------------------------------------------------------------
+SkipPixel:
+	exx
+	add hl,de
+	exx
+
+; --------------------------------------------------------------------------
+; We have drawn the pixel.
+; --------------------------------------------------------------------------
+DrawnPixel:
+
+	ex af,af'
+
+; --------------------------------------------------------------------------
+; Do we need to advance to the next row in the source?
+; --------------------------------------------------------------------------
+
 	sub d
 	jp p,NoAdvanceRow
 
+; --------------------------------------------------------------------------
+; If so, advance to the next row.
+; --------------------------------------------------------------------------
+
 AdvanceRow:
 
-AdvanceRowLoop:
-	ld c,a
-
-	ld a,(SourcePixelMask)
-	rrca
+-:	rrc c
 	jr nc,+
-	ld hl,(SourceOffset)
 	inc hl
-	ld (SourceOffset),hl
-+:	ld (SourcePixelMask),a
-	
-	ld a,c
-	add a,e
-	jp m,AdvanceRowLoop
++:	add a,e
+	jp m,-
 
 NoAdvanceRow:
 
-	ld (RowError),a
-	
+; --------------------------------------------------------------------------
+; Draw the next row.
+; --------------------------------------------------------------------------
+
 	djnz RowLoop
 	
 SkipColumn:
 
-
+; --------------------------------------------------------------------------
+; Advance to the next column if required.
+; --------------------------------------------------------------------------
 ColumnError = $+1
 	ld a,0
 
