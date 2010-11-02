@@ -66,6 +66,9 @@
 			background-color: #039;
 			border-color: #03C;
 		}
+		.key em {
+			text-transform: none;
+		}
 		</style>
 	</head>
 	<body>
@@ -74,7 +77,7 @@
 			<p>A project by <a href="http://benryves.com/">Ben Ryves</a> for <a href="http://maxcoderz.org/">MaxCoderz</a>.</p>
 		</div>
 		<div id="content">
-			<h2>Demo 3</h2>
+			<h2>Demo 4</h2>
 			<p>This is an experimental 3D engine for the TI-83 and TI-83+ graphical calculators.</p>
 			<p>
 				As it is an experiment it is not desperately useful, and it is likely to contain bugs that may crash your calculator.
@@ -97,13 +100,13 @@
 					<ul>
 						<li><strong class="key blue">&#x25B2;</strong> / <strong class="key blue">&#x25BC;</strong> Move forwards/backwards.</li>
 						<li><strong class="key blue">Trace</strong> / <strong class="key blue">Graph</strong> Strafe left/right.</li>
-						<li><strong class="key">Del</strong> / <strong class="key">Stat</strong> Move up/down.</li>
+						<li><strong class="key">Mode</strong> / <strong class="key">X,T,&Theta;,<em>n</em></strong> Move up/down.</li>
 					</ul>
 				</li>
 				<li>Looking
 					<ul>
 						<li><strong class="key blue">&#x25C0;</strong> / <strong class="key blue">&#x25B6;</strong> Look left/right.</li>
-						<li><strong class="key">Mode</strong> / <strong class="key">X,T,&Theta;,n</strong> Look up/down.</li>
+						<li><strong class="key">Del</strong> / <strong class="key">Stat</strong> Look up/down.</li>						
 					</ul>
 				</li>
 				<li>Options
@@ -111,15 +114,16 @@
 						<li><strong class="key blue">Y=</strong> Toggle the FPS counter on (default) and off.</li>
 						<li><strong class="key blue">Window</strong> Toggles between free up/down movement (default) and snapping to a fixed height above the floor.</li>
 						<li><strong class="key blue">Zoom</strong> Switch between 6MHz (default) and 15MHz (TI-83+ SE or above only) CPU speeds.</li>
+						<li><strong class="key">Vars</strong> Toggle between showing objects (default) and hiding them.</li>
 					</ul>
 				</li>
 			</ul>
 			<h2>Known issues</h2>
 			<ul>
 				<li>You can walk through walls and ceilings (a current limitation). The world renders incorrectly when you do so (the engine is not designed to handle rendering something sensible when you're outside the map).</li>
-				<li>The binary is excessively large due to several large variables allocated within the binary itself. These should be dynamically allocated.</li>
 				<li>Performance is not especially good at the moment.</li>
 				<li>Some pixels are not rendered when they should be. This is especially noticeable near the ends of steeply sloping wall edges.</li>
+				<li>The sprite drawing code for objects is not desperately robust. When you are near the object the sprite may appear to repeat or be corrupted. In other instances there may be addition pixels drawn below the bottom of the sprite.</li>
 			</ul>
 		</div>
 	</body>
