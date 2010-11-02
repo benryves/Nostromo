@@ -41,7 +41,10 @@ NoThings:
 	inc ix
 	inc ix
 	inc ix
-	ld b,(ix)
+	ld a,(ix)
+	or a
+	ret z
+	ld b,a
 	inc ix
 
 Draw.Loop:
