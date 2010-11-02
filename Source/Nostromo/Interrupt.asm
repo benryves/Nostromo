@@ -44,7 +44,7 @@ Load:
 
 Handler:
 $ = Location
-	ex af,af'
+	push af
 	
 	ld a,8
 	out (3),a
@@ -59,7 +59,7 @@ $ = Location
 	ld a,$0F
 	out (3),a
 	
-	ex af,af'
+	pop af
 	ei
 	reti
 $ = @
