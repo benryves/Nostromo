@@ -167,8 +167,8 @@ Sector4: .dw -42, 256
 Sector5: .dw -128, 64
 Sector6: .dw -160, 64
 Sector7: .dw -96, 64
-Sector8: .dw -112, 48
-Sector9: .dw -112, 48
+Sector8: .dw -128, 64
+Sector9: .dw -128, 64
 
 SubSectors:
 SubSector0: .dw Sector0

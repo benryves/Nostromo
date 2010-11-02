@@ -22,6 +22,12 @@ DemoFlag.ZoomHeld = 2
 DemoFlag.WindowHeld = 3
 DemoFlag.SnapToFloor = 4
 DemoFlag.VarsHeld = 5
+DemoFlag.AlphaHeld = 6
+
+Door.Delta: .db 1
+Door.Current: .dw 0
+Door.Min = -128 * 4
+Door.Max = 52 * 4
 
 Main:
 	call Nostromo.Initialise
@@ -40,7 +46,18 @@ Main:
 	set DemoFlag.ZoomHeld,(iy+DemoFlags)
 	set DemoFlag.WindowHeld,(iy+DemoFlags)
 	set DemoFlag.VarsHeld,(iy+DemoFlags)
+	set DemoFlag.AlphaHeld,(iy+DemoFlags)
 	res DemoFlag.SnapToFloor,(iy+DemoFlags)
+	
+	ld hl,Door.Max
+	ld (Door.Current),hl
+	
+	ld hl,Door.Max / 4
+	ld (Sector8+2),hl
+	ld (Sector9+2),hl
+	
+	xor a
+	ld (Door.Delta),a
 
 Loop:
 
@@ -515,6 +532,110 @@ SkipFPSCounter:
 	ld a,d
 	sub 32
 	ld (Nostromo.Camera.YShear),a
+
+
+	; Move the door.
+
+	ld a,(Door.Delta)
+	or a
+	jr z,Door.NotMoving
+	
+	ld de,(MovementTicks)
+	jp p,+
+	neg_de()
++:
+	
+	ld hl,(Door.Current)
+	add hl,de
+	
+	ld a,h
+	xor $80
+	ld h,a
+	
+	ld de,Door.Min ^ $8000
+	or a
+	sbc hl,de
+	jr nc,+
+
+	ex de,hl
+	xor a
+	ld (Door.Delta),a
+	jr ++	
++:	add hl,de
+++:
+
+	ld de,Door.Max ^ $8000
+	or a
+	sbc hl,de
+	jr z,+
+	jr c,+
+	
+	ex de,hl
+	xor a
+	ld (Door.Delta),a
+	jr ++
++:	add hl,de
+++:
+
+
+	ld a,h
+	xor $80
+	ld h,a
+
+	ld (Door.Current),hl
+
+	ld b,2
+	
+-:	sra h
+	rr l
+	djnz -
+	
+	ld (Sector8+2),hl
+	ld (Sector9+2),hl	
+
+Door.NotMoving:
+
+	; Check for Alpha
+	ld a,$FF
+	out (1),a
+	nop
+	ld a,$DF
+	out (1),a
+	nop
+	nop
+	in a,(1)
+	bit 7,a
+	jr nz,AlphaNotPressed
+	bit DemoFlag.AlphaHeld,(iy+DemoFlags)
+	jr nz,AlphaHandled
+	set DemoFlag.AlphaHeld,(iy+DemoFlags)
+	
+	
+	; Toggle the door direction.
+	ld a,(Door.Delta)
+	neg
+	ld (Door.Delta),a
+	or a
+	jr nz,DoorMoved
+	
+	; The door is not currently moving, so force it.
+	ld hl,Door.Min
+	ld de,(Door.Current)
+	or a
+	sbc hl,de
+	ld a,1
+	jr z,DoorMoved
+	neg
+DoorMoved:
+	ld (Door.Delta),a
+	
+	jr AlphaHandled
+AlphaNotPressed:
+	res DemoFlag.AlphaHeld,(iy+DemoFlags)
+AlphaHandled:
+
+
+	; Clear MovementTicks.
 	ld hl,0
 	ld (MovementTicks),hl
 
