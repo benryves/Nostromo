@@ -1522,6 +1522,7 @@ GetYIntercept:
 	nop
 	
 	; Result = Start.X - (Delta.X * Start.Y) / Delta.Y
+	
 	ld de,(Delta.X)
 	ld bc,(Start.Y)
 	call Nostromo.Maths.Mul.S16S16
@@ -1529,12 +1530,20 @@ GetYIntercept:
 	ld a,e
 	ld b,h
 	ld c,l
+	
+	push de
+	
 	ld de,(Delta.Y)
 	call Nostromo.Maths.Div.S24S16
 
 	ld hl,(Start.X)
-	or a
-	sbc hl,bc
+	
+	pop de
+	ld a,d
+	xor e
+	jp m,+
+	neg_bc()
++:	add hl,bc
 
 	ld a,$21 ; LC HL,nn
 	ld (GetYIntercept+0),a
@@ -1556,6 +1565,7 @@ GetXIntercept:
 	nop
 	
 	; Result = Start.Y - (Delta.Y * Start.X) / Delta.X
+	
 	ld de,(Delta.Y)
 	ld bc,(Start.X)
 	call Nostromo.Maths.Mul.S16S16
@@ -1563,12 +1573,20 @@ GetXIntercept:
 	ld a,e
 	ld b,h
 	ld c,l
+	
+	push de
+	
 	ld de,(Delta.X)
 	call Nostromo.Maths.Div.S24S16
 
 	ld hl,(Start.Y)
-	or a
-	sbc hl,bc
+	
+	pop de
+	ld a,d
+	xor e
+	jp m,+
+	neg_bc()
++:	add hl,bc
 	
 	ld a,$21 ; LC HL,nn
 	ld (GetXIntercept+0),a
