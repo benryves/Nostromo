@@ -68,10 +68,10 @@ Initialise:
 +:	ld (ClipTableAddress),de
 
 ; --------------------------------------------------------------------------
-; The table is 768 bytes long.
+; The clipping table is 768 bytes long. The trig table is 512 bytes long.
 ; --------------------------------------------------------------------------
 	
-	ld hl,768
+	ld hl,768+512
 	add hl,de
 
 ; --------------------------------------------------------------------------
@@ -104,6 +104,62 @@ Initialise:
 	ld de,End
 	
 	.bcall _InsertMem
+
+; --------------------------------------------------------------------------
+; Unpack the trig table.
+; --------------------------------------------------------------------------
+
+	ld ix,Maths.Trig.Table
+	ld de,Maths.Trig.PackedTable
+	ld hl,0
+	
+	ld b,128
+	
+-:	ld a,(de)
+	push de
+	
+	sra a
+	sra a
+	sra a
+	sra a
+	
+	ld e,a
+	
+	add a,a
+	sbc a,a
+	ld d,a
+	add hl,de
+	pop de
+	
+	ld (ix+0),l
+	ld (ix+1),h
+	inc ix
+	inc ix
+	
+	ld a,(de)
+	push de
+	
+	ld d,0
+	
+	and $0F
+	cp 8
+	jr c,+
+	or $F0
+	dec d
+
++:	ld e,a
+
+	add hl,de
+	pop de
+
+	ld (ix+0),l
+	ld (ix+1),h
+	inc ix
+	inc ix
+
+	inc de
+	
+	djnz -
 
 ; --------------------------------------------------------------------------
 ; Load the interrupt service routine.

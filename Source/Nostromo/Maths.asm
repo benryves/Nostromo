@@ -14,10 +14,19 @@
 			inc hl
 			ld b,(hl)
 			ret
-		.fill (($+$FF)&$FF00)-$
-		Table
+		
+		PackedTable		
+		PreviousValue = 0
+		Delta = 0
 		.for angle = 0 to 255
-			.dw 256 * sin(angle / 256 * 2 * pi())
+			NewValue = round(256 * sin(angle / 256 * 2 * pi()))
+			Delta <<= 4
+			Delta |= (NewValue - PreviousValue) & $0F
+			.if angle & 1
+				.db Delta
+				Delta = 0
+			.endif
+			PreviousValue = NewValue
 		.loop
 	.endmodule
 
