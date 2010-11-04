@@ -18,7 +18,7 @@
 		PackedTable		
 		PreviousValue = 0
 		Delta = 0
-		.for angle = 0 to 255
+		.for angle = 0 to 127
 			NewValue = round(256 * sin(angle / 256 * 2 * pi()))
 			Delta <<= 4
 			Delta |= (NewValue - PreviousValue) & $0F

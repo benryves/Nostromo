@@ -111,9 +111,10 @@ Initialise:
 
 	ld ix,Maths.Trig.Table
 	ld de,Maths.Trig.PackedTable
-	ld hl,0
 	
-	ld b,128
+	ld b,64
+	
+	ld hl,0
 	
 -:	ld a,(de)
 	push de
@@ -131,10 +132,7 @@ Initialise:
 	add hl,de
 	pop de
 	
-	ld (ix+0),l
-	ld (ix+1),h
-	inc ix
-	inc ix
+	call WriteUnpackedAngle
 	
 	ld a,(de)
 	push de
@@ -151,11 +149,8 @@ Initialise:
 
 	add hl,de
 	pop de
-
-	ld (ix+0),l
-	ld (ix+1),h
-	inc ix
-	inc ix
+	
+	call WriteUnpackedAngle
 
 	inc de
 	
@@ -179,6 +174,41 @@ Initialise:
 ; --------------------------------------------------------------------------
 
 	or a
+	ret
+
+
+; ==========================================================================
+; WriteUnpackedAngle
+; --------------------------------------------------------------------------
+; Internal routine used to write an unpacked angle to the trig table.
+; ==========================================================================
+WriteUnpackedAngle:
+
+; --------------------------------------------------------------------------
+; Store the angle in place.
+; --------------------------------------------------------------------------
+
+	ld (ix+0),l
+	ld (ix+1),h
+
+; --------------------------------------------------------------------------
+; The sine wave between 0..pi is inverted and repeated between pi..2pi.
+; --------------------------------------------------------------------------
+
+	push hl
+	neg_hl()
+	inc ixh
+	ld (ix+0),l
+	ld (ix+1),h
+	dec ixh
+	pop hl
+
+; --------------------------------------------------------------------------
+; Advance to the next slot in the table.
+; --------------------------------------------------------------------------
+
+	inc ix
+	inc ix
 	ret
 
 ; ==========================================================================
