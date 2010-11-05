@@ -1318,23 +1318,14 @@ Line.Clip.Default:
 ; Destroyed: AF, D.
 ; ==========================================================================
 Line.Clip.UpperFloor:
-	ld d,h
-	; Has the column been completed?
-	ld h,CompletedColumns >> 8
-	ld a,(hl)
-	add a,a
-	jr nc,+
-	ld h,d
-	ret
-
-+:	; Can we clip against the top edge?
-
-	ld a,d
-	inc h
+	ld a,h
+	
+	; Can we clip against the top edge?
+	ld h,TopEdgeClip >> 8
 	cp (hl)
 	jr c,+
 	
-	ld (hl),d
+	ld (hl),a
 
 	; Can we clip against the bottom edge?
 
@@ -1342,7 +1333,7 @@ Line.Clip.UpperFloor:
 	cp (hl)
 	ccf
 
-+:	ld h,d
++:	ld h,a
 	ret
 
 ; ==========================================================================
@@ -1356,30 +1347,21 @@ Line.Clip.UpperFloor:
 ; Destroyed: AF, D.
 ; ==========================================================================
 Line.Clip.LowerCeiling:
-	ld d,h
-	; Has the column been completed?
-	ld h,CompletedColumns >> 8
-	ld a,(hl)
-	add a,a
-	jr nc,+
-	ld h,d
-	ret
-
-+:	; Can we clip against the bottom edge?
-	ld a,d
+	ld a,h
+	
+	; Can we clip against the bottom edge?
 	ld h,BottomEdgeClip >> 8
 	cp (hl)
 	ccf
 	jr c,+
 	
-	ld (hl),d
+	ld (hl),a
 
 	; Can we clip against the top edge?
-	ld a,d
 	dec h
 	cp (hl)
 
-+:	ld h,d
++:	ld h,a
 	ret
 
 ; ==========================================================================
