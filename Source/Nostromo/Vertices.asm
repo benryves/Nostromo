@@ -7,9 +7,6 @@
 ; bc =  number of vertices to transform
 ; ===============================================================
 
-SinA: .dw 0
-CosA: .dw 0
-
 TransformSingle:
 
 	ld bc,1
