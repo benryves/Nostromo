@@ -1,13 +1,5 @@
 .module Nostromo
 
-CameraVariables:
-Camera.X: .dw 768
-Camera.Y: .dw 896
-Camera.Z: .dw 0
-Camera.Angle: .db 0
-Camera.YShear: .db 0
-CameraVariables.Size = $ - CameraVariables
-
 #define neg_hl() ld a,h \ cpl \ ld h,a \ ld a,l \ cpl \ ld l,a \ inc hl
 #define neg_de() ld a,d \ cpl \ ld d,a \ ld a,e \ cpl \ ld e,a \ inc de
 #define neg_bc() ld a,b \ cpl \ ld b,a \ ld a,c \ cpl \ ld c,a \ inc de
