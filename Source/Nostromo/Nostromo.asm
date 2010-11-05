@@ -21,19 +21,6 @@
 #include "Level.asm"
 #include "Things.asm"
 
-Render.Camera.Z: .dw 0
-Render.Camera.YShear: .dw 0
-
-Sector.Front: .dw 0
-Sector.Back: .dw 0
-
-Previous.Camera.X: .dw 0
-Previous.Camera.Y: .dw 0
-Previous.Camera.Angle: .db 0
-
-AllocatedTableMemory: .dw 0
-ClipTableAddress: .dw 0
-
 RenderFlags = asm_Flag1
 RenderFlag.DrawThings = 6
 
@@ -382,9 +369,5 @@ Render.RenderTreeNodeFunction:
 	push hl
 	pop ix
 	jp Subsector.Draw
-
-
-ColumnsToDraw:
-	.db 0
 
 .endmodule

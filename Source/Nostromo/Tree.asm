@@ -23,9 +23,6 @@ Node.Type.HorizontalPartition = 2
 Node.Type.ShallowSlopePartition = 3
 Node.Type.SteepSlopePartition = 4
 
-Walker.X: .dw 0
-Walker.Y: .dw 0
-
 ; ==========================================================================
 ; Walk
 ; --------------------------------------------------------------------------

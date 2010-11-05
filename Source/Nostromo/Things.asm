@@ -1,35 +1,5 @@
 .module Things
 
-SubSectorStack.Top:
-	.dw 0
-
-SubSectorStack.Current:
-	.dw 0
-
-SubSectorStack.MaximumCapacity:
-	.db 3
-
-SubSectorStack.EntriesFree:
-	.db 3
-
-SubSectorStack.EntrySize = (96 * 2) + 2
-
-DrawingSubSector: .dw 0
-
-Transformed.X: .dw 0
-Transformed.Y: .dw 0
-
-Projected.X: .db 0
-
-Projected.Y.Bottom: .dw 0
-Projected.Y.Bottom.Clipped: .db 0
-
-Projected.Y.Top: .dw 0
-Projected.Y.Top.Clipped: .db 0
-
-Projected.Width: .db 0
-Projected.Height: .db 0
-
 ; ==========================================================================
 ; SubSectorStack.Push
 ; --------------------------------------------------------------------------
