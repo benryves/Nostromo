@@ -927,9 +927,9 @@ Wall.DrawMiddle:
 	ld (hl),a
 	
 	inc h
-	ld (hl),64
+	ld (hl),64+1
 	inc h
-	ld (hl),0
+	ld (hl),-1+1
 	
 	ld h,CompletedColumns >> 8
 	
@@ -1291,29 +1291,20 @@ WallPart.SkipStrokeEnd:
 ; Destroyed: AF, D.
 ; ==========================================================================
 Line.Clip.Default:
-	ld d,h
-	; Has the column been completed?
-	ld h,CompletedColumns >> 8
-	ld a,(hl)
-	add a,a
-	jr nc,+
-	ld h,d
-	ret
-
-+:	; Can we clip against the top edge?
-	ld a,d
-	inc h
+	ld a,h
+	
+	; Can we clip against the top edge?
+	ld h,TopEdgeClip >> 8
 	cp (hl)
 	jr nc,+
-	ld h,d
+	ld h,a
 	ret
 	
 +:	; Can we clip against the bottom edge?
-
 	inc h
 	cp (hl)
 	ccf
-	ld h,d
+	ld h,a
 	ret
 
 ; ==========================================================================
