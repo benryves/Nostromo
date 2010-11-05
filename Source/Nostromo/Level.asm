@@ -1,5 +1,37 @@
 .module Level
 
+StructurePointers:
+
+Vertices:
+	.dw 0
+Vertices.Count:
+	.dw 0
+
+Walls:
+	.dw 0
+Walls.Count:
+	.dw 0
+
+SubSectors:
+	.dw 0
+
+Sectors:
+	.dw 0
+
+Tree:
+	.dw 0
+
+StructurePointers.Size = $ - StructurePointers
+
+DynamicMemory:
+	.dw 0
+
+TransformedVertices:
+	.dw 0
+
+AllocatedMemory:
+	.dw 0
+
 ; ==========================================================================
 ; Load
 ; --------------------------------------------------------------------------

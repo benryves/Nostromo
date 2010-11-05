@@ -18,6 +18,36 @@ DrawFlag.StrokeEnd = 1
 DrawFlag.FillMiddle = 2
 DrawFlag.DrawnThisFrame = 7
 
+Trapezium.Start.Column: .db 0
+Trapezium.End.Column: .db 0
+
+Trapezium.Start.Ceiling: .dw 0
+Trapezium.Start.Floor: .dw 0
+Trapezium.End.Ceiling: .dw 0
+Trapezium.End.Floor: .dw 0
+
+Start.X: .dw 0
+Start.Y: .dw 0
+
+End.X: .dw 0
+End.Y: .dw 0
+
+Delta.X: .dw 0
+Delta.AbsX: .dw 0
+
+Delta.Y: .dw 0
+Delta.AbsY: .dw 0
+
+Gradient: .dw 0
+
+UpperLower.FrontCeilingHeight: .dw 0
+UpperLower.BackCeilingHeight: .dw 0
+UpperLower.FrontFloorHeight: .dw 0
+UpperLower.BackFloorHeight: .dw 0
+
+HorizontalEdge.Start.Y: .dw 0
+HorizontalEdge.End.Y: .dw 0
+
 ; ==========================================================================
 ; ClipAndDraw
 ; --------------------------------------------------------------------------

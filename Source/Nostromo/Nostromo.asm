@@ -1,5 +1,13 @@
 .module Nostromo
 
+CameraVariables:
+Camera.X: .dw 768
+Camera.Y: .dw 896
+Camera.Z: .dw 0
+Camera.Angle: .db 0
+Camera.YShear: .db 0
+CameraVariables.Size = $ - CameraVariables
+
 #define neg_hl() ld a,h \ cpl \ ld h,a \ ld a,l \ cpl \ ld l,a \ inc hl
 #define neg_de() ld a,d \ cpl \ ld d,a \ ld a,e \ cpl \ ld e,a \ inc de
 #define neg_bc() ld a,b \ cpl \ ld b,a \ ld a,c \ cpl \ ld c,a \ inc de
@@ -20,6 +28,19 @@
 #include "Screen.asm"
 #include "Level.asm"
 #include "Things.asm"
+
+Render.Camera.Z: .dw 0
+Render.Camera.YShear: .dw 0
+
+Sector.Front: .dw 0
+Sector.Back: .dw 0
+
+Previous.Camera.X: .dw 0
+Previous.Camera.Y: .dw 0
+Previous.Camera.Angle: .db 0
+
+AllocatedTableMemory: .dw 0
+ClipTableAddress: .dw 0
 
 RenderFlags = asm_Flag1
 RenderFlag.DrawThings = 6
@@ -369,5 +390,9 @@ Render.RenderTreeNodeFunction:
 	push hl
 	pop ix
 	jp Subsector.Draw
+
+
+ColumnsToDraw:
+	.db 0
 
 .endmodule
