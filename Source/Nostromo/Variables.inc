@@ -19,6 +19,7 @@ Camera.Angle = AllocateVariable(1)
 Camera.YShear = AllocateVariable(1)
 CameraVariables.Size = AllocateVariable(0) - CameraVariables
 
+Render.Camera.Angle = AllocateVariable(1)
 Render.Camera.Z = AllocateVariable(2)
 Render.Camera.YShear = AllocateVariable(2)
 
@@ -72,6 +73,9 @@ UpperLower.BackFloorHeight = AllocateVariable(2)
 
 HorizontalEdge.Start.Y = AllocateVariable(2)
 HorizontalEdge.End.Y = AllocateVariable(2)
+
+Angle = AllocateVariable(1)
+Angle.Transformed = AllocateVariable(1)
 
 .endmodule
 

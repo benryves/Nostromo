@@ -273,6 +273,10 @@ Render:
 	ld de,32
 	add hl,de
 	ld (Render.Camera.YShear),hl
+	
+	ld a,(Camera.Angle)
+	neg
+	ld (Render.Camera.Angle),a
 
 ; --------------------------------------------------------------------------
 ; Transform the vertices.
@@ -312,7 +316,7 @@ SkipTransformVertices:
 ; --------------------------------------------------------------------------
 
 	ld hl,(Level.Walls)
-	ld de,7 ; size of a wall.
+	ld de,8 ; size of a wall.
 	ld bc,(Level.Walls.Count)
 	ld a,b
 	ld b,c

@@ -24,6 +24,21 @@ DrawFlag.DrawnThisFrame = 7
 ; Clips the wall to the view and draws it on the screen.
 ; ==========================================================================
 ClipAndDraw:
+
+; --------------------------------------------------------------------------
+; Can we quickly backface cull the wall by its angle?
+; --------------------------------------------------------------------------
+
+	bit DrawFlag.FillMiddle,(iy+DrawFlags)
+	jr z,+
+	
+	ld a,(Angle)
+	cp 32
+	ret c
+	cp 224
+	ret nc
++:
+
 ; --------------------------------------------------------------------------
 ; Is the wall entirely behind the camera?
 ; --------------------------------------------------------------------------
