@@ -35,6 +35,9 @@ Load:
 ; How much dynamic memory will we need for the level?
 ; --------------------------------------------------------------------------
 	
+	ld a,3
+	ld (Things.SubSectorStack.MaximumCapacity),a
+	
 	ld hl,(Vertices.Count)
 	add hl,hl
 	add hl,hl
