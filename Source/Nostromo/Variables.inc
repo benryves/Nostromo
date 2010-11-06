@@ -7,7 +7,7 @@
 	.endif
 .endfunction
 
-VariableRegion1 = CompletedColumns + 96
+VariableRegion1 = TopEdgeClip + 96
 
 VariableRegion = VariableRegion1 \ VariableSpace = 160
 

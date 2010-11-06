@@ -930,23 +930,20 @@ Wall.DrawMiddle:
 ; --------------------------------------------------------------------------
 
 	ld hl,(Trapezium.Start.Column)
-	ld h,CompletedColumns >> 8
+	ld h,TopEdgeClip >> 8
 	ld a,(Trapezium.End.Column)
 	sub l
 	ld b,a
 	inc b
 -:	ld a,(hl)
 	or a
-	jr nz,+
-	dec a
+	jp m,+
+	cpl
 	ld (hl),a
 	
 	inc h
-	ld (hl),64+1
-	inc h
 	ld (hl),-1+1
-	
-	ld h,CompletedColumns >> 8
+	dec h
 	
 	ld a,(ColumnsToDraw)
 	dec a
@@ -1174,17 +1171,16 @@ DrawVerticalEdges:
 	jr z,WallPart.SkipStrokeStart
 	
 	ld de,(Trapezium.Start.Column)
-	ld d,CompletedColumns >> 8
+	ld d,TopEdgeClip >> 8
 	ld a,(de)
 	or a
-	jr nz,WallPart.SkipStrokeStart
+	jp m,WallPart.SkipStrokeStart
 
 	ld hl,(Trapezium.Start.Ceiling)
 	call Clip16ToRow
 	inc a
 	ld b,a
 	
-	inc d
 	ld a,(de)
 	cp b
 	jr c,+
@@ -1237,10 +1233,10 @@ WallPart.SkipStrokeStart:
 	jr z,WallPart.SkipStrokeEnd
 	
 	ld de,(Trapezium.End.Column)
-	ld d,CompletedColumns >> 8
+	ld d,TopEdgeClip >> 8
 	ld a,(de)
 	or a
-	jr nz,WallPart.SkipStrokeEnd
+	jp m,WallPart.SkipStrokeEnd
 
 	ld hl,(Trapezium.End.Ceiling)
 	inc hl
@@ -1248,7 +1244,6 @@ WallPart.SkipStrokeStart:
 	inc a
 	ld b,a
 	
-	inc d
 	ld a,(de)
 	cp b
 	jr c,+

@@ -47,10 +47,10 @@ Initialise:
 +:	ld (ClipTableAddress),de
 
 ; --------------------------------------------------------------------------
-; The clipping table is 768 bytes long. The trig table is 512 bytes long.
+; The clipping table is 512 bytes long. The trig table is 512 bytes long.
 ; --------------------------------------------------------------------------
 	
-	ld hl,768+512
+	ld hl,512+512
 	add hl,de
 
 ; --------------------------------------------------------------------------
@@ -222,16 +222,6 @@ Render:
 	ld (hl),0
 	ld de,plotSScreen+1
 	ld bc,767
-	ldir
-
-; --------------------------------------------------------------------------
-; Clear the completed columns.
-; --------------------------------------------------------------------------
-
-	ld hl,CompletedColumns
-	ld (hl),0
-	ld de,CompletedColumns+1
-	ld bc,95
 	ldir
 
 ; --------------------------------------------------------------------------
