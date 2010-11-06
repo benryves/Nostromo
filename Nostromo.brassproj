@@ -4,5 +4,6 @@
 	<input source="Source/Program.asm">	
 		<label name="Program.Description" type="string" value="Nostromo" />
 		<label name="Program.Name" type="string" value="NOSTROMO" />
+		<label name="Program.Icon" type="string" value="Source/Icon.gif" />
 	</input>
 </brassproject>

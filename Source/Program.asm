@@ -1,5 +1,5 @@
 .module Program
-
+;.echoln Program.Icon
 	jp Main
 
 Engine:
