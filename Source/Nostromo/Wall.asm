@@ -32,7 +32,7 @@ ClipAndDraw:
 	bit DrawFlag.FillMiddle,(iy+DrawFlags)
 	jr z,+
 	
-	ld a,(Angle)
+	ld a,(Angle.Transformed)
 	cp 32
 	ret c
 	cp 224

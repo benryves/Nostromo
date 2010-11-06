@@ -73,8 +73,9 @@ Shallow.Delta.Y.Positive:
 	ld a,$24 ; inc l
 	ld (Shallow.YStep),a
 	
-	ld hl,+12
-	ld (Shallow.AdvanceY.Shallow.Stride),hl
+	exx
+	ld de,+12
+	exx
 
 	jr Shallow.Delta.Y.Set
 
@@ -85,8 +86,9 @@ Shallow.Delta.Y.Negative:
 	ld a,$25 ; dec h
 	ld (Shallow.YStep),a
 	
-	ld hl,-12
-	ld (Shallow.AdvanceY.Shallow.Stride),hl
+	exx
+	ld de,-12
+	exx
 
 Shallow.Delta.Y.Set:
 
@@ -103,9 +105,6 @@ Shallow.Delta.Y.Set:
 	
 	ld b,a ; b = number of steps.
 	
-	ld a,(Error)
-	ld c,a
-	
 	push hl
 	push bc
 	
@@ -114,8 +113,15 @@ Shallow.Delta.Y.Set:
 	
 	dec e
 	call Pixel.GetInformation
-	ld (Shallow.PixelBufferOffset),hl
-	ld (Shallow.PixelMask),a
+	
+	ld c,a
+	push hl
+	push bc
+	
+	exx
+	pop bc
+	pop hl
+	exx
 	
 	pop bc
 	pop hl
@@ -123,49 +129,43 @@ Shallow.Delta.Y.Set:
 	; Swap H and L.
 	ld a,h \ ld h,l \ ld l,a
 	
--:		
-Shallow.ClipPixel = $+1
-	call NoClip
-	jr c,Shallow.Line.PixelClipped
-
-Shallow.PixelBufferOffset = $+1
-	ld de,0
-	
-	ld a,(de)
-Shallow.PixelMask = $+1
-	or 0	
-	
-	ld (de),a
-	
-Shallow.Line.PixelClipped:
-
-	; Advance X.
-	ld a,(Shallow.PixelMask)
-	rrca
-	ld (Shallow.PixelMask),a
-	jr nc,+
-	ld de,(Shallow.PixelBufferOffset)
-	inc de
-	ld (Shallow.PixelBufferOffset),de
-+:
-
 Shallow.Delta.X = $+2
 Shallow.Delta.Y = $+1
 	ld de,0
+
+	ld a,(Error)
+	ld c,a
+-:
+Shallow.ClipPixel = $+1
+	call NoClip
+
+	exx
+
+	jr c,Shallow.Line.PixelClipped
+
+	ld a,(hl)
+	or c
+	ld (hl),a
+	
+Shallow.Line.PixelClipped:
+	
+	rrc c
+	jr nc,+
+	inc hl
++:
+
+	exx
+	
 	ld a,c
 	sub e
 	jp p,Shallow.NoAdvanceY
 
 	add a,d
 	
-	; Advance Y.
-	push hl
-	ld hl,(Shallow.PixelBufferOffset)
-Shallow.AdvanceY.Shallow.Stride = $+1
-	ld de,12
+	; Advance Y.	
+	exx
 	add hl,de
-	ld (Shallow.PixelBufferOffset),hl
-	pop hl
+	exx
 	
 Shallow.YStep:
 	inc h
