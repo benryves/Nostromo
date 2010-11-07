@@ -131,25 +131,34 @@ Draw.Loop:
 ; Transform the position of the thing.
 ; --------------------------------------------------------------------------
 
-	ld de,Transformed.X
-	call Vertices.TransformSingle
+	ld c,(hl) \ inc hl
+	ld b,(hl) \ inc hl
+	ld e,(hl) \ inc hl
+	ld d,(hl) \ inc hl
+	call Vertices.Transform
 
 ; --------------------------------------------------------------------------
 ; Is it behind the camera?
 ; --------------------------------------------------------------------------
 
-	ld a,(Transformed.Y+1)
+	ld a,d
 	or a
 	jp m,Draw.Skip
+
+; --------------------------------------------------------------------------
+; Store the transormed position.
+; --------------------------------------------------------------------------
+
+	ld (Transformed.X),bc
+	ld (Transformed.Y),de
 
 ; --------------------------------------------------------------------------
 ; Is it outside Y=+X?
 ; --------------------------------------------------------------------------
 
-	ld hl,(Transformed.X)
-	ld de,(Transformed.Y)
-	
-	ld a,h \ xor $80 \ ld h,a
+
+	ld l,c
+	ld a,b \ xor $80 \ ld h,a
 	ld a,d \ xor $80 \ ld d,a
 	or a
 	sbc hl,de
@@ -160,11 +169,8 @@ Draw.Loop:
 ; Is it outside Y=-X?
 ; --------------------------------------------------------------------------
 
-	ld hl,(Transformed.X)
-	ld de,(Transformed.Y)
+	add hl,de
 	neg_de()
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
 	or a
 	sbc hl,de
 	jp c,Draw.Skip

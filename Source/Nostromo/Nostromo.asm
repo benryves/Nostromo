@@ -269,6 +269,12 @@ Render:
 	ld (Render.Camera.Angle),a
 
 ; --------------------------------------------------------------------------
+; Prepare for vertex transformations.
+; --------------------------------------------------------------------------
+
+	call Vertices.Transform.Begin
+
+; --------------------------------------------------------------------------
 ; Transform the vertices.
 ; --------------------------------------------------------------------------
 	
@@ -297,7 +303,7 @@ TransformVertices:
 	ld hl,(Level.Vertices)
 	ld de,(Level.TransformedVertices)
 	ld bc,(Level.Vertices.Count)
-	call Vertices.Transform
+	call Vertices.Transform.Multiple
 
 SkipTransformVertices:
 
