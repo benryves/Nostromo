@@ -103,48 +103,28 @@ Draw.Loop:
 	
 	push hl
 	
-	ld l,(hl)
-	ld h,0
-	add hl,hl
-	add hl,hl
-	ld bc,(Level.TransformedVertices)
-	add hl,bc
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (Wall.Start.X),de
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (Wall.Start.Y),de
+	call GetTransformedVertex
+	ld de,Wall.Start.X
+	ldi
+	ldi
+	ldi
+	ldi
 	
 	pop hl
 	inc hl
-	push hl
 	
 ; --------------------------------------------------------------------------
 ; Read the end vertex information.
 ; --------------------------------------------------------------------------
 
-	ld l,(hl)
-	ld h,0
-	add hl,hl
-	add hl,hl
-	add hl,bc
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (Wall.End.X),de
-	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ld (Wall.End.Y),de
+	push hl
+
+	call GetTransformedVertex
+	ld de,Wall.End.X
+	ldi
+	ldi
+	ldi
+	ldi
 	
 	pop hl
 	inc hl
@@ -182,6 +162,59 @@ Draw.Loop:
 AlreadyDrawnWall:
 	djnz Draw.Loop	
 	ret
+
+; ==========================================================================
+; GetTransformedVertex
+; --------------------------------------------------------------------------
+; Gets a transformed vertex. Vertices may be cached.
+; --------------------------------------------------------------------------
+; Inputs:    HL: Pointer to vertex number.
+; Outputs:   HL: Pointer to transformed vertex.
+; Destroyed: AF, BC, DE.
+; ==========================================================================
+GetTransformedVertex:
+
+	ld l,(hl)
+	ld e,l
+	ld h,0
+	add hl,hl
+	add hl,hl
+	push hl
+	ld bc,(Level.TransformedVertices)
+	add hl,bc
+	pop bc
 	
+	ld d,Vertices.AlreadyTransformed >> 8
+	ld a,(de)
+	or a
+	ret nz
+	
+	dec a
+	ld (de),a
+
+	push hl
+	
+	ld hl,(Level.Vertices)
+	add hl,bc
+	
+	ld c,(hl) \ inc hl
+	ld b,(hl) \ inc hl
+	ld e,(hl) \ inc hl
+	ld d,(hl)
+	
+	call Vertices.Transform
+	
+	pop hl
+	push hl
+	
+	ld (hl),c \ inc hl
+	ld (hl),b \ inc hl
+	ld (hl),e \ inc hl
+	ld (hl),d
+	
+	pop hl
+	
+	ret
+
 
 .endmodule

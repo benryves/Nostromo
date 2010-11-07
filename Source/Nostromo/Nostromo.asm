@@ -47,10 +47,12 @@ Initialise:
 +:	ld (ClipTableAddress),de
 
 ; --------------------------------------------------------------------------
-; The clipping table is 512 bytes long. The trig table is 512 bytes long.
+; The clipping table is 512 bytes long.
+; The trig table is 512 bytes long.
+; The transformed vertices table is 256 bytes long.
 ; --------------------------------------------------------------------------
 	
-	ld hl,512+512
+	ld hl,512+512+256
 	add hl,de
 
 ; --------------------------------------------------------------------------
@@ -284,14 +286,14 @@ Render:
 	cp b
 	jr z,+
 	ld (Previous.Camera.Angle),a
-	jr TransformVertices
+	jr MarkVerticesUntransformed
 +:	ld hl,(Previous.Camera.X)
 	ld de,(Camera.X)
 	or a
 	sbc hl,de
 	jr z,+
 	ld (Previous.Camera.X),de
-	jr TransformVertices
+	jr MarkVerticesUntransformed
 +:	ld hl,(Previous.Camera.Y)
 	ld de,(Camera.Y)
 	or a
@@ -299,11 +301,19 @@ Render:
 	jr z,SkipTransformVertices
 	ld (Previous.Camera.Y),de
 	
-TransformVertices:
-	ld hl,(Level.Vertices)
-	ld de,(Level.TransformedVertices)
-	ld bc,(Level.Vertices.Count)
-	call Vertices.Transform.Multiple
+; --------------------------------------------------------------------------
+; Mark all vertices as not transformed this frame.
+; --------------------------------------------------------------------------
+
+MarkVerticesUntransformed:
+
+	ld a,(Level.Vertices.Count)
+	ld b,a
+	ld hl,Vertices.AlreadyTransformed
+	xor a
+-:	ld (hl),a
+	inc l
+	djnz -
 
 SkipTransformVertices:
 
