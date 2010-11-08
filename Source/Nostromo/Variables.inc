@@ -134,4 +134,16 @@ Projected.Y.Top.Clipped = AllocateVariable(1)
 Projected.Width = AllocateVariable(1)
 Projected.Height = AllocateVariable(1)
 
+Appearance.Offset = AllocateVariable(2)
+
+Appearance = AllocateVariable(0)
+Appearance.WorldWidth = AllocateVariable(2)
+Appearance.WorldHeight = AllocateVariable(2)
+Appearance.SpriteWidth = AllocateVariable(1)
+Appearance.SpriteHeight = AllocateVariable(1)
+Appearance.ColumnStride = AllocateVariable(2)
+Appearance.Size = AllocateVariable(0) - Appearance
+
+Sprite = AllocateVariable(2)
+
 .endmodule

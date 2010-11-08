@@ -3,7 +3,7 @@
 	.dw SubSectors
 	.dw Sectors
 	.dw Tree
-	.dw 2560, -2560, -32 \ .db 0, 0
+	.dw 6912, -8448, -352 \ .db 192, 0
 
 Vertices:
 	.dw 0, -3072
@@ -94,6 +94,24 @@ Vertices:
 	.dw 3328, -8192
 	.dw 3328, -7680
 	.dw 3328, -7168
+	.dw -768, -12288
+	.dw 256, -12288
+	.dw 768, -12288
+	.dw 2304, -10496
+	.dw 3328, -10496
+	.dw 4352, -10496
+	.dw 5120, -11264
+	.dw 5888, -11264
+	.dw 5888, -10496
+	.dw 5888, -8960
+	.dw 7168, -8960
+	.dw 7168, -7936
+	.dw 5888, -7936
+	.dw 3584, -7936
+	.dw 3584, -9472
+	.dw 2304, -9472
+	.dw 1280, -9472
+	.dw 768, -11264
 Vertices.Count = ($ - Vertices) / 4
 
 Walls:
@@ -191,7 +209,7 @@ Walls:
 	Wall91: .db 4 \ .db 64 \ .db 72, 73 \ .dw Sector18, Sector18
 	Wall92: .db 4 \ .db 64 \ .db 73, 74 \ .dw Sector19, Sector19
 	Wall93: .db 6 \ .db 64 \ .db 74, 75 \ .dw Sector20, Sector20
-	Wall94: .db 7 \ .db 0 \ .db 75, 76 \ .dw Sector20, Sector20
+	Wall94: .db 3 \ .db 0 \ .db 75, 76 \ .dw Sector20, Sector21
 	Wall95: .db 5 \ .db 192 \ .db 76, 77 \ .dw Sector20, Sector20
 	Wall96: .db 4 \ .db 192 \ .db 77, 78 \ .dw Sector19, Sector19
 	Wall97: .db 6 \ .db 192 \ .db 78, 79 \ .dw Sector18, Sector18
@@ -216,6 +234,26 @@ Walls:
 	Wall116: .db 3 \ .db 0 \ .db 74, 77 \ .dw Sector19, Sector20
 	Wall117: .db 7 \ .db 0 \ .db 30, 64 \ .dw Sector5, Sector5
 	Wall118: .db 7 \ .db 0 \ .db 87, 31 \ .dw Sector5, Sector5
+	Wall119: .db 7 \ .db 64 \ .db 75, 88 \ .dw Sector21, Sector21
+	Wall120: .db 5 \ .db 0 \ .db 88, 89 \ .dw Sector21, Sector21
+	Wall121: .db 6 \ .db 0 \ .db 89, 90 \ .dw Sector21, Sector21
+	Wall122: .db 7 \ .db 221 \ .db 90, 91 \ .dw Sector21, Sector21
+	Wall123: .db 5 \ .db 0 \ .db 91, 92 \ .dw Sector21, Sector21
+	Wall124: .db 6 \ .db 0 \ .db 92, 93 \ .dw Sector21, Sector21
+	Wall125: .db 7 \ .db 32 \ .db 93, 94 \ .dw Sector21, Sector21
+	Wall126: .db 7 \ .db 0 \ .db 94, 95 \ .dw Sector21, Sector21
+	Wall127: .db 5 \ .db 192 \ .db 95, 96 \ .dw Sector21, Sector21
+	Wall128: .db 6 \ .db 192 \ .db 96, 97 \ .dw Sector21, Sector21
+	Wall129: .db 7 \ .db 0 \ .db 97, 98 \ .dw Sector22, Sector22
+	Wall130: .db 7 \ .db 192 \ .db 98, 99 \ .dw Sector22, Sector22
+	Wall131: .db 5 \ .db 128 \ .db 99, 100 \ .dw Sector22, Sector22
+	Wall132: .db 6 \ .db 128 \ .db 100, 101 \ .dw Sector21, Sector21
+	Wall133: .db 7 \ .db 64 \ .db 101, 102 \ .dw Sector21, Sector21
+	Wall134: .db 5 \ .db 128 \ .db 102, 103 \ .dw Sector21, Sector21
+	Wall135: .db 6 \ .db 128 \ .db 103, 104 \ .dw Sector21, Sector21
+	Wall136: .db 7 \ .db 75 \ .db 104, 105 \ .dw Sector21, Sector21
+	Wall137: .db 7 \ .db 128 \ .db 105, 76 \ .dw Sector21, Sector21
+	Wall138: .db 2 \ .db 192 \ .db 97, 100 \ .dw Sector21, Sector22
 Walls.Count = ($ - Walls) / 8
 
 Sectors:
@@ -240,6 +278,8 @@ Sector17: .dw -352, 24
 Sector18: .dw -384, 24
 Sector19: .dw -416, 24
 Sector20: .dw -448, 24
+Sector21: .dw -448, -192
+Sector22: .dw -448, -256
 
 SubSectors:
 SubSector0: .dw Sector0
@@ -315,7 +355,7 @@ SubSector17: .dw Sector5
 	.db 2 \ .dw Wall69, Wall80
 
 SubSector18: .dw Sector6
-	.db 0
+	.db 1 \ .dw Thing3
 	.db 2 \ .dw Wall71, Wall80
 
 SubSector19: .dw Sector6
@@ -335,7 +375,7 @@ SubSector22: .dw Sector5
 	.db 2 \ .dw Wall78, Wall61
 
 SubSector23: .dw Sector6
-	.db 0
+	.db 1 \ .dw Thing4
 	.db 2 \ .dw Wall73, Wall74
 
 SubSector24: .dw Sector5
@@ -407,7 +447,7 @@ SubSector40: .dw Sector16
 	.db 4 \ .dw Wall112, Wall113, Wall88, Wall98
 
 SubSector41: .dw Sector17
-	.db 0
+	.db 1 \ .dw Thing6
 	.db 4 \ .dw Wall113, Wall114, Wall89, Wall90
 
 SubSector42: .dw Sector18
@@ -420,13 +460,45 @@ SubSector43: .dw Sector19
 
 SubSector44: .dw Sector20
 	.db 0
-	.db 4 \ .dw Wall116, Wall93, Wall94, Wall95
+	.db 4 \ .dw Wall116, Wall94, Wall93, Wall95
+
+SubSector45: .dw Sector21
+	.db 0
+	.db 3 \ .dw Wall94, Wall119, Wall120
+
+SubSector46: .dw Sector21
+	.db 0
+	.db 2 \ .dw Wall121, Wall137
+
+SubSector47: .dw Sector21
+	.db 0
+	.db 3 \ .dw Wall122, Wall136, Wall135
+
+SubSector48: .dw Sector21
+	.db 0
+	.db 5 \ .dw Wall138, Wall124, Wall128, Wall132, Wall133
+
+SubSector49: .dw Sector21
+	.db 1 \ .dw Thing5
+	.db 3 \ .dw Wall125, Wall126, Wall127
+
+SubSector50: .dw Sector22
+	.db 0
+	.db 4 \ .dw Wall138, Wall129, Wall130, Wall131
+
+SubSector51: .dw Sector21
+	.db 0
+	.db 2 \ .dw Wall123, Wall134
 
 
 Things:
-Thing0: .dw 1024, -1280
-Thing1: .dw 2560, -4352
-Thing2: .dw 2816, -768
+Thing0: .dw 1024, -1280 \ .dw Thing.Stand
+Thing1: .dw 2560, -4352 \ .dw Thing.Stand
+Thing2: .dw 2816, -768 \ .dw Thing.Keycard
+Thing3: .dw 640, -5760 \ .dw Thing.Lamp
+Thing4: .dw 4480, -5760 \ .dw Thing.Lamp
+Thing5: .dw 5376, -10880 \ .dw Thing.Stand
+Thing6: .dw -512, -8448 \ .dw Thing.Lamp
 
 Tree:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -789,18 +861,58 @@ Tree.B:
 .dw 2304
 
 Tree.B.F:
-.db Nostromo.Tree.Node.Type.HorizontalPartition
+.db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.F
 .dw Tree.B.F.B
-.dw -8192
+.dw 3584
 
 Tree.B.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.B.F.F.F
+.dw Tree.B.F.F.B
+.dw 5888
+
+Tree.B.F.F.F:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector50
+
+Tree.B.F.F.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.B.F.F.B.F
+.dw Tree.B.F.F.B.B
+.dw -10496
+
+Tree.B.F.F.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector48
+
+Tree.B.F.F.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector49
+
+Tree.B.F.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.B.F.B.F
+.dw Tree.B.F.B.B
+.dw -8192
+
+Tree.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector35
 
-Tree.B.F.B:
+Tree.B.F.B.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.B.F.B.B.F
+.dw Tree.B.F.B.B.B
+.dw -9344
+
+Tree.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector36
+
+Tree.B.F.B.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector51
 
 Tree.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -809,24 +921,44 @@ Tree.B.B:
 .dw 256
 
 Tree.B.B.F:
-.db Nostromo.Tree.Node.Type.VerticalPartition
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.F.F
 .dw Tree.B.B.F.B
-.dw 1280
+.dw -9344
 
 Tree.B.B.F.F:
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.F.F.F
 .dw Tree.B.B.F.F.B
-.dw 1792
+.dw 1280
 
 Tree.B.B.F.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.B.B.F.F.F.F
+.dw Tree.B.B.F.F.F.B
+.dw 1792
+
+Tree.B.B.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector37
 
-Tree.B.B.F.F.B:
+Tree.B.B.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector38
+
+Tree.B.B.F.F.B:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.B.B.F.F.B.F
+.dw Tree.B.B.F.F.B.B
+.dw 768
+
+Tree.B.B.F.F.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector39
+
+Tree.B.B.F.F.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector40
 
 Tree.B.B.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -836,11 +968,11 @@ Tree.B.B.F.B:
 
 Tree.B.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector39
+.dw SubSector47
 
 Tree.B.B.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector40
+.dw SubSector46
 
 Tree.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -873,6 +1005,15 @@ Tree.B.B.B.B.F:
 .dw SubSector43
 
 Tree.B.B.B.B.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.B.B.B.B.B.F
+.dw Tree.B.B.B.B.B.B
+.dw -11264
+
+Tree.B.B.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector44
 
+Tree.B.B.B.B.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+.dw SubSector45

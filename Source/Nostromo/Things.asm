@@ -135,6 +135,11 @@ Draw.Loop:
 	ld b,(hl) \ inc hl
 	ld e,(hl) \ inc hl
 	ld d,(hl) \ inc hl
+	push de
+	ld e,(hl) \ inc hl
+	ld d,(hl)
+	ld (Appearance.Offset),de
+	pop de
 	call Vertices.Transform
 
 ; --------------------------------------------------------------------------
@@ -174,6 +179,16 @@ Draw.Loop:
 	or a
 	sbc hl,de
 	jp c,Draw.Skip
+
+; --------------------------------------------------------------------------
+; Get the sprite appearance information.
+; --------------------------------------------------------------------------
+
+	ld hl,(Appearance.Offset)
+	ld de,Appearance
+	ld bc,Appearance.Size
+	ldir
+	ld (Sprite),hl
 
 ; --------------------------------------------------------------------------
 ; Project to X.
@@ -230,11 +245,12 @@ Draw.Loop:
 	inc a
 	ld (Projected.Y.Bottom.Clipped),a
 
+
 ; --------------------------------------------------------------------------
 ; Calculate the height and therefore top.
 ; --------------------------------------------------------------------------
 
-	ld hl,128
+	ld hl,(Appearance.WorldHeight)
 	call Maths.Div.S16S16
 	call Wall.Clip24To16
 	ld a,b
@@ -244,8 +260,7 @@ Draw.Loop:
 	or a
 	jp m,Draw.Skip
 	ld (Projected.Height),a
-	srl a
-	ld (Projected.Width),a
+	
 	or a
 	jp z,Draw.Skip
 	ld hl,(Projected.Y.Bottom)
@@ -255,16 +270,36 @@ Draw.Loop:
 	inc a
 	ld (Projected.Y.Top.Clipped),a
 
+; --------------------------------------------------------------------------
+; Calculate the width.
+; --------------------------------------------------------------------------
+
+	ld hl,(Appearance.WorldWidth)
+	ld de,(Transformed.Y)
+	call Maths.Div.S16S16
+	call Wall.Clip24To16
+	ld a,b
+	or a
+	jp nz,Draw.Skip
+	ld a,c
+	or a
+	jp m,Draw.Skip
+	ld (Projected.Width),a
+	
+; --------------------------------------------------------------------------
+; Copy the width and height values over.
+; --------------------------------------------------------------------------
+
 	ld a,(Projected.Height)
 	ld (Delta.DestinationHeight),a
 	
 	ld a,(Projected.Width)
 	ld (Delta.DestinationWidth),a
 	
-	ld a,32
+	ld a,(Appearance.SpriteHeight)
 	ld (Delta.SourceHeight),a
 	
-	ld a,16
+	ld a,(Appearance.SpriteWidth)
 	ld (Delta.SourceWidth),a
 
 	ld a,(Delta.DestinationWidth)
@@ -289,7 +324,7 @@ Draw.Loop:
 ; Initialise the per-row source offset.
 ; --------------------------------------------------------------------------
 	
-	ld de,Sprite
+	ld de,(Sprite)
 	ld (SourceRowOffset),de
 
 ; --------------------------------------------------------------------------
@@ -560,7 +595,7 @@ Delta.SourceWidth = $+2
 	jp p,NoAdvanceColumn
 	
 	ld hl,(SourceRowOffset)
-	ld bc,8
+	ld bc,(Appearance.ColumnStride)
 
 -:	add hl,bc	
 	add a,e
@@ -584,23 +619,4 @@ Draw.Skip:
 	djnz +
 	ret
 +:	jp Draw.Loop
-
-
-Sprite:
-.db %00111111, %11111111, %11111100, %00000000, %00000000, %00000000, %00000000, %11110000
-.db %11111110, %10101010, %10111111, %00000000, %00000000, %00000000, %00000011, %11111100
-.db %11101111, %11111111, %11111011, %00000000, %00000000, %00000011, %00110011, %10111111
-.db %11111111, %11111111, %11111111, %11111100, %00000000, %11111111, %11111111, %10111111
-.db %11101110, %10101010, %10111011, %10101111, %11111111, %11101011, %10111011, %10101111
-.db %11101110, %10101010, %10111011, %10101110, %10101010, %11101011, %10111011, %10101111
-.db %11111110, %10101010, %10111111, %11111110, %10101010, %11111111, %11111111, %10101111
-.db %11111110, %10101010, %10111111, %10101111, %11111111, %11101011, %10111011, %10101111
-.db %11111110, %10101010, %10111111, %11111111, %11111111, %11111111, %11111111, %10111111
-.db %11111110, %10101010, %10111111, %11111111, %11111111, %11111111, %11111111, %11111111
-.db %11111110, %10101010, %10111111, %11111110, %10101010, %11111111, %11111111, %11111111
-.db %11111110, %10101010, %10111111, %11111111, %11111111, %11111111, %11111111, %11111111
-.db %11111111, %11111111, %11111111, %11111100, %00000000, %11111111, %11111111, %11111111
-.db %11111111, %11111111, %11111111, %00000000, %00000000, %00000011, %00110011, %11111111
-.db %11111110, %10101010, %10111111, %00000000, %00000000, %00000000, %00000011, %11111100
-.db %00111111, %11111111, %11111100, %00000000, %00000000, %00000000, %00000000, %11110000
 .endmodule

@@ -668,5 +668,7 @@ Level:
 #include "Level.inc"
 .echoln strformat("Level size: {0} bytes.", $-Level)
 
+#include "Things.inc"
+
 .include "Nostromo/End.asm"
 .endmodule
