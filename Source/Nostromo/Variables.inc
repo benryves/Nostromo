@@ -125,12 +125,6 @@ Transformed.Y = AllocateVariable(2)
 
 Projected.X = AllocateVariable(1)
 
-Projected.Y.Bottom = AllocateVariable(2)
-Projected.Y.Bottom.Clipped = AllocateVariable(1)
-
-Projected.Y.Top = AllocateVariable(2)
-Projected.Y.Top.Clipped = AllocateVariable(1)
-
 Projected.Width = AllocateVariable(1)
 Projected.Height = AllocateVariable(1)
 
@@ -144,6 +138,16 @@ Appearance.SpriteHeight = AllocateVariable(1)
 Appearance.ColumnStride = AllocateVariable(2)
 Appearance.Size = AllocateVariable(0) - Appearance
 
-Sprite = AllocateVariable(2)
+.endmodule
+
+.module Sprite
+
+Data = AllocateVariable(2)
+
+Column.Bottom = AllocateVariable(2)
+Column.Bottom.Clipped = AllocateVariable(1)
+
+Column.Top = AllocateVariable(2)
+Column.Top.Clipped = AllocateVariable(1)
 
 .endmodule

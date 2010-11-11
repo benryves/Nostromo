@@ -188,7 +188,7 @@ Draw.Loop:
 	ld de,Appearance
 	ld bc,Appearance.Size
 	ldir
-	ld (Sprite),hl
+	ld (Sprite.Data),hl
 
 ; --------------------------------------------------------------------------
 ; Project to X.
@@ -240,10 +240,10 @@ Draw.Loop:
 	ld hl,(Render.Camera.YShear)
 	or a
 	sbc hl,bc
-	ld (Projected.Y.Bottom),hl
+	ld (Sprite.Column.Bottom),hl
 	call Wall.Clip16ToRowPlusOne
 	inc a
-	ld (Projected.Y.Bottom.Clipped),a
+	ld (Sprite.Column.Bottom.Clipped),a
 
 
 ; --------------------------------------------------------------------------
@@ -263,12 +263,12 @@ Draw.Loop:
 	
 	or a
 	jp z,Draw.Skip
-	ld hl,(Projected.Y.Bottom)
+	ld hl,(Sprite.Column.Bottom)
 	sbc hl,bc
-	ld (Projected.Y.Top),hl
+	ld (Sprite.Column.Top),hl
 	call Wall.Clip16ToRowPlusOne
 	inc a
-	ld (Projected.Y.Top.Clipped),a
+	ld (Sprite.Column.Top.Clipped),a
 
 ; --------------------------------------------------------------------------
 ; Calculate the width.
@@ -291,13 +291,13 @@ Draw.Loop:
 ; --------------------------------------------------------------------------
 
 	ld a,(Projected.Height)
-	ld (Delta.DestinationHeight),a
+	ld (Sprite.Column.DestinationHeight),a
+
+	ld a,(Appearance.SpriteHeight)
+	ld (Sprite.Column.SourceHeight),a
 	
 	ld a,(Projected.Width)
-	ld (Delta.DestinationWidth),a
-	
-	ld a,(Appearance.SpriteHeight)
-	ld (Delta.SourceHeight),a
+	ld (Delta.DestinationWidth),a	
 	
 	ld a,(Appearance.SpriteWidth)
 	ld (Delta.SourceWidth),a
@@ -324,8 +324,8 @@ Draw.Loop:
 ; Initialise the per-row source offset.
 ; --------------------------------------------------------------------------
 	
-	ld de,(Sprite)
-	ld (SourceRowOffset),de
+	ld de,(Sprite.Data)
+	ld (Sprite.Column.SourceData),de
 
 ; --------------------------------------------------------------------------
 ; Draw a column.
@@ -333,252 +333,8 @@ Draw.Loop:
 ColumnLoop:
 	push hl
 	
-; --------------------------------------------------------------------------
-; Is the column on the screen?
-; --------------------------------------------------------------------------
-
-	ld a,l
-	or a
-	jp m,SkipColumn
-	cp 96
-	jp nc,SkipColumn
-
-; --------------------------------------------------------------------------
-; Clip to the top edge.
-; --------------------------------------------------------------------------
-
-	ld a,(Projected.Y.Top.Clipped)
-	ld h,TopEdgeClip >> 8
-	cp (hl)
-	jr nc,+
-	ld a,(hl)
-+:	
-	inc h
-	cp (hl)
-	jr c,+
-	ld a,(hl)
-+:
-	dec a
-	ld c,a
-
-; --------------------------------------------------------------------------
-; Clip to the bottom edge.
-; --------------------------------------------------------------------------
-
-	ld a,(Projected.Y.Bottom.Clipped)
-	ld h,TopEdgeClip >> 8
-	cp (hl)
-	jr nc,+
-	ld a,(hl)
-+:	
-	inc h
-	cp (hl)
-	jr c,+
-	ld a,(hl)
-+:
-	dec a
-	ld b,a
-
-; --------------------------------------------------------------------------
-; Is the height <= 0?
-; --------------------------------------------------------------------------
-
-	sub c
-	jr c,SkipColumn
-	jr z,SkipColumn
 	
-; --------------------------------------------------------------------------
-; Store the number of rows to render to the stack.
-; --------------------------------------------------------------------------
-	
-	ld b,a
-	push bc
-	
-	ld a,l
-	ld e,c
-	
-; --------------------------------------------------------------------------
-; Calculate where on the screen the first pixel should go.
-; --------------------------------------------------------------------------
-	
-	call Pixel.GetInformation
-	ld c,a
-	push hl
-	push bc
-	
-	exx
-	pop bc
-	pop hl
-	ld de,12
-	exx
-
-; --------------------------------------------------------------------------
-; Restore the height, ready to draw row-by-row.
-; --------------------------------------------------------------------------
-
-	pop bc
-	
-; --------------------------------------------------------------------------
-; Load the offset to the source row.
-; --------------------------------------------------------------------------
-
-SourceRowOffset = $+1
-	ld hl,0
-
-; --------------------------------------------------------------------------
-; Load the scale factor into DE.
-; --------------------------------------------------------------------------
-
-Delta.DestinationHeight = $+1
-Delta.SourceHeight = $+2
-	ld de,0
-
-; --------------------------------------------------------------------------
-; Is the top of the thing clipped?
-; --------------------------------------------------------------------------
-
-	ld a,c
-	xor $80
-	ld c,a
-	ld a,(Projected.Y.Top)
-	xor $80
-	sub c
-	jr nc,TopNotClipped
-	
-; --------------------------------------------------------------------------
-; The top of the thing is clipped, so advance source pointer accordingly.
-; --------------------------------------------------------------------------
-	
-	push bc
-	
-	neg
-	ld b,a
-	
-	ld a,e
-	
-	ld c,%10000000
-
---:	sub d
-	jp p,++
--:	rrc c
-	rrc c
-	jr nc,+
-	inc hl
-+:	add a,e
-	jp m,-
-++:	djnz --
-	
-	ex af,af'
-	ld a,c
-	pop bc
-	ld c,a
-	ex af,af'
-	
-	jr RowLoop
-
-TopNotClipped:
-
-; --------------------------------------------------------------------------
-; Initialise the error.
-; --------------------------------------------------------------------------
-
-	ld a,e
-
-; --------------------------------------------------------------------------
-; Start from the first pixel in the source row.
-; --------------------------------------------------------------------------
-
-	ld c,%10000000
-
-; --------------------------------------------------------------------------
-; Draw all of the rows of the sprite.
-; --------------------------------------------------------------------------
-
-RowLoop:
-
-; --------------------------------------------------------------------------
-; Are we drawing a pixel?
-; --------------------------------------------------------------------------
-
-	ex af,af'
-	ld a,(hl)
-	and c
-	jr z,Pixel.Skip
-	
-	rrc c
-	ld a,(hl)
-	and c
-	jr nz,Pixel.Set
-
-; --------------------------------------------------------------------------
-; Clears the pixel (white).
-; --------------------------------------------------------------------------
-Pixel.Clear:
-	rlc c
-	exx
-	ld a,c
-	cpl
-	and (hl)
-	ld (hl),a
-	add hl,de
-	exx
-	jr Pixel.Drawn
-
-; --------------------------------------------------------------------------
-; Sets the pixel (black).
-; --------------------------------------------------------------------------
-Pixel.Set:
-	rlc c
-	exx
-	ld a,(hl)
-	or c
-	ld (hl),a
-	add hl,de
-	exx
-	jr Pixel.Drawn
-
-; --------------------------------------------------------------------------
-; Skips the pixel (transparent).
-; --------------------------------------------------------------------------
-Pixel.Skip:
-	exx
-	add hl,de
-	exx
-
-; --------------------------------------------------------------------------
-; We have drawn the pixel.
-; --------------------------------------------------------------------------
-Pixel.Drawn:
-
-	ex af,af'
-
-; --------------------------------------------------------------------------
-; Do we need to advance to the next row in the source?
-; --------------------------------------------------------------------------
-
-	sub d
-	jp p,NoAdvanceRow
-
-; --------------------------------------------------------------------------
-; If so, advance to the next row.
-; --------------------------------------------------------------------------
-
-AdvanceRow:
-
--:	rrc c
-	rrc c
-	jr nc,+
-	inc hl
-+:	add a,e
-	jp m,-
-
-NoAdvanceRow:
-
-; --------------------------------------------------------------------------
-; Draw the next row.
-; --------------------------------------------------------------------------
-
-	djnz RowLoop
+	call Sprite.DrawColumn
 	
 SkipColumn:
 
@@ -594,14 +350,14 @@ Delta.SourceWidth = $+2
 	sub d
 	jp p,NoAdvanceColumn
 	
-	ld hl,(SourceRowOffset)
+	ld hl,(Sprite.Column.SourceData)
 	ld bc,(Appearance.ColumnStride)
 
 -:	add hl,bc	
 	add a,e
 	jp m,-
 
-	ld (SourceRowOffset),hl	
+	ld (Sprite.Column.SourceData),hl	
 
 NoAdvanceColumn:
 

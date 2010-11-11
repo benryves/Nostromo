@@ -20,6 +20,7 @@
 #include "Screen.asm"
 #include "Level.asm"
 #include "Things.asm"
+#include "Sprite.asm"
 
 RenderFlags = asm_Flag1
 RenderFlag.DrawThings = 6
