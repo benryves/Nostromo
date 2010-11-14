@@ -268,6 +268,7 @@ SkipFPSCounter:
 	ld de,(MovementTicks)
 	call Nostromo.Maths.Mul.S16S16
 	sla l \ rl h \ rl e
+	sla l \ rl h \ rl e
 	ld l,h
 	ld h,e	
 	ld (Forwards.X),hl
@@ -276,6 +277,7 @@ SkipFPSCounter:
 	call Nostromo.Maths.Trig.Cos
 	ld de,(MovementTicks)
 	call Nostromo.Maths.Mul.S16S16
+	sla l \ rl h \ rl e
 	sla l \ rl h \ rl e
 	ld l,h
 	ld h,e
@@ -334,6 +336,7 @@ SkipFPSCounter:
 	ld de,(MovementTicks)
 	call Nostromo.Maths.Mul.S16S16
 	sla l \ rl h \ rl e
+	sla l \ rl h \ rl e
 	ld l,h
 	ld h,e
 	ld (Forwards.X),hl
@@ -342,6 +345,7 @@ SkipFPSCounter:
 	call Nostromo.Maths.Trig.Sin
 	ld de,(MovementTicks)
 	call Nostromo.Maths.Mul.S16S16
+	sla l \ rl h \ rl e
 	sla l \ rl h \ rl e
 	ld l,h
 	ld h,e
