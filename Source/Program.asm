@@ -206,6 +206,16 @@ SkipFPSCounter:
 	sbc hl,de
 	jp c,SkipMovementInput
 
+	; Load the current position.
+	ld hl,Nostromo.Camera.X
+	ld de,Nostromo.Physics.Actor.StartPosition.X
+	ldi \ ldi
+	ldi \ ldi
+	ldi \ ldi
+	ld hl,Nostromo.Camera.X
+	ld de,Nostromo.Physics.Actor.EndPosition.X
+	ldi \ ldi
+	ldi \ ldi
 
 	ld a,$FF
 	out (1),a
@@ -276,32 +286,32 @@ SkipFPSCounter:
 	bit 3,c
 	jr nz,+
 	
-	ld hl,(Nostromo.Camera.X)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.X)
 	ld de,(Forwards.X)
 	add hl,de
-	ld (Nostromo.Camera.X),hl
+	ld (Nostromo.Physics.Actor.EndPosition.X),hl
 	
-	ld hl,(Nostromo.Camera.Y)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.Y)
 	ld de,(Forwards.Y)
 	add hl,de
-	ld (Nostromo.Camera.Y),hl
+	ld (Nostromo.Physics.Actor.EndPosition.Y),hl
 	
 +:
 
 	bit 0,c
 	jr nz,+
 	
-	ld hl,(Nostromo.Camera.X)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.X)
 	ld de,(Forwards.X)
 	or a
 	sbc hl,de
-	ld (Nostromo.Camera.X),hl
+	ld (Nostromo.Physics.Actor.EndPosition.X),hl
 	
-	ld hl,(Nostromo.Camera.Y)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.Y)
 	ld de,(Forwards.Y)
 	or a
 	sbc hl,de
-	ld (Nostromo.Camera.Y),hl
+	ld (Nostromo.Physics.Actor.EndPosition.Y),hl
 	
 +:
 
@@ -343,32 +353,32 @@ SkipFPSCounter:
 	bit 1,c
 	jr nz,+
 	
-	ld hl,(Nostromo.Camera.X)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.X)
 	ld de,(Forwards.X)
 	add hl,de
-	ld (Nostromo.Camera.X),hl
+	ld (Nostromo.Physics.Actor.EndPosition.X),hl
 	
-	ld hl,(Nostromo.Camera.Y)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.Y)
 	ld de,(Forwards.Y)
 	add hl,de
-	ld (Nostromo.Camera.Y),hl
+	ld (Nostromo.Physics.Actor.EndPosition.Y),hl
 	
 +:
 
 	bit 0,c
 	jr nz,+
 	
-	ld hl,(Nostromo.Camera.X)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.X)
 	ld de,(Forwards.X)
 	or a
 	sbc hl,de
-	ld (Nostromo.Camera.X),hl
+	ld (Nostromo.Physics.Actor.EndPosition.X),hl
 	
-	ld hl,(Nostromo.Camera.Y)
+	ld hl,(Nostromo.Physics.Actor.EndPosition.Y)
 	ld de,(Forwards.Y)
 	or a
 	sbc hl,de
-	ld (Nostromo.Camera.Y),hl
+	ld (Nostromo.Physics.Actor.EndPosition.Y),hl
 	
 +:
 
@@ -639,6 +649,15 @@ AlphaHandled:
 	ld hl,0
 	ld (MovementTicks),hl
 
+	; Attempt to move the camera.
+	call Nostromo.Physics.MoveActor
+	
+	; Copy the actor position back to the camera.
+	ld hl,Nostromo.Physics.Actor.EndPosition.X
+	ld de,Nostromo.Camera.X
+	ldi \ ldi
+	ldi \ ldi
+	
 SkipMovementInput:
 
 	jp Loop

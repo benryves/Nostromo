@@ -21,6 +21,7 @@
 #include "Level.asm"
 #include "Things.asm"
 #include "Sprite.asm"
+#include "Physics.asm"
 
 RenderFlags = asm_Flag1
 RenderFlag.DrawThings = 6
@@ -323,7 +324,7 @@ SkipTransformVertices:
 ; --------------------------------------------------------------------------
 
 	ld hl,(Level.Walls)
-	ld de,8 ; size of a wall.
+	ld de,Wall.DataSize ; size of a wall.
 	ld bc,(Level.Walls.Count)
 	ld a,b
 	ld b,c

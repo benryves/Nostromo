@@ -151,3 +151,18 @@ Column.Top = AllocateVariable(2)
 Column.Top.Clipped = AllocateVariable(1)
 
 .endmodule
+
+.module Physics
+
+Actor.StartPosition.X = AllocateVariable(2)
+Actor.StartPosition.Y = AllocateVariable(2)
+Actor.StartPosition.Z = AllocateVariable(2)
+
+Actor.EndPosition.X = AllocateVariable(2)
+Actor.EndPosition.Y = AllocateVariable(2)
+
+Collision.U = AllocateVariable(2)
+Collision.X = AllocateVariable(2)
+Collision.Y = AllocateVariable(2)
+
+.endmodule
