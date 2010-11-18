@@ -32,6 +32,22 @@
 
 	.module Mul
 
+		U8U8: ; HL = H * E
+			ld l,0
+			ld d,l
+			
+			sla	h
+			jr	nc,$+3
+			ld	l,e
+			
+			.rept 7
+				add	hl,hl
+				jr	nc,$+3
+				add	hl,de
+			.loop
+			
+			ret
+			
 		U16U16 ; DEHL = sDE*sBC
 			ld hl,0
 			.rept 16

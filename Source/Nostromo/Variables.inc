@@ -8,6 +8,7 @@
 .endfunction
 
 VariableRegion1 = TopEdgeClip + 96
+VariableRegion2 = BottomEdgeClip + 96
 
 VariableRegion = VariableRegion1 \ VariableSpace = 160
 
@@ -103,6 +104,7 @@ Level.Walls.Count = AllocateVariable(2)
 Level.SubSectors = AllocateVariable(2)
 Level.Sectors = AllocateVariable(2)
 Level.Tree = AllocateVariable(2)
+Level.BlockMap = AllocateVariable(2)
 Level.StructurePointers.Size = AllocateVariable(0) - Level.StructurePointers
 
 Level.DynamicMemory = AllocateVariable(2)
@@ -164,5 +166,20 @@ Actor.EndPosition.Y = AllocateVariable(2)
 Collision.U = AllocateVariable(2)
 Collision.X = AllocateVariable(2)
 Collision.Y = AllocateVariable(2)
+
+.endmodule
+
+VariableRegion = VariableRegion2 \ VariableSpace = 160
+
+.module BlockMap
+
+Header = AllocateVariable(0)
+Origin.X = AllocateVariable(2)
+Origin.Y = AllocateVariable(2)
+Width = AllocateVariable(1)
+Height = AllocateVariable(1)
+Header.Size = AllocateVariable(0) - Header
+
+Grid = AllocateVariable(2)
 
 .endmodule
