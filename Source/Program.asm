@@ -15,6 +15,12 @@ CameraAngleTicksRemainder:
 FPSCounter:
 	.db 0
 
+Player.Z.Delta:
+	.dw 0
+
+Player.TargetZ:
+	.dw 0
+
 DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
 DemoFlag.YEquHeld = 1
@@ -58,51 +64,11 @@ Main:
 	
 	xor a
 	ld (Door.Delta),a
+	
+	ld hl,0
+	ld (Player.Z.Delta),hl
 
 Loop:
-
-; --------------------------------------------------------------------------
-; Are we snapped to the floor?
-; --------------------------------------------------------------------------
-
-	bit DemoFlag.SnapToFloor,(iy+DemoFlags)
-	jr z,NotSnappedToFloor
-
-	ld (FindFloorHeightFunction.SP),sp
-	ld ix,(Nostromo.Level.Tree)
-	ld hl,(Nostromo.Camera.X)
-	ld de,(Nostromo.Camera.Y)
-	ld bc,FindFloorHeightFunction
-	call Nostromo.Tree.Walk
-
-FindFloorHeightFunction:
-FindFloorHeightFunction.SP = $+1
-	ld sp,0
-	
-	; Leaf offset.
-	ld l,(ix+Nostromo.Tree.Node.Leaf+0)
-	ld h,(ix+Nostromo.Tree.Node.Leaf+1)
-	
-	; Sector address.
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	
-	ex de,hl
-	
-	; Floor height.
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	
-	; Give the player some height.
-	ld hl,96
-	add hl,de
-	
-	; Set the camera height.
-	ld (Nostromo.Camera.Z),hl
-
-NotSnappedToFloor:
 
 ; --------------------------------------------------------------------------
 ; Render the world.
@@ -660,10 +626,6 @@ AlphaNotPressed:
 AlphaHandled:
 
 
-	; Clear MovementTicks.
-	ld hl,0
-	ld (MovementTicks),hl
-
 	; Attempt to move the camera.
 	call Nostromo.Physics.MoveActor
 	
@@ -672,6 +634,104 @@ AlphaHandled:
 	ld de,Nostromo.Camera.X
 	ldi \ ldi
 	ldi \ ldi
+
+; --------------------------------------------------------------------------
+; Are we snapped to the floor?
+; --------------------------------------------------------------------------
+
+	bit DemoFlag.SnapToFloor,(iy+DemoFlags)
+	jp z,NotSnappedToFloor
+
+	ld (FindFloorHeightFunction.SP),sp
+	ld ix,(Nostromo.Level.Tree)
+	ld hl,(Nostromo.Camera.X)
+	ld de,(Nostromo.Camera.Y)
+	ld bc,FindFloorHeightFunction
+	call Nostromo.Tree.Walk
+
+FindFloorHeightFunction:
+FindFloorHeightFunction.SP = $+1
+	ld sp,0
+	
+	; Leaf offset.
+	ld l,(ix+Nostromo.Tree.Node.Leaf+0)
+	ld h,(ix+Nostromo.Tree.Node.Leaf+1)
+	
+	; Sector address.
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	
+	ex de,hl
+	
+	; Floor height.
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	
+	; Give the player some height.
+	ld hl,96
+	add hl,de
+	
+	ld (Player.TargetZ),hl
+	
+	ld hl,(Nostromo.Camera.Z)
+	ld de,(Player.Z.Delta)
+	add hl,de
+	ld (Nostromo.Camera.Z),hl
+	
+	ld a,(MovementTicks)
+	srl a
+	srl a
+	jr z,NotSnappedToFloor
+	ld b,a
+	
+HeightPhysicsLoop:
+	push bc
+
+	ld hl,(Nostromo.Camera.Z)
+	ld a,h \ xor $80 \ ld h,a
+	
+	ld de,(Player.TargetZ)
+	ld a,d \ xor $80 \ ld d,a
+
+	or a
+	sbc hl,de
+	jr z,NoRiseOrFall
+
+	jr nc,Fall
+
+Rise:
+
+	ld hl,0
+	ld (Player.Z.Delta),hl
+	
+	ld hl,(Player.TargetZ)
+	ld de,(Nostromo.Camera.Z)
+	sra h \ rr l
+	sra d \ rr e
+	add hl,de
+	ld (Nostromo.Camera.Z),hl
+	jr NoRiseOrFall
+
+Fall:
+	
+	ld hl,(Player.Z.Delta)
+	dec hl
+	ld (Player.Z.Delta),hl
+
+NoRiseOrFall:
+	pop bc
+	djnz HeightPhysicsLoop
+
+NotSnappedToFloor:
+
+; --------------------------------------------------------------------------
+; Clear MovementTicks.
+; --------------------------------------------------------------------------
+
+	ld hl,0
+	ld (MovementTicks),hl
 	
 SkipMovementInput:
 
