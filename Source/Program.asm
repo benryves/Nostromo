@@ -211,11 +211,22 @@ SkipFPSCounter:
 	ld de,Nostromo.Physics.Actor.StartPosition.X
 	ldi \ ldi
 	ldi \ ldi
-	ldi \ ldi
 	ld hl,Nostromo.Camera.X
 	ld de,Nostromo.Physics.Actor.EndPosition.X
 	ldi \ ldi
 	ldi \ ldi
+	
+	; Set the actor height.
+	ld hl,(Nostromo.Camera.Z)
+	ld de,-96
+	add hl,de
+	ld (Nostromo.Physics.Actor.Z.Feet),hl
+	ld de,48
+	add hl,de
+	ld (Nostromo.Physics.Actor.Z.Knees),hl
+	ld de,80
+	add hl,de
+	ld (Nostromo.Physics.Actor.Z.Head),hl
 
 	ld a,$FF
 	out (1),a

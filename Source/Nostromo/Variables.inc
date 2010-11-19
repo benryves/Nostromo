@@ -158,10 +158,13 @@ Column.Top.Clipped = AllocateVariable(1)
 
 Actor.StartPosition.X = AllocateVariable(2)
 Actor.StartPosition.Y = AllocateVariable(2)
-Actor.StartPosition.Z = AllocateVariable(2)
 
 Actor.EndPosition.X = AllocateVariable(2)
 Actor.EndPosition.Y = AllocateVariable(2)
+
+Actor.Z.Head = AllocateVariable(2)
+Actor.Z.Knees = AllocateVariable(2)
+Actor.Z.Feet = AllocateVariable(2)
 
 Collision.U = AllocateVariable(2)
 Collision.X = AllocateVariable(2)

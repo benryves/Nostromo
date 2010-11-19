@@ -108,9 +108,13 @@ ClipAgainstWall:
 ; The wall is an "upper/lower" wall. Check if we can fit through the hole.
 ; --------------------------------------------------------------------------
 
+	set Wall.DrawFlag.DrawnThisFrame,(ix+0)
+
 	ld l,(ix+4) \ ld h,(ix+5)
 	call CheckUpperLowerSectorHeights
 	jr c,ClipAgainstWall.Clip
+	
+	res Wall.DrawFlag.DrawnThisFrame,(ix+0)
 	
 	ld l,(ix+6) \ ld h,(ix+7)
 	call CheckUpperLowerSectorHeights
@@ -337,14 +341,36 @@ ClipAgainstWall.Clip:
 ; We have collided with the wall!
 ; --------------------------------------------------------------------------
 
+; --------------------------------------------------------------------------
+; Did we bump into the front or back of the wall?
+; --------------------------------------------------------------------------
+
+	bit Wall.DrawFlag.FillMiddle,(ix+0)
+	jr nz,CollidedWithFront
+
+	bit Wall.DrawFlag.DrawnThisFrame,(ix+0)
+	jr z,CollidedWithFront
+
+CollidedWithBack:
+
 	ld a,(ix+1)
+	xor $80
 	
+	jr PushBackFromWall
+
+CollidedWithFront:
+
+	ld a,(ix+1)
+
+PushBackFromWall:
+	
+	push af
 	call Maths.Trig.Sin
 	ld hl,(Collision.X)
 	add hl,bc
 	ld (Actor.EndPosition.X),hl
 
-	ld a,(ix+1)
+	pop af
 	call Maths.Trig.Cos
 	ld hl,(Collision.Y)
 	add hl,bc
@@ -364,7 +390,9 @@ ClipAgainstWall.Clip:
 ; ==========================================================================
 CheckUpperLowerSectorHeights:
 
-	; Are we below the floor?
+; --------------------------------------------------------------------------
+; Are we below the floor?
+; --------------------------------------------------------------------------
 	
 	ld e,(hl)
 	inc hl
@@ -375,7 +403,7 @@ CheckUpperLowerSectorHeights:
 	
 	push hl
 	
-	ld hl,(Actor.StartPosition.Z)
+	ld hl,(Actor.Z.Knees)
 	ld a,h \ xor $80 \ ld h,a
 	or a
 	sbc hl,de
@@ -383,8 +411,10 @@ CheckUpperLowerSectorHeights:
 	pop hl
 	
 	ret c
-	
-	; Are we above the ceiling?
+
+; --------------------------------------------------------------------------
+; Are we above the ceiling?
+; --------------------------------------------------------------------------
 	
 	ld e,(hl)
 	inc hl
@@ -392,7 +422,7 @@ CheckUpperLowerSectorHeights:
 	xor $80
 	ld d,a
 	
-	ld hl,(Actor.StartPosition.Z)
+	ld hl,(Actor.Z.Head)
 	ld a,h \ xor $80 \ ld h,a
 	or a
 	sbc hl,de
