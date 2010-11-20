@@ -592,11 +592,15 @@ FindFloorHeightFunction.SP = $+1
 	ld h,(ix+Nostromo.Tree.Node.Leaf+1)
 	
 	; Sector address.
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
+	ld l,(hl)
+	ld h,0
 	
-	ex de,hl
+	add hl,hl
+	add hl,hl
+	
+	ld de,(Nostromo.Level.Sectors)
+	
+	add hl,de
 	
 	; Floor height.
 	ld e,(hl)

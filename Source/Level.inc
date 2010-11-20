@@ -271,213 +271,213 @@ Sector21: .dw -448, -192
 Sector22: .dw -448, -256
 
 SubSectors:
-SubSector0: .dw Sector0
+SubSector0: .db 0
 	.db 0
-	.db 4 \ .dw Wall5, Wall0, Wall4, Wall20
+	.db 4 \ .db 5, 0, 4, 20
 
-SubSector1: .dw Sector2
+SubSector1: .db 2
 	.db 0
-	.db 4 \ .dw Wall1, Wall2, Wall3, Wall21
+	.db 4 \ .db 1, 2, 3, 21
 
-SubSector2: .dw Sector0
+SubSector2: .db 0
 	.db 0
-	.db 4 \ .dw Wall7, Wall8, Wall12, Wall22
+	.db 4 \ .db 7, 8, 12, 22
 
-SubSector3: .dw Sector2
+SubSector3: .db 2
 	.db 0
-	.db 4 \ .dw Wall9, Wall10, Wall11, Wall23
+	.db 4 \ .db 9, 10, 11, 23
 
-SubSector4: .dw Sector0
+SubSector4: .db 0
 	.db 0
-	.db 1 \ .dw Wall24
+	.db 1 \ .db 24
 
-SubSector5: .dw Sector1
+SubSector5: .db 1
 	.db 1 \ .dw Thing0
-	.db 6 \ .dw Wall29, Wall30, Wall19, Wall17, Wall24, Wall18
+	.db 6 \ .db 29, 30, 19, 17, 24, 18
 
-SubSector6: .dw Sector0
+SubSector6: .db 0
 	.db 0
-	.db 1 \ .dw Wall25
+	.db 1 \ .db 25
 
-SubSector7: .dw Sector1
+SubSector7: .db 1
 	.db 0
-	.db 6 \ .dw Wall13, Wall31, Wall32, Wall15, Wall25, Wall14
+	.db 6 \ .db 13, 31, 32, 15, 25, 14
 
-SubSector8: .dw Sector0
+SubSector8: .db 0
 	.db 0
-	.db 2 \ .dw Wall26, Wall6
+	.db 2 \ .db 26, 6
 
-SubSector9: .dw Sector3
+SubSector9: .db 3
 	.db 0
-	.db 4 \ .dw Wall26, Wall27, Wall30, Wall31
+	.db 4 \ .db 26, 27, 30, 31
 
-SubSector10: .dw Sector4
+SubSector10: .db 4
 	.db 1 \ .dw Thing2
-	.db 4 \ .dw Wall27, Wall28, Wall29, Wall32
+	.db 4 \ .db 27, 28, 29, 32
 
-SubSector11: .dw Sector1
+SubSector11: .db 1
 	.db 0
-	.db 2 \ .dw Wall28, Wall16
+	.db 2 \ .db 28, 16
 
-SubSector12: .dw Sector5
+SubSector12: .db 5
 	.db 0
-	.db 4 \ .dw Wall62, Wall96, Wall107, Wall108
+	.db 4 \ .db 62, 96, 107, 108
 
-SubSector13: .dw Sector6
+SubSector13: .db 6
 	.db 0
-	.db 2 \ .dw Wall62, Wall67
+	.db 2 \ .db 62, 67
 
-SubSector14: .dw Sector5
+SubSector14: .db 5
 	.db 0
-	.db 2 \ .dw Wall67, Wall50
+	.db 2 \ .db 67, 50
 
-SubSector15: .dw Sector7
+SubSector15: .db 7
 	.db 1 \ .dw Thing1
-	.db 4 \ .dw Wall50, Wall47, Wall48, Wall49
+	.db 4 \ .db 50, 47, 48, 49
 
-SubSector16: .dw Sector5
+SubSector16: .db 5
 	.db 0
-	.db 4 \ .dw Wall61, Wall33, Wall34, Wall60
+	.db 4 \ .db 61, 33, 34, 60
 
-SubSector17: .dw Sector5
+SubSector17: .db 5
 	.db 0
-	.db 2 \ .dw Wall59, Wall70
+	.db 2 \ .db 59, 70
 
-SubSector18: .dw Sector6
+SubSector18: .db 6
 	.db 1 \ .dw Thing3
-	.db 2 \ .dw Wall61, Wall70
+	.db 2 \ .db 61, 70
 
-SubSector19: .dw Sector6
+SubSector19: .db 6
 	.db 0
-	.db 1 \ .dw Wall69
+	.db 1 \ .db 69
 
-SubSector20: .dw Sector5
+SubSector20: .db 5
 	.db 0
-	.db 4 \ .dw Wall56, Wall57, Wall58, Wall69
+	.db 4 \ .db 56, 57, 58, 69
 
-SubSector21: .dw Sector6
+SubSector21: .db 6
 	.db 0
-	.db 1 \ .dw Wall68
+	.db 1 \ .db 68
 
-SubSector22: .dw Sector5
+SubSector22: .db 5
 	.db 0
-	.db 2 \ .dw Wall68, Wall51
+	.db 2 \ .db 68, 51
 
-SubSector23: .dw Sector6
+SubSector23: .db 6
 	.db 1 \ .dw Thing4
-	.db 2 \ .dw Wall63, Wall64
+	.db 2 \ .db 63, 64
 
-SubSector24: .dw Sector5
+SubSector24: .db 5
 	.db 0
-	.db 2 \ .dw Wall64, Wall38
+	.db 2 \ .db 64, 38
 
-SubSector25: .dw Sector6
+SubSector25: .db 6
 	.db 0
-	.db 1 \ .dw Wall66
+	.db 1 \ .db 66
 
-SubSector26: .dw Sector6
+SubSector26: .db 6
 	.db 0
-	.db 1 \ .dw Wall65
+	.db 1 \ .db 65
 
-SubSector27: .dw Sector5
+SubSector27: .db 5
 	.db 0
-	.db 4 \ .dw Wall65, Wall39, Wall40, Wall41
+	.db 4 \ .db 65, 39, 40, 41
 
-SubSector28: .dw Sector5
+SubSector28: .db 5
 	.db 0
-	.db 2 \ .dw Wall66, Wall46
+	.db 2 \ .db 66, 46
 
-SubSector29: .dw Sector5
+SubSector29: .db 5
 	.db 0
-	.db 4 \ .dw Wall63, Wall35, Wall36, Wall37
+	.db 4 \ .db 63, 35, 36, 37
 
-SubSector30: .dw Sector5
+SubSector30: .db 5
 	.db 0
-	.db 3 \ .dw Wall71, Wall42, Wall45
+	.db 3 \ .db 71, 42, 45
 
-SubSector31: .dw Sector5
+SubSector31: .db 5
 	.db 0
-	.db 3 \ .dw Wall72, Wall52, Wall55
+	.db 3 \ .db 72, 52, 55
 
-SubSector32: .dw Sector8
+SubSector32: .db 8
 	.db 0
-	.db 4 \ .dw Wall2, Wall72, Wall53, Wall54
+	.db 4 \ .db 2, 72, 53, 54
 
-SubSector33: .dw Sector9
+SubSector33: .db 9
 	.db 0
-	.db 4 \ .dw Wall10, Wall43, Wall44, Wall71
+	.db 4 \ .db 10, 43, 44, 71
 
-SubSector34: .dw Sector10
+SubSector34: .db 10
 	.db 0
-	.db 4 \ .dw Wall96, Wall97, Wall73, Wall95
+	.db 4 \ .db 96, 97, 73, 95
 
-SubSector35: .dw Sector11
+SubSector35: .db 11
 	.db 0
-	.db 4 \ .dw Wall97, Wall98, Wall74, Wall94
+	.db 4 \ .db 97, 98, 74, 94
 
-SubSector36: .dw Sector12
+SubSector36: .db 12
 	.db 0
-	.db 4 \ .dw Wall98, Wall99, Wall92, Wall93
+	.db 4 \ .db 98, 99, 92, 93
 
-SubSector37: .dw Sector13
+SubSector37: .db 13
 	.db 0
-	.db 4 \ .dw Wall99, Wall100, Wall75, Wall91
+	.db 4 \ .db 99, 100, 75, 91
 
-SubSector38: .dw Sector14
+SubSector38: .db 14
 	.db 0
-	.db 4 \ .dw Wall100, Wall101, Wall76, Wall90
+	.db 4 \ .db 100, 101, 76, 90
 
-SubSector39: .dw Sector15
+SubSector39: .db 15
 	.db 0
-	.db 4 \ .dw Wall101, Wall102, Wall77, Wall89
+	.db 4 \ .db 101, 102, 77, 89
 
-SubSector40: .dw Sector16
+SubSector40: .db 16
 	.db 0
-	.db 4 \ .dw Wall102, Wall103, Wall78, Wall88
+	.db 4 \ .db 102, 103, 78, 88
 
-SubSector41: .dw Sector17
+SubSector41: .db 17
 	.db 1 \ .dw Thing6
-	.db 4 \ .dw Wall103, Wall104, Wall79, Wall80
+	.db 4 \ .db 103, 104, 79, 80
 
-SubSector42: .dw Sector18
+SubSector42: .db 18
 	.db 0
-	.db 4 \ .dw Wall104, Wall105, Wall81, Wall87
+	.db 4 \ .db 104, 105, 81, 87
 
-SubSector43: .dw Sector19
+SubSector43: .db 19
 	.db 0
-	.db 4 \ .dw Wall105, Wall106, Wall82, Wall86
+	.db 4 \ .db 105, 106, 82, 86
 
-SubSector44: .dw Sector20
+SubSector44: .db 20
 	.db 0
-	.db 4 \ .dw Wall106, Wall84, Wall83, Wall85
+	.db 4 \ .db 106, 84, 83, 85
 
-SubSector45: .dw Sector21
+SubSector45: .db 21
 	.db 0
-	.db 3 \ .dw Wall84, Wall109, Wall110
+	.db 3 \ .db 84, 109, 110
 
-SubSector46: .dw Sector21
+SubSector46: .db 21
 	.db 0
-	.db 2 \ .dw Wall111, Wall127
+	.db 2 \ .db 111, 127
 
-SubSector47: .dw Sector21
+SubSector47: .db 21
 	.db 0
-	.db 3 \ .dw Wall112, Wall126, Wall125
+	.db 3 \ .db 112, 126, 125
 
-SubSector48: .dw Sector21
+SubSector48: .db 21
 	.db 0
-	.db 5 \ .dw Wall128, Wall114, Wall118, Wall122, Wall123
+	.db 5 \ .db 128, 114, 118, 122, 123
 
-SubSector49: .dw Sector21
+SubSector49: .db 21
 	.db 1 \ .dw Thing5
-	.db 3 \ .dw Wall115, Wall116, Wall117
+	.db 3 \ .db 115, 116, 117
 
-SubSector50: .dw Sector22
+SubSector50: .db 22
 	.db 0
-	.db 4 \ .dw Wall128, Wall119, Wall120, Wall121
+	.db 4 \ .db 128, 119, 120, 121
 
-SubSector51: .dw Sector21
+SubSector51: .db 21
 	.db 0
-	.db 2 \ .dw Wall113, Wall124
+	.db 2 \ .db 113, 124
 
 
 Things:

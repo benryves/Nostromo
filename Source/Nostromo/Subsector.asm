@@ -14,7 +14,7 @@ Draw:
 ; How many things do we have to draw?
 ; --------------------------------------------------------------------------
 	
-	ld a,(ix+2)
+	ld a,(ix+1)
 	or a
 	jr z,NoThings
 
@@ -31,14 +31,13 @@ Draw:
 ; the walls.
 ; --------------------------------------------------------------------------
 
-	ld l,(ix+2)
+	ld l,(ix+1)
 	ld h,0
 	add hl,hl
 	ex de,hl
 	add ix,de
 
 NoThings:
-	inc ix
 	inc ix
 	inc ix
 	ld a,(ix)
@@ -54,8 +53,14 @@ Draw.Loop:
 
 	ld l,(ix)
 	inc ix
-	ld h,(ix)
-	inc ix
+	ld h,0
+	
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	
+	ld de,(Level.Walls)
+	add hl,de
 
 ; --------------------------------------------------------------------------
 ; Load the wall flags.

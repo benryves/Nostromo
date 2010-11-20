@@ -119,7 +119,7 @@ Draw.Loop:
 ; --------------------------------------------------------------------------
 
 	ld hl,(DrawingSubSector)
-	ld de,3
+	ld de,2
 	add hl,de
 	ld e,(hl)
 	inc hl
@@ -223,10 +223,18 @@ Draw.Loop:
 ; --------------------------------------------------------------------------
 	
 	ld hl,(DrawingSubSector)
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	ex de,hl
+	ld l,(hl)
+	ld h,0
+	
+	.if Sector.DataSize != 4
+		.echoln "Sectors are no longer 4 bytes (fix this)"
+	.endif
+
+	
+	add hl,hl
+	add hl,hl
+	ld de,(Level.Sectors)
+	add hl,de
 	ld e,(hl)
 	inc hl
 	ld d,(hl)
