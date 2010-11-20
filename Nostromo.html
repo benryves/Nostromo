@@ -40,16 +40,16 @@
 		#content {
 			padding: 0.5em 2em;
 		}
-		#keys {
+		.keys {
 			list-style: none;
 			margin-left: 0;
 			padding-left: 0;
 		}
-		#keys li {
+		.keys li {
 			font-weight: bold;
 			line-height: 24px;
 		}
-		#keys li ul li {
+		.keys li ul li {
 			font-weight: normal;
 		}
 		.key {
@@ -70,6 +70,12 @@
 			background-color: #093;
 			border-color: #0C3;
 		}
+		.key.yellow {
+			background-color: #FC3;
+			border-color: #CC6;
+			text-transform: none;
+			text-shadow: 0 0 1px #330;
+		}
 		.key em {
 			text-transform: none;
 		}
@@ -81,7 +87,7 @@
 			<p>A project by <a href="http://benryves.com/">Ben Ryves</a> for <a href="http://maxcoderz.org/">MaxCoderz</a>.</p>
 		</div>
 		<div id="content">
-			<h2>Demo 5</h2>
+			<h2>Demo 6</h2>
 			<p>This is an experimental 3D engine for the TI-83 and TI-83+ graphical calculators.</p>
 			<p>
 				As it is an experiment it is not desperately useful, and it is likely to contain bugs that may crash your calculator.
@@ -94,7 +100,7 @@
 			<p>Source code is not currently provided as it is currently too messy and buggy to be of use.</p>
 			<h2>Usage</h2>
 			<p>Select the program from the list in your shell of choice and run it. The following keys can be used to control the demo:</p>
-			<ul id="keys">
+			<ul class="keys">
 				<li>General
 					<ul>
 						<li><strong class="key">Clear</strong> Exit.</li>
@@ -104,7 +110,7 @@
 					<ul>
 						<li><strong class="key blue">&#x25B2;</strong> / <strong class="key blue">&#x25BC;</strong> Move forwards/backwards.</li>
 						<li><strong class="key blue">Trace</strong> / <strong class="key blue">Graph</strong> Strafe left/right.</li>
-						<li><strong class="key">Mode</strong> / <strong class="key">X,T,&Theta;,<em>n</em></strong> Move up/down.</li>
+						<li><strong class="key">Mode</strong> / <strong class="key">X,T,&Theta;,<em>n</em></strong> Move up/down ("fly mode" only).</li>
 					</ul>
 				</li>
 				<li>Looking
@@ -120,19 +126,33 @@
 				</li>
 				<li>Options
 					<ul>
-						<li><strong class="key blue">Y=</strong> Toggle the FPS counter on (default) and off.</li>
-						<li><strong class="key blue">Window</strong> Toggles between free up/down movement (default) and snapping to a fixed height above the floor.</li>
-						<li><strong class="key blue">Zoom</strong> Switch between 6MHz (default) and 15MHz (TI-83+ SE or above only) CPU speeds.</li>
-						<li><strong class="key">Vars</strong> Toggle between showing objects (default) and hiding them.</li>
+						<li><strong class="key blue">Y=</strong> Show/hide the options menu.</li>
 					</ul>
 				</li>
 			</ul>
+			
+			<h2>Options menu</h2>
+			<p>
+				Press <strong class="key blue">Y=</strong> to show or hide the options menu. 
+				Select an option from the menu with the <strong class="key blue">&#x25B2;</strong> and <strong class="key blue">&#x25BC;</strong> keys.
+			</p>
+			<p>Pressing <strong class="key blue">Enter</strong> or <strong class="key yellow">2nd</strong> will change the highlighted option.</p>
+			<ul>
+				<li><strong>Show FPS counter</strong> &mdash; When enabled, this displays the number of frames rendered each second in the bottom left of the screen.</li>
+				<li><strong>CPU speed</strong> &mdash; Toggle between 6MHz and 15MHz on supported calculators (the regular TI-83+ and TI-83 are limited to 6MHz operation only).</li>
+				<li><strong>Fly mode</strong> &mdash; Enabling this mode allows you to freely move the camera up and down rather than walking around on the floor.</li>
+				<li><strong>Collision detection</strong> &mdash; Disabling this allows you to walk through walls.</li>
+				<li><strong>Render objects</strong> &mdash; When disabled, sprite objects are not drawn.</li>
+			</ul>
 			<h2>Known issues</h2>
 			<ul>
-				<li>You can walk through walls and ceilings (a current limitation). The world renders incorrectly when you do so (the engine is not designed to handle rendering something sensible when you're outside the map) and performance is severely affected.</li>
-				<li>Performance is not especially good at the moment. Looking across the central room with the pit in the middle slows the framerate to a crawl owing to the sheer number of subsectors and lines being handled.</li>
+				<li>Performance is not especially good at the moment. Looking across the large room with the pit in the middle slows the framerate to a crawl owing to the sheer number of subsectors and lines being handled.</li>
 				<li>Some pixels are not rendered when they should be. This is especially noticeable near the ends of steeply sloping wall edges.</li>
 				<li>When you are very close to the edge of a wall it may get projected incorrectly (integer overflow) and you will see either a vertical line flash into view then out again or a region of the screen will appear blank.</li>
+				<li>In "fly mode" you can fly above the ceiling and below the floor.</li>
+				<li>If the camera is moved into a "solid" region it will be instantly pushed out into free space when near a wall. This can be triggered in normal usage (without disabling collision detection or enabling fly mode) by standing under an open door then closing it; you'll be forced into the room when the bottom edge of the door moves below your head height.</li>
+				<li>Collision detection is not properly handled around the very ends of walls, which may cause a sudden jump in player position when you "slide" around a corner.</li>
+				<li>The current floor height is calculated based on the point directly under the centre of the player and not taking the player's radius into consideration. This can cause an unnatural jump when you slowly walk off the edge of a raised portion of the level.</li>
 			</ul>
 		</div>
 	</body>
