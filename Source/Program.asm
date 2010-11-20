@@ -1,5 +1,4 @@
 .module Program
-;.echoln Program.Icon
 	jp Main
 
 Engine:
@@ -23,12 +22,9 @@ Player.TargetZ:
 
 DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
-DemoFlag.YEquHeld = 1
-DemoFlag.ZoomHeld = 2
-DemoFlag.WindowHeld = 3
-DemoFlag.SnapToFloor = 4
-DemoFlag.VarsHeld = 5
-DemoFlag.AlphaHeld = 6
+DemoFlag.FlyMode = 1
+DemoFlag.CollisionDetection = 2
+DemoFlag.AlphaHeld = 3
 
 Door.Delta: .db 1
 Door.Current: .dw 0
@@ -36,6 +32,7 @@ Door.Min = -128 * 4
 Door.Max = 52 * 4
 
 Main:
+
 	call Nostromo.Initialise
 	ret c
 
@@ -48,12 +45,12 @@ Main:
 	ld (CameraAngleTicksRemainder),a
 	
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
-	set DemoFlag.YEquHeld,(iy+DemoFlags)
-	set DemoFlag.ZoomHeld,(iy+DemoFlags)
-	set DemoFlag.WindowHeld,(iy+DemoFlags)
-	set DemoFlag.VarsHeld,(iy+DemoFlags)
+	res DemoFlag.FlyMode,(iy+DemoFlags)
+	set DemoFlag.CollisionDetection,(iy+DemoFlags)
 	set DemoFlag.AlphaHeld,(iy+DemoFlags)
-	res DemoFlag.SnapToFloor,(iy+DemoFlags)
+	
+	xor a
+	ld (Menu.SelectedItem.Index),a
 	
 	ld hl,Door.Max
 	ld (Door.Current),hl
@@ -155,16 +152,22 @@ SkipFPSCounter:
 	
 	; Check for Clear.
 	
-	ld a,$FF
-	out (1),a
-	nop
-	ld a,$FD
-	out (1),a
-	nop
-	nop
-	in a,(1)
-	bit 6,a
-	jp z,Exit.UnloadLevel
+	ld a,skClear
+	call Nostromo.Key.GetState
+	jp nc,Exit.UnloadLevel
+	
+	; Check for Y=.
+	
+	ld a,skYEqu
+	call Nostromo.Key.GetState
+	jr c,+
+	call Menu
+	di
+	ld hl,0
+	ld (MovementTicks),hl
+	ld (Nostromo.Interrupt.Ticks),hl
+	ei
++:
 
 	ld hl,(MovementTicks)
 	ld de,8
@@ -363,79 +366,6 @@ SkipFPSCounter:
 	
 +:
 
-	; Check for Y=
-	bit 4,c
-	jr nz,+
-	bit DemoFlag.YEquHeld,(iy+DemoFlags)
-	jr nz,++
-	set DemoFlag.YEquHeld,(iy+DemoFlags)
-	ld a,(iy+DemoFlags)
-	xor 1 << DemoFlag.FPSCounter
-	ld (iy+DemoFlags),a
-	jr ++
-+:	res DemoFlag.YEquHeld,(iy+DemoFlags)
-++:
-
-.if outputwriteris('ti8x')
-	; Check for Zoom
-	bit 2,c
-	jr nz,+
-	bit DemoFlag.ZoomHeld,(iy+DemoFlags)
-	jr nz,++
-	set DemoFlag.ZoomHeld,(iy+DemoFlags)
-	
-	; Toggle speed.
-	in a,($02)
-	bit 7,a
-	jr z,++
-	
-	in a,($20)
-	xor 1
-	out ($20),a
-	
-	jr ++
-+:	res DemoFlag.ZoomHeld,(iy+DemoFlags)
-++:
-.endif
-
-	; Check for Window
-	bit 3,c
-	jr nz,+
-	bit DemoFlag.WindowHeld,(iy+DemoFlags)
-	jr nz,++
-	set DemoFlag.WindowHeld,(iy+DemoFlags)
-	
-	ld a,(iy+DemoFlags)
-	xor 1 << DemoFlag.SnapToFloor
-	ld (iy+DemoFlags),a
-	
-	jr ++
-+:	res DemoFlag.WindowHeld,(iy+DemoFlags)
-++:
-
-	; Check for Vars
-	ld a,$FF
-	out (1),a
-	nop
-	ld a,$FB
-	out (1),a
-	nop
-	nop
-	in a,(1)
-	bit 6,a
-	jr nz,+
-	bit DemoFlag.VarsHeld,(iy+DemoFlags)
-	jr nz,++
-	set DemoFlag.VarsHeld,(iy+DemoFlags)
-	
-	ld a,(iy+Nostromo.RenderFlags)
-	xor 1 << Nostromo.RenderFlag.DrawThings
-	ld (iy+Nostromo.RenderFlags),a
-	
-	jr ++
-+:	res DemoFlag.VarsHeld,(iy+DemoFlags)
-++:
-
 	ld hl,(Nostromo.Camera.Z)
 	ld de,(MovementTicks)
 	sra d \ rr e
@@ -625,10 +555,14 @@ AlphaNotPressed:
 	res DemoFlag.AlphaHeld,(iy+DemoFlags)
 AlphaHandled:
 
+	bit DemoFlag.CollisionDetection,(iy+DemoFlags)
+	jr z,CollisionDetection.Skip
 
 	; Attempt to move the camera.
 	call Nostromo.Physics.MoveActor
-	
+
+CollisionDetection.Skip:
+
 	; Copy the actor position back to the camera.
 	ld hl,Nostromo.Physics.Actor.EndPosition.X
 	ld de,Nostromo.Camera.X
@@ -639,8 +573,8 @@ AlphaHandled:
 ; Are we snapped to the floor?
 ; --------------------------------------------------------------------------
 
-	bit DemoFlag.SnapToFloor,(iy+DemoFlags)
-	jp z,NotSnappedToFloor
+	bit DemoFlag.FlyMode,(iy+DemoFlags)
+	jp nz,NotSnappedToFloor
 
 	ld (FindFloorHeightFunction.SP),sp
 	ld ix,(Nostromo.Level.Tree)
@@ -757,6 +691,419 @@ Exit.ShutDownNostromo:
 .endif
 	
 	ret
+
+Menu:
+
+; --------------------------------------------------------------------------
+; Wait for the menu key to be released.
+; --------------------------------------------------------------------------
+
+	call Nostromo.Key.GetCurrent
+	jr nz,Menu
+
+Menu.InputLoop:
+
+; --------------------------------------------------------------------------
+; Clear the graph buffer.
+; --------------------------------------------------------------------------
+
+	.bcall _GrBufClr
+	
+; --------------------------------------------------------------------------
+; Draw the horizontal lines.
+; --------------------------------------------------------------------------
+
+	ld hl,plotSScreen+12*0
+	call Menu.DrawHorizontalLine
+	ld hl,plotSScreen+12*13
+	call Menu.DrawHorizontalLine
+	ld hl,plotSScreen+12*63
+	call Menu.DrawHorizontalLine
+	
+; --------------------------------------------------------------------------
+; Draw the vertical lines
+; --------------------------------------------------------------------------
+
+	ld hl,plotSScreen+0
+	ld bc,64*256+%10000000
+	call Menu.DrawVerticalLine
+	
+	ld hl,plotSScreen+11
+	ld bc,64*256+%00000001
+	call Menu.DrawVerticalLine
+
+; --------------------------------------------------------------------------
+; Draw the caption.
+; --------------------------------------------------------------------------
+
+	ld hl,Menu.Header
+	ld de,plotSScreen+12*2
+	ld bc,Menu.Header.Size
+	ldir
+
+; --------------------------------------------------------------------------
+; Draw the scroll bar.	
+; --------------------------------------------------------------------------
+	
+	ld hl,plotSScreen+(14*12)+11
+	ld de,12
+	ld bc,49*256+%00010101
+	
+-:	ld a,(hl)
+	or c
+	ld (hl),a
+	ld a,c
+	xor %00001110
+	ld c,a
+	add hl,de
+	djnz -
+
+; --------------------------------------------------------------------------
+; Render the menu items.
+; --------------------------------------------------------------------------
+	
+	ld ix,Menu.Items
+	
+	ld a,7
+	ld (penRow),a
+
+	ld a,(Menu.SelectedItem.Index)
+	inc a
+	ld b,a
+
+Menu.RenderItem:
+
+	set textWrite,(iy+sGrFlags)
+	
+	ld a,(ix)
+	or a
+	jr z,Menu.DrawnAllItems
+
+	ld a,(penRow)
+	add a,7
+	ld (penRow),a
+	
+	push bc
+
+	push ix
+	pop hl
+	ld a,2
+	ld (penCol),a
+	.bcall _VPutS
+	push hl
+	pop ix
+	
+	ld l,(ix+0)
+	ld h,(ix+1)
+	call Menu.CallHL
+	inc ix
+	inc ix
+	
+	pop bc	
+	
+	dec b
+	jr nz,+
+	ld l,(ix+0)
+	ld h,(ix+1)
+	ld (Menu.SelectedItem.Action),hl
++:
+	inc ix
+	inc ix
+	
+	res textWrite,(iy+sGrFlags)
+	jr Menu.RenderItem
+
+Menu.DrawnAllItems:
+
+; --------------------------------------------------------------------------
+; Draw the selection rectangle.
+; --------------------------------------------------------------------------
+	
+	ld a,(Menu.SelectedItem.Index)
+	ld l,a
+	ld h,84
+	.bcall _HTimesL
+	ld de,plotSScreen+12*14
+	add hl,de
+	
+	ld c,7
+
+--:	ld a,(hl)
+	xor %01111111
+	ld (hl),a
+	inc hl
+	
+	ld b,10
+-:	ld a,(hl)
+	cpl
+	ld (hl),a
+	inc hl
+	djnz -
+
+	ld a,(hl)
+	xor %11100000
+	ld (hl),a
+	inc hl
+	
+	dec c
+	jr nz,--
+	
+; --------------------------------------------------------------------------
+; Copy the buffer to the display.
+; --------------------------------------------------------------------------
+	
+	call Nostromo.Screen.Copy
+	ei
+
+; --------------------------------------------------------------------------
+; Get an input key.
+; --------------------------------------------------------------------------
+
+-:	halt
+	call Nostromo.Key.GetOneShot
+	jr z,-
+
+; --------------------------------------------------------------------------
+; Is it Clear/YEqu?
+; --------------------------------------------------------------------------
+
+	cp skClear
+	jr z,Menu.Exit
+	cp skYEqu
+	jr nz,Menu.NoExit
+Menu.Exit:
+	call Nostromo.Key.GetCurrent
+	jr nz,Menu.Exit
+	ret
+Menu.NoExit:
+
+; --------------------------------------------------------------------------
+; Is it 2nd/Enter?
+; --------------------------------------------------------------------------
+
+	cp sk2nd
+	jr z,Menu.Interact
+	cp skEnter
+	jr nz,Menu.NoInteract
+Menu.Interact:
+	ld hl,(Menu.SelectedItem.Action)
+	call Menu.CallHL
+	jp Menu.InputLoop
+Menu.NoInteract:
+
+; --------------------------------------------------------------------------
+; Is it Up?
+; --------------------------------------------------------------------------
+
+	cp skUp
+	jr nz,+
+	ld a,(Menu.SelectedItem.Index)
+	or a
+	jp z,Menu.InputLoop
+	dec a
+	ld (Menu.SelectedItem.Index),a
+	jp Menu.InputLoop
++:
+
+; --------------------------------------------------------------------------
+; Is it Down?
+; --------------------------------------------------------------------------
+
+	cp skDown
+	jr nz,+
+	ld a,(Menu.SelectedItem.Index)
+	inc a
+	cp Menu.Items.Count
+	jp z,Menu.InputLoop
+	ld (Menu.SelectedItem.Index),a
+	jp Menu.InputLoop
++:
+
+	jp Menu.InputLoop
+
+Menu.DrawHorizontalLine:
+	ld (hl),$FF
+	ld d,h
+	ld e,l
+	inc de
+	ld bc,11
+	ldir
+	ret
+
+Menu.DrawVerticalLine:
+	ld de,12
+-:	ld a,(hl)
+	or c
+	ld (hl),a
+	add hl,de
+	djnz -
+	ret
+
+Menu.CallHL:
+	jp (hl)
+
+Menu.Header:
+.db $BF,$7E,$FD,$FB,$F7,$EF,$EF,$C0,$00,$00,$00,$FD,$B3,$66,$CC,$63
+.db $36,$6D,$6C,$C0,$00,$00,$00,$CD,$B3,$66,$CC,$63,$36,$6D,$6C,$C0
+.db $00,$00,$00,$CD,$B3,$66,$C0,$63,$36,$6D,$6C,$C0,$00,$00,$00,$C1
+.db $B3,$66,$FC,$63,$C6,$6D,$6C,$C0,$00,$00,$00,$FD,$B3,$66,$0C,$63
+.db $36,$6C,$6C,$C0,$DF,$BF,$7E,$CD,$B3,$66,$CC,$63,$36,$6C,$6C,$C0
+.db $D8,$2B,$46,$CD,$B3,$66,$CC,$63,$36,$6C,$6C,$CF,$DF,$AB,$46,$CD
+.db $B3,$66,$CC,$63,$36,$6C,$6C,$C8,$D8,$23,$46,$CD,$B3,$7E,$FC,$63
+.db $37,$EC,$6F,$CF,$DF,$A3,$7E,$FD
+Menu.Header.Size = $-Menu.Header
+
+Menu.Items:
+.db "Show FPS counter",0 \ .dw Menu.FPSCounter.Render \ .dw Menu.FPSCounter.Interact
+.db "CPU speed",0 \ .dw Menu.CPUSpeed.Render \ .dw Menu.CPUSpeed.Interact
+.db "Fly mode",0 \ .dw Menu.FlyMode.Render \ .dw Menu.FlyMode.Interact
+.db "Collision detection",0 \ .dw Menu.CollisionDetection.Render \ .dw Menu.CollisionDetection.Interact
+.db "Render objects",0 \ .dw Menu.RenderThings.Render \ .dw Menu.RenderThings.Interact
+.db 0
+Menu.Items.Count = 5
+
+Menu.SelectedItem.Index:
+	.db 0
+
+Menu.SelectedItem.Action:
+	.dw 0
+	
+Menu.Nothing.Render:
+	ret
+
+Menu.Nothing.Interact:
+	ret
+
+Menu.FPSCounter.Render:
+	bit DemoFlag.FPSCounter,(iy+DemoFlags)
+	jp Menu.CheckBox.Draw
+
+Menu.FPSCounter.Interact:
+	ld a,(iy+DemoFlags)
+	xor 1 << DemoFlag.FPSCounter
+	ld (iy+DemoFlags),a
+	ret
+
+Menu.FlyMode.Render:
+	bit DemoFlag.FlyMode,(iy+DemoFlags)
+	jp Menu.CheckBox.Draw
+
+Menu.FlyMode.Interact:
+	ld a,(iy+DemoFlags)
+	xor 1 << DemoFlag.FlyMode
+	ld (iy+DemoFlags),a
+	ret
+
+Menu.CollisionDetection.Render:
+	bit DemoFlag.CollisionDetection,(iy+DemoFlags)
+	jp Menu.CheckBox.Draw
+
+Menu.CollisionDetection.Interact:
+	ld a,(iy+DemoFlags)
+	xor 1 << DemoFlag.CollisionDetection
+	ld (iy+DemoFlags),a
+	ret
+
+Menu.RenderThings.Render:
+	bit Nostromo.RenderFlag.DrawThings,(iy+Nostromo.RenderFlags)
+	jp Menu.CheckBox.Draw
+
+Menu.RenderThings.Interact:
+	ld a,(iy+Nostromo.RenderFlags)
+	xor 1 << Nostromo.RenderFlag.DrawThings
+	ld (iy+Nostromo.RenderFlags),a
+	ret
+
+Menu.CPUSpeed.Render:
+	ld hl,CPUSpeed.Slow
+.if outputwriteris('ti8x')
+	in a,($02)
+	bit 7,a
+	jr z,+
+	
+	in a,($20)
+	or a
+	jr z,+
+	ld hl,CPUSpeed.Fast
++:	
+.endif
+	ld a,70
+	ld (penCol),a
+	.bcall _VPutS
+	ret
+
+CPUSpeed.Slow:
+	.db "    6MHz",0
+CPUSpeed.Fast:
+	.db "15MHz",0
+
+Menu.CPUSpeed.Interact:
+.if outputwriteris('ti8x')
+	in a,($02)
+	bit 7,a
+	jr z,+	
+	in a,($20)
+	xor 1
+	out ($20),a
++:	
+.endif
+	ret
+
+Menu.CheckBox.Draw:
+	ld hl,Menu.CheckBox.Unchecked
+	jr z,+
+	ld hl,Menu.CheckBox.Checked
++:	push hl
+
+	ld a,(penRow)
+	inc a
+	ld l,a
+	ld h,0
+	add hl,hl
+	add hl,hl
+	ld d,h \ ld e,l
+	add hl,hl
+	add hl,de
+	ld de,plotSScreen+10
+	add hl,de
+	pop de
+	
+	ld b,5
+--:	push bc
+	ld a,(de)
+	ld b,5
+-:	srl a
+	djnz -
+	or (hl)
+	ld (hl),a
+	inc hl
+	ld a,(de)
+	add a,a
+	add a,a
+	add a,a
+	or (hl)
+	ld (hl),a
+	ld bc,11
+	add hl,bc
+	pop bc
+	inc de
+	djnz --
+	
+	ret
+
+Menu.CheckBox.Unchecked:
+	.db %11111000
+	.db %10001000
+	.db %10001000
+	.db %10001000
+	.db %11111000
+
+Menu.CheckBox.Checked:
+	.db %11111000
+	.db %11110000
+	.db %10101000
+	.db %11011000
+	.db %11111000
 
 Level:
 #include "Level.inc"

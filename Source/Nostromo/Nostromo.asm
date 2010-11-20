@@ -23,6 +23,7 @@
 #include "Sprite.asm"
 #include "Physics.asm"
 #include "BlockMap.asm"
+#include "Key.asm"
 
 RenderFlags = asm_Flag1
 RenderFlag.DrawThings = 6

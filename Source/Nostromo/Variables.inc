@@ -186,3 +186,9 @@ Header.Size = AllocateVariable(0) - Header
 Grid = AllocateVariable(2)
 
 .endmodule
+
+.module Key
+
+PreviousScancode = AllocateVariable(1)
+
+.endmodule
