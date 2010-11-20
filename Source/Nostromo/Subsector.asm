@@ -133,17 +133,35 @@ Draw.Loop:
 ; Get the sector pointers.
 ; --------------------------------------------------------------------------
 	
+	.if Sector.DataSize != 4
+		.echoln "Sectors are no longer 4 bytes (fix this)"
+	.endif
+
 	ld e,(hl)
 	inc hl
-	ld d,(hl)
-	inc hl
-	ld (Sector.Front),de
+	push hl
+	ld d,0
+	ex de,hl
 	
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
-	inc hl
-	ld (Sector.Back),de
+	add hl,hl
+	add hl,hl
+	
+	ld bc,(Level.Sectors)
+	add hl,bc
+	ld (Sector.Front),hl
+	
+	pop hl
+	
+	ld l,(hl)
+	ld h,0
+	
+	add hl,hl
+	add hl,hl
+	
+	ld de,(Level.Sectors)
+	add hl,de
+	
+	ld (Sector.Back),hl
 
 ; --------------------------------------------------------------------------
 ; Clip and draw the wall.

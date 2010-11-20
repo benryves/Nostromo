@@ -12,6 +12,7 @@
 #include "Vertices.asm"
 #include "Wall.asm"
 #include "Clip.asm"
+#include "Sector.asm"
 #include "Subsector.asm"
 #include "Tree.asm"
 #include "Line.asm"

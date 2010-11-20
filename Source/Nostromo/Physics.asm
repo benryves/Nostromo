@@ -58,15 +58,13 @@ MoveActor:
 ; Calculate the address of the wall from its index.
 ; --------------------------------------------------------------------------
 
-	.if Wall.DataSize != 10
-		.echoln "Walls are no longer 10 bytes (fix this)"
+	.if Wall.DataSize != 8
+		.echoln "Walls are no longer 8 bytes (fix this)"
 	.endif
 
 	add hl,hl
-	ld d,h \ ld e,l
 	add hl,hl
 	add hl,hl
-	add hl,de
 	ex de,hl
 
 	ld ix,(Level.Walls)
@@ -101,22 +99,37 @@ MoveActor:
 ; ==========================================================================
 ClipAgainstWall:
 
-	bit Wall.DrawFlag.FillMiddle,(ix+0)
+	bit Wall.DrawFlag.FillMiddle,(ix+Wall.Data.Flags)
 	jr nz,ClipAgainstWall.Clip
 
 ; --------------------------------------------------------------------------
 ; The wall is an "upper/lower" wall. Check if we can fit through the hole.
 ; --------------------------------------------------------------------------
 
-	set Wall.DrawFlag.DrawnThisFrame,(ix+0)
 
-	ld l,(ix+4) \ ld h,(ix+5)
+	set Wall.DrawFlag.DrawnThisFrame,(ix+Wall.Data.Flags)
+
+	.if Sector.DataSize != 4
+		.echoln "Sectors are no longer 4 bytes (fix this)"
+	.endif
+
+	ld l,(ix+Wall.Data.FrontSector)
+	ld h,0
+	add hl,hl
+	add hl,hl
+	ld de,(Level.Sectors)
+	add hl,de
 	call CheckUpperLowerSectorHeights
 	jr c,ClipAgainstWall.Clip
 	
-	res Wall.DrawFlag.DrawnThisFrame,(ix+0)
+	res Wall.DrawFlag.DrawnThisFrame,(ix+Wall.Data.Flags)
 	
-	ld l,(ix+6) \ ld h,(ix+7)
+	ld l,(ix+Wall.Data.BackSector)
+	ld h,0
+	add hl,hl
+	add hl,hl
+	ld de,(Level.Sectors)
+	add hl,de
 	call CheckUpperLowerSectorHeights
 	ret nc
 
@@ -126,7 +139,7 @@ ClipAgainstWall.Clip:
 ; Load the start vertex.
 ; --------------------------------------------------------------------------
 	
-	ld l,(ix+2)
+	ld l,(ix+Wall.Data.StartVertex)
 	ld h,0
 	add hl,hl
 	add hl,hl
@@ -139,7 +152,7 @@ ClipAgainstWall.Clip:
 ; Load the end vertex.
 ; --------------------------------------------------------------------------
 
-	ld l,(ix+3)
+	ld l,(ix+Wall.Data.EndVertex)
 	ld h,0
 	add hl,hl
 	add hl,hl
@@ -229,8 +242,8 @@ ClipAgainstWall.Clip:
 ; Divide by the wall length squared.
 ; --------------------------------------------------------------------------
 	
-	ld e,(ix+8)
-	ld d,(ix+9)
+	ld e,(ix+Wall.Data.LengthSquared+0)
+	ld d,(ix+Wall.Data.LengthSquared+1)
 	
 	call Maths.Div.S24S16
 	
@@ -345,22 +358,22 @@ ClipAgainstWall.Clip:
 ; Did we bump into the front or back of the wall?
 ; --------------------------------------------------------------------------
 
-	bit Wall.DrawFlag.FillMiddle,(ix+0)
+	bit Wall.DrawFlag.FillMiddle,(ix+Wall.Data.Flags)
 	jr nz,CollidedWithFront
 
-	bit Wall.DrawFlag.DrawnThisFrame,(ix+0)
+	bit Wall.DrawFlag.DrawnThisFrame,(ix+Wall.Data.Flags)
 	jr z,CollidedWithFront
 
 CollidedWithBack:
 
-	ld a,(ix+1)
+	ld a,(ix+Wall.Data.Angle)
 	xor $80
 	
 	jr PushBackFromWall
 
 CollidedWithFront:
 
-	ld a,(ix+1)
+	ld a,(ix+Wall.Data.Angle)
 
 PushBackFromWall:
 	

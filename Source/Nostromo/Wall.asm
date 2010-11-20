@@ -18,7 +18,15 @@ DrawFlag.StrokeEnd = 1
 DrawFlag.FillMiddle = 2
 DrawFlag.DrawnThisFrame = 7
 
-DataSize = 10
+DataSize = 8
+
+Data.Flags = 0
+Data.Angle = 1
+Data.StartVertex = 2
+Data.EndVertex = 3
+Data.FrontSector = 4
+Data.BackSector = 5
+Data.LengthSquared = 6
 
 ; ==========================================================================
 ; ClipAndDraw
