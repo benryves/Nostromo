@@ -149,8 +149,12 @@ Draw.Loop:
 	ld bc,(Level.Sectors)
 	add hl,bc
 	ld (Sector.Front),hl
+	ld (Sector.Back),hl
 	
 	pop hl
+	
+	bit Wall.DrawFlag.FillMiddle,(iy+Wall.DrawFlags)
+	jr nz,+
 	
 	ld l,(hl)
 	ld h,0
@@ -162,6 +166,7 @@ Draw.Loop:
 	add hl,de
 	
 	ld (Sector.Back),hl
++:
 
 ; --------------------------------------------------------------------------
 ; Clip and draw the wall.
