@@ -128,18 +128,35 @@ Draw.Loop:
 	ex de,hl
 
 ; --------------------------------------------------------------------------
-; Transform the position of the thing.
+; Look up the thing's type.
+; --------------------------------------------------------------------------
+
+	push hl
+	ld l,(hl)
+	ld h,0
+	add hl,hl
+	ld de,Thing.Types
+	add hl,de
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	ld (Appearance.Offset),de
+	pop hl
+	inc hl
+
+; --------------------------------------------------------------------------
+; Get the coordinates of the thing.
 ; --------------------------------------------------------------------------
 
 	ld c,(hl) \ inc hl
 	ld b,(hl) \ inc hl
 	ld e,(hl) \ inc hl
-	ld d,(hl) \ inc hl
-	push de
-	ld e,(hl) \ inc hl
 	ld d,(hl)
-	ld (Appearance.Offset),de
-	pop de
+
+; --------------------------------------------------------------------------
+; Transform it.
+; --------------------------------------------------------------------------
+
 	call Vertices.Transform
 
 ; --------------------------------------------------------------------------

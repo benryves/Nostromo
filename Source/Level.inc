@@ -481,13 +481,13 @@ SubSector51: .db 21
 
 
 Things:
-Thing0: .dw 1024, -1280 \ .dw Thing.Stand
-Thing1: .dw 2560, -4352 \ .dw Thing.Stand
-Thing2: .dw 2816, -768 \ .dw Thing.Keycard
-Thing3: .dw 640, -5760 \ .dw Thing.Lamp
-Thing4: .dw 4480, -5760 \ .dw Thing.Lamp
-Thing5: .dw 5376, -10880 \ .dw Thing.Stand
-Thing6: .dw -512, -8448 \ .dw Thing.Lamp
+Thing0: .db Thing.Stand \ .dw 1024, -1280
+Thing1: .db Thing.Stand \ .dw 2560, -4352
+Thing2: .db Thing.Keycard \ .dw 2816, -768
+Thing3: .db Thing.Lamp \ .dw 640, -5760
+Thing4: .db Thing.Lamp \ .dw 4480, -5760
+Thing5: .db Thing.Stand \ .dw 5376, -10880
+Thing6: .db Thing.Lamp \ .dw -512, -8448
 
 Tree:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
