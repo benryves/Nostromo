@@ -141,6 +141,8 @@ Appearance.SpriteHeight = AllocateVariable(1)
 Appearance.ColumnStride = AllocateVariable(2)
 Appearance.Size = AllocateVariable(0) - Appearance
 
+NextThing.Index =  AllocateVariable(1)
+
 .endmodule
 
 .module Sprite
@@ -154,6 +156,8 @@ Column.Top = AllocateVariable(2)
 Column.Top.Clipped = AllocateVariable(1)
 
 .endmodule
+
+VariableRegion = VariableRegion2 \ VariableSpace = 160
 
 .module Physics
 
@@ -173,7 +177,6 @@ Collision.Y = AllocateVariable(2)
 
 .endmodule
 
-VariableRegion = VariableRegion2 \ VariableSpace = 160
 
 .module BlockMap
 

@@ -465,7 +465,7 @@ SubSector47: .db 21
 	.db 3 \ .db 112, 126, 125
 
 SubSector48: .db 21
-	.db 0
+	.db 8
 	.db 5 \ .db 128, 114, 118, 122, 123
 
 SubSector49: .db 21
@@ -489,6 +489,9 @@ Thing3: .db 0, Thing.Lamp, 0, 0 \ .dw 640, -5760
 Thing4: .db 0, Thing.Lamp, 0, 0 \ .dw 4480, -5760
 Thing5: .db 0, Thing.Stand, 0, 0 \ .dw 5376, -10880
 Thing6: .db 0, Thing.Lamp, 0, 0 \ .dw -512, -8448
+Thing7: .db 9, Thing.MaxCoderz, 0, 0 \ .dw 4864, -8704
+Thing8: .db 10, Thing.MaxCoderz, 0, 0 \ .dw 4864, -9984
+Thing9: .db 0, Thing.MaxCoderz, 0, 0 \ .dw 4352, -8960
 
 Tree:
 .db Nostromo.Tree.Node.Type.HorizontalPartition

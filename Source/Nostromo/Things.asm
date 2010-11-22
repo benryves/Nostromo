@@ -121,8 +121,15 @@ Draw.Loop:
 	ld hl,(DrawingSubSector)
 	
 	inc hl
-	
+
 	ld l,(hl)
+
+; --------------------------------------------------------------------------
+; We have the index of the thing to draw in L.
+; --------------------------------------------------------------------------
+
+DrawNextThing:
+
 	ld h,0
 	
 	add hl,hl
@@ -136,6 +143,8 @@ Draw.Loop:
 ; Fetch the pointer to the next thing.
 ; --------------------------------------------------------------------------
 
+	ld a,(hl)
+	ld (NextThing.Index),a
 	inc hl
 
 ; --------------------------------------------------------------------------
@@ -413,6 +422,14 @@ NoAdvanceColumn:
 	jp nz,ColumnLoop
 
 Draw.Skip:
+
+	ld a,(NextThing.Index)
+	or a
+	jr z,+
+	ld l,a
+	jp DrawNextThing
+
++:
 
 	pop bc
 	djnz +
