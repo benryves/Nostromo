@@ -577,10 +577,4 @@ AdvanceToNextSubsector:
 	ret
 +:	jp Draw.Loop
 
-
-SortedSpriteBuffer:
-.fill 16 * 8
-SortedSpriteBuffer.Count:
-.db 0
-
 .endmodule
