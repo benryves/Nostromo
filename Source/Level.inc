@@ -3,6 +3,7 @@
 	.dw SubSectors
 	.dw Sectors
 	.dw Tree
+	.dw Things
 	.dw BlockMap
 	.dw 6912, -8448, -352 \ .db 192, 0
 
@@ -292,7 +293,7 @@ SubSector4: .db 0
 	.db 1 \ .db 24
 
 SubSector5: .db 1
-	.db 1 \ .dw Thing0
+	.db 1
 	.db 6 \ .db 29, 30, 19, 17, 24, 18
 
 SubSector6: .db 0
@@ -312,7 +313,7 @@ SubSector9: .db 3
 	.db 4 \ .db 26, 27, 30, 31
 
 SubSector10: .db 4
-	.db 1 \ .dw Thing2
+	.db 3
 	.db 4 \ .db 27, 28, 29, 32
 
 SubSector11: .db 1
@@ -332,7 +333,7 @@ SubSector14: .db 5
 	.db 2 \ .db 67, 50
 
 SubSector15: .db 7
-	.db 1 \ .dw Thing1
+	.db 2
 	.db 4 \ .db 50, 47, 48, 49
 
 SubSector16: .db 5
@@ -344,7 +345,7 @@ SubSector17: .db 5
 	.db 2 \ .db 59, 70
 
 SubSector18: .db 6
-	.db 1 \ .dw Thing3
+	.db 4
 	.db 2 \ .db 61, 70
 
 SubSector19: .db 6
@@ -364,7 +365,7 @@ SubSector22: .db 5
 	.db 2 \ .db 68, 51
 
 SubSector23: .db 6
-	.db 1 \ .dw Thing4
+	.db 5
 	.db 2 \ .db 63, 64
 
 SubSector24: .db 5
@@ -436,7 +437,7 @@ SubSector40: .db 16
 	.db 4 \ .db 102, 103, 78, 88
 
 SubSector41: .db 17
-	.db 1 \ .dw Thing6
+	.db 7
 	.db 4 \ .db 103, 104, 79, 80
 
 SubSector42: .db 18
@@ -468,7 +469,7 @@ SubSector48: .db 21
 	.db 5 \ .db 128, 114, 118, 122, 123
 
 SubSector49: .db 21
-	.db 1 \ .dw Thing5
+	.db 6
 	.db 3 \ .db 115, 116, 117
 
 SubSector50: .db 22
@@ -480,14 +481,14 @@ SubSector51: .db 21
 	.db 2 \ .db 113, 124
 
 
-Things:
-Thing0: .db Thing.Stand \ .dw 1024, -1280
-Thing1: .db Thing.Stand \ .dw 2560, -4352
-Thing2: .db Thing.Keycard \ .dw 2816, -768
-Thing3: .db Thing.Lamp \ .dw 640, -5760
-Thing4: .db Thing.Lamp \ .dw 4480, -5760
-Thing5: .db Thing.Stand \ .dw 5376, -10880
-Thing6: .db Thing.Lamp \ .dw -512, -8448
+Things = $-8
+Thing0: .db 0, Thing.Stand, 0, 0 \ .dw 1024, -1280
+Thing1: .db 0, Thing.Stand, 0, 0 \ .dw 2560, -4352
+Thing2: .db 0, Thing.Keycard, 0, 0 \ .dw 2816, -768
+Thing3: .db 0, Thing.Lamp, 0, 0 \ .dw 640, -5760
+Thing4: .db 0, Thing.Lamp, 0, 0 \ .dw 4480, -5760
+Thing5: .db 0, Thing.Stand, 0, 0 \ .dw 5376, -10880
+Thing6: .db 0, Thing.Lamp, 0, 0 \ .dw -512, -8448
 
 Tree:
 .db Nostromo.Tree.Node.Type.HorizontalPartition

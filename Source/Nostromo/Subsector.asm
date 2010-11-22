@@ -10,8 +10,9 @@
 ; ==========================================================================
 Draw:
 
+
 ; --------------------------------------------------------------------------
-; How many things do we have to draw?
+; Is there a thing to draw?
 ; --------------------------------------------------------------------------
 	
 	ld a,(ix+1)
@@ -19,27 +20,26 @@ Draw:
 	jr z,NoThings
 
 ; --------------------------------------------------------------------------
-; We will have a number of things to draw, so push the subsector and current
+; We will have at least one thing to draw, so push the subsector and current
 ; clipping information onto thing stack.
 ; --------------------------------------------------------------------------
 
 	bit RenderFlag.DrawThings,(iy+RenderFlags)
 	call nz,Things.SubSectorStack.Push
 
-; --------------------------------------------------------------------------
-; Skip past the things to draw in the subsector definition before drawing
-; the walls.
-; --------------------------------------------------------------------------
-
-	ld l,(ix+1)
-	ld h,0
-	add hl,hl
-	ex de,hl
-	add ix,de
-
 NoThings:
+
+; --------------------------------------------------------------------------
+; Skip over the sector index and first thing index.
+; --------------------------------------------------------------------------
+
 	inc ix
 	inc ix
+
+; --------------------------------------------------------------------------
+; Are there any walls to draw?
+; --------------------------------------------------------------------------
+
 	ld a,(ix)
 	or a
 	ret z

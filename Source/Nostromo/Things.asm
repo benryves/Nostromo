@@ -5,7 +5,7 @@
 ; --------------------------------------------------------------------------
 ; Pushes information about the subsector to draw to the stack.
 ; --------------------------------------------------------------------------
-; Inputs:    IX: Pointer to the list of things to draw within the subsector.
+; Inputs:    IX: Pointer to the subsector containing the things to draw.
 ; Destroyed: AF, BC, DE, HL.
 ; ==========================================================================
 SubSectorStack.Push:
@@ -115,17 +115,28 @@ Draw.Loop:
 	ldir
 
 ; --------------------------------------------------------------------------
-; Draw the things in turn.
+; Find the things to draw in turn.
 ; --------------------------------------------------------------------------
 
 	ld hl,(DrawingSubSector)
-	ld de,2
-	add hl,de
-	ld e,(hl)
-	inc hl
-	ld d,(hl)
 	
-	ex de,hl
+	inc hl
+	
+	ld l,(hl)
+	ld h,0
+	
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	
+	ld de,(Level.Things)
+	add hl,de
+
+; --------------------------------------------------------------------------
+; Fetch the pointer to the next thing.
+; --------------------------------------------------------------------------
+
+	inc hl
 
 ; --------------------------------------------------------------------------
 ; Look up the thing's type.
@@ -142,6 +153,13 @@ Draw.Loop:
 	ld d,(hl)
 	ld (Appearance.Offset),de
 	pop hl
+	inc hl
+
+; --------------------------------------------------------------------------
+; Skip over the two reserved bytes.
+; --------------------------------------------------------------------------
+
+	inc hl
 	inc hl
 
 ; --------------------------------------------------------------------------
@@ -168,7 +186,7 @@ Draw.Loop:
 	jp m,Draw.Skip
 
 ; --------------------------------------------------------------------------
-; Store the transormed position.
+; Store the transformed position.
 ; --------------------------------------------------------------------------
 
 	ld (Transformed.X),bc

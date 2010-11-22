@@ -104,6 +104,7 @@ Level.Walls.Count = AllocateVariable(2)
 Level.SubSectors = AllocateVariable(2)
 Level.Sectors = AllocateVariable(2)
 Level.Tree = AllocateVariable(2)
+Level.Things = AllocateVariable(2)
 Level.BlockMap = AllocateVariable(2)
 Level.StructurePointers.Size = AllocateVariable(0) - Level.StructurePointers
 
