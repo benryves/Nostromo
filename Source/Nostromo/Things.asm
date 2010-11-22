@@ -310,12 +310,16 @@ IsCloser:
 ; --------------------------------------------------------------------------
 SortedSpriteBuffer.Add:
 
+	push bc
+
 	ld hl,Transformed.Y
 	ldi \ ldi ; Y
 	ldi \ ldi ; X
 	ld hl,Appearance.Offset
 	ldi \ ldi
 	ldi \ ldi ; (Dummy)
+	
+	pop bc
 
 ; --------------------------------------------------------------------------
 ; We have one more item in the sprite buffer.
@@ -348,6 +352,8 @@ Buffer.Skip:
 	ld hl,SortedSpriteBuffer
 
 DrawSortedSprite.Loop:
+
+	push bc
 	
 	ld de,Transformed.Y
 	ldi \ ldi ; Y
@@ -356,11 +362,6 @@ DrawSortedSprite.Loop:
 	ldi \ ldi
 	inc hl \ inc hl
 	
-	; HACK
-	ld de,Thing.MaxCoderz.Data
-	ld (Appearance.Offset),de
-	
-	push bc
 	push hl
 
 
