@@ -123,8 +123,8 @@ SubSectorStack.EntrySize = (96 * 2) + 2
 
 DrawingSubSector = AllocateVariable(2)
 
-Transformed.X = AllocateVariable(2)
-Transformed.Y = AllocateVariable(2)
+Transformed.Y = AllocateVariable(2) ; \_ Deliberately in reverse order to
+Transformed.X = AllocateVariable(2) ; /  aid sorting.
 
 Projected.X = AllocateVariable(1)
 

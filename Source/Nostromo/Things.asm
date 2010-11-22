@@ -72,7 +72,6 @@ Draw:
 	ld a,(SubSectorStack.MaximumCapacity)
 	sub b
 	ret z
-	
 	ld b,a
 Draw.Loop:
 	push bc
@@ -115,6 +114,13 @@ Draw.Loop:
 	ldir
 
 ; --------------------------------------------------------------------------
+; We have not yet added anything to the sorted sprite buffer.
+; --------------------------------------------------------------------------
+	
+	xor a
+	ld (SortedSpriteBuffer.Count),a
+
+; --------------------------------------------------------------------------
 ; Find the things to draw in turn.
 ; --------------------------------------------------------------------------
 
@@ -128,7 +134,7 @@ Draw.Loop:
 ; We have the index of the thing to draw in L.
 ; --------------------------------------------------------------------------
 
-DrawNextThing:
+SortNextThing:
 
 	ld h,0
 	
@@ -192,7 +198,7 @@ DrawNextThing:
 
 	ld a,d
 	or a
-	jp m,Draw.Skip
+	jp m,Buffer.Skip
 
 ; --------------------------------------------------------------------------
 ; Store the transformed position.
@@ -212,7 +218,7 @@ DrawNextThing:
 	or a
 	sbc hl,de
 	
-	jp nc,Draw.Skip
+	jp nc,Buffer.Skip
 
 ; --------------------------------------------------------------------------
 ; Is it outside Y=-X?
@@ -222,7 +228,141 @@ DrawNextThing:
 	neg_de()
 	or a
 	sbc hl,de
-	jp c,Draw.Skip
+	jp c,Buffer.Skip
+
+; --------------------------------------------------------------------------
+; Now we have the thing to draw, we need to add it to our sorting buffer.
+; --------------------------------------------------------------------------
+
+	ld de,SortedSpriteBuffer
+	ld a,(SortedSpriteBuffer.Count)
+	or a
+	jr z,SortedSpriteBuffer.Add
+
+; --------------------------------------------------------------------------
+; We need to find somewhere to add the sprite.
+; --------------------------------------------------------------------------
+
+	ld b,a
+FindInsertionPoint:
+	
+	ex de,hl
+	ld e,(hl)
+	inc hl
+	ld d,(hl)
+	dec hl
+	ex de,hl
+	push bc
+	ld bc,(Transformed.Y)
+	or a
+	sbc hl,bc
+	pop bc
+	jr nc,IsCloser
+
+; --------------------------------------------------------------------------
+; The sprite is further from the camera than the one at (DE).
+; --------------------------------------------------------------------------
+IsFurther:
+	
+	push de
+	
+	ld l,b
+	ld h,0
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	ld b,h \ ld c,l
+	
+	; BC = number of bytes to move.	
+	
+	ld a,(SortedSpriteBuffer.Count)
+	ld l,a
+	ld h,0
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	ld de,SortedSpriteBuffer-1
+	add hl,de
+	
+	; HL->Current end of buffer.
+	
+	push hl
+	ld de,8
+	add hl,de
+	ex de,hl
+	pop hl
+	
+	; DE->End of buffer + 8
+	
+	lddr
+	
+	pop de
+	jr SortedSpriteBuffer.Add	
+
+IsCloser:
+	ld hl,8
+	add hl,de
+	ex de,hl
+	djnz FindInsertionPoint
+
+; --------------------------------------------------------------------------
+; Add the sorted sprite to the buffer.
+; --------------------------------------------------------------------------
+SortedSpriteBuffer.Add:
+
+	ld hl,Transformed.Y
+	ldi \ ldi ; Y
+	ldi \ ldi ; X
+	ld hl,Appearance.Offset
+	ldi \ ldi
+	ldi \ ldi ; (Dummy)
+
+; --------------------------------------------------------------------------
+; We have one more item in the sprite buffer.
+; --------------------------------------------------------------------------
+
+	ld a,(SortedSpriteBuffer.Count)
+	inc a
+	ld (SortedSpriteBuffer.Count),a
+
+; --------------------------------------------------------------------------
+; Do we have any more things to sort?
+; --------------------------------------------------------------------------
+Buffer.Skip:
+	ld a,(NextThing.Index)
+	or a
+	jr z,+
+	ld l,a
+	jp SortNextThing
++:
+
+; --------------------------------------------------------------------------
+; We now have a buffer full of sorted sprites. Draw them!
+; --------------------------------------------------------------------------
+
+	ld a,(SortedSpriteBuffer.Count)
+	or a
+	jp z,AdvanceToNextSubsector
+	
+	ld b,a
+	ld hl,SortedSpriteBuffer
+
+DrawSortedSprite.Loop:
+	
+	ld de,Transformed.Y
+	ldi \ ldi ; Y
+	ldi \ ldi ; X
+	ld de,Appearance.Offset
+	ldi \ ldi
+	inc hl \ inc hl
+	
+	; HACK
+	ld de,Thing.MaxCoderz.Data
+	ld (Appearance.Offset),de
+	
+	push bc
+	push hl
+
 
 ; --------------------------------------------------------------------------
 ; Get the sprite appearance information.
@@ -423,16 +563,23 @@ NoAdvanceColumn:
 
 Draw.Skip:
 
-	ld a,(NextThing.Index)
-	or a
-	jr z,+
-	ld l,a
-	jp DrawNextThing
+	pop hl
+	pop bc
+	djnz +
+	jr AdvanceToNextSubsector
++:	jp DrawSortedSprite.Loop
 
-+:
+AdvanceToNextSubsector:
 
 	pop bc
 	djnz +
 	ret
 +:	jp Draw.Loop
+
+
+SortedSpriteBuffer:
+.fill 16 * 8
+SortedSpriteBuffer.Count:
+.db 0
+
 .endmodule
