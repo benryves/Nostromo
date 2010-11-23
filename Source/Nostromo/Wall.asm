@@ -865,6 +865,42 @@ Lower.FrontFloorAboveBackFloor:
 
 Lower.Done:
 
+; --------------------------------------------------------------------------
+; Check if we've finished any more columns.
+; --------------------------------------------------------------------------
+
+	ld hl,(Trapezium.Start.Column)
+	ld h,TopEdgeClip >> 8
+	ld a,(Trapezium.End.Column)
+	sub l
+	ld b,a
+	inc b
+
+-:	ld a,(hl)
+	or a
+	jp m,+
+	
+	inc h
+	cp (hl)
+	dec h
+	
+	jr c,+
+	
+	cpl
+	ld (hl),a
+	
+	inc h
+	ld (hl),-1+1
+	dec h
+	
+	ld a,(ColumnsToDraw)
+	dec a
+	jp z,Render.Finish ; Quickly bail out if we've finished.
+	ld (ColumnsToDraw),a
+
++:	inc l
+	djnz -
+
 	jr Wall.Drawn
 
 ; --------------------------------------------------------------------------
