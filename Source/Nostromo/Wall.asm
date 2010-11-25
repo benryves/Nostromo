@@ -245,7 +245,7 @@ IsShallow:
 ; Calculate the gradient of the line.
 ; --------------------------------------------------------------------------
 
-	call Nostromo.Maths.Div.S16S16
+	call Maths.Div.S16S16
 	ld (Gradient),bc
 
 ; --------------------------------------------------------------------------
@@ -293,7 +293,7 @@ ClipStartRight.Clip:
 	; X = -c * 256 / m - 256
 	ld de,(Gradient)
 	dec d
-	call Nostromo.Maths.Div.S16S16
+	call Maths.Div.S16S16
 	neg_bc()
 	
 	ld (Start.X),bc
@@ -346,7 +346,7 @@ ClipEndRight.Clip:
 	; X = -c * 256 / m - 256
 	ld de,(Gradient)
 	dec d
-	call Nostromo.Maths.Div.S16S16
+	call Maths.Div.S16S16
 	neg_bc()
 	
 	ld (End.X),bc
@@ -401,7 +401,7 @@ ClipStartLeft.Clip:
 	; X = c * 256 / m + 256
 	ld de,(Gradient)
 	inc d
-	call Nostromo.Maths.Div.S16S16
+	call Maths.Div.S16S16
 	
 	bit ClipFlag.Steep,(iy+ClipFlags)
 	jr nz,+
@@ -463,7 +463,7 @@ ClipEndLeft.Clip:
 	; X = c * 256 / m + 256
 	ld de,(Gradient)
 	inc d
-	call Nostromo.Maths.Div.S16S16
+	call Maths.Div.S16S16
 	
 	bit ClipFlag.Steep,(iy+ClipFlags)
 	jr nz,+
@@ -709,10 +709,7 @@ Wall.DrawUpperAndLower:
 	ld hl,(UpperLower.FrontCeilingHeight)
 	ld de,(UpperLower.BackCeilingHeight)
 	
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
+	call Maths.Compare.HL.DE.Signed
 	
 	jr z,Upper.Done
 	jr c,Upper.FrontCeilingBelowBackCeiling
@@ -784,10 +781,7 @@ Upper.Done:
 	ld hl,(UpperLower.FrontFloorHeight)
 	ld de,(UpperLower.BackFloorHeight)
 	
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
+	call Maths.Compare.HL.DE.Signed
 	
 	jr z,Lower.Done
 	jr nc,Lower.FrontFloorAboveBackFloor
@@ -1510,7 +1504,7 @@ GetYIntercept:
 	
 	ld de,(Delta.X)
 	ld bc,(Start.Y)
-	call Nostromo.Maths.Mul.S16S16
+	call Maths.Mul.S16S16
 	
 	ld a,e
 	ld b,h
@@ -1519,7 +1513,7 @@ GetYIntercept:
 	push de
 	
 	ld de,(Delta.Y)
-	call Nostromo.Maths.Div.S24S16
+	call Maths.Div.S24S16
 
 	ld hl,(Start.X)
 	
@@ -1553,7 +1547,7 @@ GetXIntercept:
 	
 	ld de,(Delta.Y)
 	ld bc,(Start.X)
-	call Nostromo.Maths.Mul.S16S16
+	call Maths.Mul.S16S16
 	
 	ld a,e
 	ld b,h
@@ -1562,7 +1556,7 @@ GetXIntercept:
 	push de
 	
 	ld de,(Delta.X)
-	call Nostromo.Maths.Div.S24S16
+	call Maths.Div.S24S16
 
 	ld hl,(Start.Y)
 	
