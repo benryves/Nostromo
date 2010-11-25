@@ -5,32 +5,6 @@ Engine:
 #include "Nostromo/Nostromo.asm"
 .echoln strformat("Engine size: {0} bytes.", $-Engine)
 
-MovementTicks:
-	.dw 0
-
-CameraAngleTicksRemainder:
-	.db 0
-
-FPSCounter:
-	.db 0
-
-Player.Z.Delta:
-	.dw 0
-
-Player.TargetZ:
-	.dw 0
-
-DemoFlags = asm_Flag3
-DemoFlag.FPSCounter = 0
-DemoFlag.FlyMode = 1
-DemoFlag.CollisionDetection = 2
-DemoFlag.AlphaHeld = 3
-
-Door.Delta: .db 1
-Door.Current: .dw 0
-Door.Min = -128 * 4
-Door.Max = 52 * 4
-
 Main:
 
 	call Nostromo.Initialise
@@ -43,6 +17,8 @@ Main:
 	xor a
 	ld (FPSCounter),a
 	ld (CameraAngleTicksRemainder),a
+	ld (Sector.Current),a
+	ld (Sector.Previous),a
 	
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
 	res DemoFlag.FlyMode,(iy+DemoFlags)
@@ -66,6 +42,89 @@ Main:
 	ld (Player.Z.Delta),hl
 
 Loop:
+
+	; Move moving sectors.
+	
+	ld ix,MovingSectors
+
+	ld l,(ix+4)
+	ld h,(ix+5)
+	ld a,l
+	or h
+	jr z,Sector.NotMoving
+
+	ld e,(ix+2)
+	ld d,(ix+3)
+	
+	add hl,de
+	
+	ex de,hl
+	
+	ld a,d
+	xor $80
+	ld d,a
+	
+	ld l,(ix+6)
+	ld a,(ix+7)
+	xor $80
+	ld h,a
+	
+	or a
+	sbc hl,de
+	
+	jr c,+
+	
+	add hl,de
+	ex de,hl
+	
+	xor a
+	ld (ix+4),a
+	ld (ix+5),a
+	
++:
+	ld l,(ix+8)
+	ld a,(ix+9)
+	xor $80
+	ld h,a
+	or a
+	sbc hl,de
+
+	jr nc,+
+	
+	add hl,de
+	ex de,hl
+	
+	xor a
+	ld (ix+4),a
+	ld (ix+5),a
+
++:
+	ld a,d
+	xor $80
+	ld d,a
+	
+	ld (ix+2),e
+	ld (ix+3),d
+
+	ld b,4
+-:	sra d \ rr e
+	djnz -
+	
+	ld l,(ix+0)
+	ld h,(ix+1)
+	
+	ld (hl),e
+	inc hl
+	ld (hl),d
+
+Sector.NotMoving:
+
+; --------------------------------------------------------------------------
+; Remember which sector we used to be in.
+; --------------------------------------------------------------------------
+
+	ld a,(Sector.Current)
+	ld (Sector.Previous),a
 
 ; --------------------------------------------------------------------------
 ; Render the world.
@@ -592,7 +651,11 @@ FindFloorHeightFunction.SP = $+1
 	ld h,(ix+Nostromo.Tree.Node.Leaf+1)
 	
 	; Sector address.
-	ld l,(hl)
+	ld a,(hl)
+	
+	ld (Sector.Current),a
+	
+	ld l,a
 	ld h,0
 	
 	add hl,hl
@@ -663,6 +726,47 @@ NoRiseOrFall:
 	djnz HeightPhysicsLoop
 
 NotSnappedToFloor:
+
+; --------------------------------------------------------------------------
+; Have we moved from one sector to another?
+; --------------------------------------------------------------------------
+
+	ld a,(Sector.Previous)
+	ld b,a
+	ld a,(Sector.Current)
+	cp b
+	jr z,Sector.NotChanged
+	ld c,a
+
+; --------------------------------------------------------------------------
+; We've moved from sector B to sector C.
+; --------------------------------------------------------------------------
+	
+	ld a,c
+	cp 35
+	jr nz,Sector.NotLowerAltar
+	ld a,b
+	cp 36
+	jr nz,Sector.NotLowerAltar
+
+	ld hl,-100
+	ld (MovingSectors+4),hl	
+
+Sector.NotLowerAltar:
+
+	ld a,c
+	cp 34
+	jr nz,Sector.NotRaiseAltar
+	ld a,b
+	cp 35
+	jr nz,Sector.NotRaiseAltar
+
+	ld hl,+100
+	ld (MovingSectors+4),hl	
+
+Sector.NotRaiseAltar:
+
+Sector.NotChanged:
 
 ; --------------------------------------------------------------------------
 ; Clear MovementTicks.
@@ -946,17 +1050,6 @@ Menu.DrawVerticalLine:
 Menu.CallHL:
 	jp (hl)
 
-Menu.Header:
-.db $BF,$7E,$FD,$FB,$F7,$EF,$EF,$C0,$00,$00,$00,$FD,$B3,$66,$CC,$63
-.db $36,$6D,$6C,$C0,$00,$00,$00,$CD,$B3,$66,$CC,$63,$36,$6D,$6C,$C0
-.db $00,$00,$00,$CD,$B3,$66,$C0,$63,$36,$6D,$6C,$C0,$00,$00,$00,$C1
-.db $B3,$66,$FC,$63,$C6,$6D,$6C,$C0,$00,$00,$00,$FD,$B3,$66,$0C,$63
-.db $36,$6C,$6C,$C0,$DF,$BF,$7E,$CD,$B3,$66,$CC,$63,$36,$6C,$6C,$C0
-.db $D8,$2B,$46,$CD,$B3,$66,$CC,$63,$36,$6C,$6C,$CF,$DF,$AB,$46,$CD
-.db $B3,$66,$CC,$63,$36,$6C,$6C,$C8,$D8,$23,$46,$CD,$B3,$7E,$FC,$63
-.db $37,$EC,$6F,$CF,$DF,$A3,$7E,$FD
-Menu.Header.Size = $-Menu.Header
-
 Menu.Items:
 .db "Show FPS counter",0 \ .dw Menu.FPSCounter.Render \ .dw Menu.FPSCounter.Interact
 .db "CPU speed",0 \ .dw Menu.CPUSpeed.Render \ .dw Menu.CPUSpeed.Interact
@@ -1095,6 +1188,10 @@ Menu.CheckBox.Draw:
 	
 	ret
 
+.if $ > $C000
+.echoln strformat("PC > $C000 (${0:X4})", $)
+.endif
+
 Menu.CheckBox.Unchecked:
 	.db %11111000
 	.db %10001000
@@ -1115,5 +1212,53 @@ Level:
 
 #include "Things.inc"
 
+
+MovementTicks:
+	.dw 0
+
+CameraAngleTicksRemainder:
+	.db 0
+
+FPSCounter:
+	.db 0
+
+Player.Z.Delta:
+	.dw 0
+
+Player.TargetZ:
+	.dw 0
+
+DemoFlags = asm_Flag3
+DemoFlag.FPSCounter = 0
+DemoFlag.FlyMode = 1
+DemoFlag.CollisionDetection = 2
+DemoFlag.AlphaHeld = 3
+
+Door.Delta: .db 1
+Door.Current: .dw 0
+Door.Min = -128 * 4
+Door.Max = 52 * 4
+
+Sector.Previous:
+	.db 0
+
+Sector.Current:
+	.db 0
+
+MovingSectors:
+	.dw Sector34+0, -104 * 16, 0, (-320 + 16) * 16, -104 * 16 ; 0:Ptr to sector variable, 2:current value, 4:delta, 6:minimum value, 8:maximum value.
+
+Menu.Header:
+.db $BF,$7E,$FD,$FB,$F7,$EF,$EF,$C0,$00,$00,$00,$FD,$B3,$66,$CC,$63
+.db $36,$6D,$6C,$C0,$00,$00,$00,$CD,$B3,$66,$CC,$63,$36,$6D,$6C,$C0
+.db $00,$00,$00,$CD,$B3,$66,$C0,$63,$36,$6D,$6C,$C0,$00,$00,$00,$C1
+.db $B3,$66,$FC,$63,$C6,$6D,$6C,$C0,$00,$00,$00,$FD,$B3,$66,$0C,$63
+.db $36,$6C,$6C,$C0,$DF,$BF,$7E,$CD,$B3,$66,$CC,$63,$36,$6C,$6C,$C0
+.db $D8,$2B,$46,$CD,$B3,$66,$CC,$63,$36,$6C,$6C,$CF,$DF,$AB,$46,$CD
+.db $B3,$66,$CC,$63,$36,$6C,$6C,$C8,$D8,$23,$46,$CD,$B3,$7E,$FC,$63
+.db $37,$EC,$6F,$CF,$DF,$A3,$7E,$FD
+Menu.Header.Size = $-Menu.Header
+
 .include "Nostromo/End.asm"
+
 .endmodule

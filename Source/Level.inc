@@ -5,7 +5,7 @@
 	.dw Tree
 	.dw Things
 	.dw BlockMap
-	.dw 6912, -8448, -272 \ .db 192, 0
+	.dw 8188, -5386, -256 \ .db 105, 0
 
 Vertices:
 	.dw 0, -3072
