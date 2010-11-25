@@ -23,21 +23,10 @@ Main:
 	set DemoFlag.FPSCounter,(iy+DemoFlags)
 	res DemoFlag.FlyMode,(iy+DemoFlags)
 	set DemoFlag.CollisionDetection,(iy+DemoFlags)
-	set DemoFlag.AlphaHeld,(iy+DemoFlags)
 	
 	xor a
 	ld (Menu.SelectedItem.Index),a
-	
-	ld hl,Door.Max
-	ld (Door.Current),hl
-	
-	ld hl,Door.Max / 4
-	ld (Sector8+2),hl
-	ld (Sector9+2),hl
-	
-	xor a
-	ld (Door.Delta),a
-	
+
 	ld hl,0
 	ld (Player.Z.Delta),hl
 
@@ -437,107 +426,6 @@ SkipFPSCounter:
 	sub 32
 	ld (Nostromo.Camera.YShear),a
 
-
-	; Move the door.
-
-	ld a,(Door.Delta)
-	or a
-	jr z,Door.NotMoving
-	
-	ld de,(MovementTicks)
-	jp p,+
-	neg_de()
-+:
-	
-	ld hl,(Door.Current)
-	add hl,de
-	
-	ld a,h
-	xor $80
-	ld h,a
-	
-	ld de,Door.Min ^ $8000
-	or a
-	sbc hl,de
-	jr nc,+
-
-	ex de,hl
-	xor a
-	ld (Door.Delta),a
-	jr ++	
-+:	add hl,de
-++:
-
-	ld de,Door.Max ^ $8000
-	or a
-	sbc hl,de
-	jr z,+
-	jr c,+
-	
-	ex de,hl
-	xor a
-	ld (Door.Delta),a
-	jr ++
-+:	add hl,de
-++:
-
-
-	ld a,h
-	xor $80
-	ld h,a
-
-	ld (Door.Current),hl
-
-	ld b,2
-	
--:	sra h
-	rr l
-	djnz -
-	
-	ld (Sector8+2),hl
-	ld (Sector9+2),hl	
-
-Door.NotMoving:
-
-	; Check for Alpha
-	ld a,$FF
-	out (1),a
-	nop
-	ld a,$DF
-	out (1),a
-	nop
-	nop
-	in a,(1)
-	bit 7,a
-	jr nz,AlphaNotPressed
-	bit DemoFlag.AlphaHeld,(iy+DemoFlags)
-	jr nz,AlphaHandled
-	set DemoFlag.AlphaHeld,(iy+DemoFlags)
-	
-	
-	; Toggle the door direction.
-	ld a,(Door.Delta)
-	neg
-	ld (Door.Delta),a
-	or a
-	jr nz,DoorMoved
-	
-	; The door is not currently moving, so force it.
-	ld hl,Door.Min
-	ld de,(Door.Current)
-	or a
-	sbc hl,de
-	ld a,1
-	jr z,DoorMoved
-	neg
-DoorMoved:
-	ld (Door.Delta),a
-	
-	jr AlphaHandled
-AlphaNotPressed:
-	res DemoFlag.AlphaHeld,(iy+DemoFlags)
-AlphaHandled:
-
 	bit DemoFlag.CollisionDetection,(iy+DemoFlags)
 	jr z,CollisionDetection.Skip
 
@@ -557,11 +445,14 @@ CollisionDetection.Skip:
 ; --------------------------------------------------------------------------
 
 	ld ix,MovingSectors
+	ld b,3
+MoveSector:
+	push bc
 
 	ld e,(ix+4)
 	ld d,(ix+5)
 	ld a,e
-	or l
+	or d
 	jr z,Sector.NotMoving
 	
 	ld bc,(MovementTicks)
@@ -632,6 +523,11 @@ CollisionDetection.Skip:
 	ld (hl),d
 
 Sector.NotMoving:
+
+	ld bc,10
+	add ix,bc
+	pop bc
+	djnz MoveSector
 
 ; --------------------------------------------------------------------------
 ; Are we snapped to the floor?
@@ -770,6 +666,39 @@ Sector.NotLowerAltar:
 	ld (MovingSectors+4),hl	
 
 Sector.NotRaiseAltar:
+
+	ld a,c
+	cp 40
+	jr z,Sector.OpenLeftDoor
+	cp 2
+	jr nz,Sector.NotOpenLeftDoor
+Sector.OpenLeftDoor:
+	ld hl,+8
+	ld (LeftDoor+4),hl	
+Sector.NotOpenLeftDoor:
+
+	ld a,c
+	cp 39
+	jr z,Sector.OpenRightDoor
+	cp 38
+	jr nz,Sector.NotOpenRightDoor
+Sector.OpenRightDoor:
+	ld hl,+8
+	ld (RightDoor+4),hl	
+Sector.NotOpenRightDoor:
+
+	ld a,c
+	cp 5
+	jr z,Sector.CloseDoors
+	cp 6
+	jr z,Sector.CloseDoors
+	cp 0
+	jr nz,Sector.NotCloseDoors
+Sector.CloseDoors:
+	ld hl,-4
+	ld (LeftDoor+4),hl	
+	ld (RightDoor+4),hl	
+Sector.NotCloseDoors:
 
 Sector.NotChanged:
 
@@ -1237,12 +1166,6 @@ DemoFlags = asm_Flag3
 DemoFlag.FPSCounter = 0
 DemoFlag.FlyMode = 1
 DemoFlag.CollisionDetection = 2
-DemoFlag.AlphaHeld = 3
-
-Door.Delta: .db 1
-Door.Current: .dw 0
-Door.Min = -128 * 4
-Door.Max = 52 * 4
 
 Sector.Previous:
 	.db 0
@@ -1252,6 +1175,10 @@ Sector.Current:
 
 MovingSectors:
 	.dw Sector34+0, -104 * 16, 0, (-320 + 16) * 16, -104 * 16 ; 0:Ptr to sector variable, 2:current value, 4:delta, 6:minimum value, 8:maximum value.
+LeftDoor:
+	.dw Sector8+2, -128 * 16, 0, -128 * 16, (64-8) * 16 ; 0:Ptr to sector variable, 2:current value, 4:delta, 6:minimum value, 8:maximum value.
+RightDoor:
+	.dw Sector9+2, -128 * 16, 0, -128 * 16, (64-8) * 16 ; 0:Ptr to sector variable, 2:current value, 4:delta, 6:minimum value, 8:maximum value.
 
 Menu.Header:
 .db $BF,$7E,$FD,$FB,$F7,$EF,$EF,$C0,$00,$00,$00,$FD,$B3,$66,$CC,$63

@@ -5,7 +5,7 @@
 	.dw Tree
 	.dw Things
 	.dw BlockMap
-	.dw 8188, -5386, -256 \ .db 105, 0
+	.dw 6912, -8448, -272 \ .db 192, 0
 
 Vertices:
 	.dw 0, -3072
@@ -170,9 +170,9 @@ Walls:
 	Wall6: .db 4 \ .db 0 \ .db 6, 7 \ .db 0, 0 \ .dw 16
 	Wall7: .db 6 \ .db 0 \ .db 7, 8 \ .db 0, 0 \ .dw 1
 	Wall8: .db 7 \ .db 32 \ .db 8, 9 \ .db 0, 0 \ .dw 8
-	Wall9: .db 7 \ .db 64 \ .db 9, 10 \ .db 2, 2 \ .dw 4
-	Wall10: .db 3 \ .db 0 \ .db 10, 11 \ .db 2, 9 \ .dw 9
-	Wall11: .db 7 \ .db 192 \ .db 11, 12 \ .db 2, 2 \ .dw 4
+	Wall9: .db 7 \ .db 64 \ .db 9, 10 \ .db 38, 38 \ .dw 4
+	Wall10: .db 3 \ .db 0 \ .db 10, 11 \ .db 38, 9 \ .dw 9
+	Wall11: .db 7 \ .db 192 \ .db 11, 12 \ .db 38, 38 \ .dw 4
 	Wall12: .db 7 \ .db 224 \ .db 12, 13 \ .db 0, 0 \ .dw 8
 	Wall13: .db 7 \ .db 192 \ .db 13, 14 \ .db 1, 1 \ .dw 100
 	Wall14: .db 4 \ .db 160 \ .db 14, 15 \ .db 1, 1 \ .dw 8
@@ -183,8 +183,8 @@ Walls:
 	Wall19: .db 7 \ .db 64 \ .db 19, 0 \ .db 1, 1 \ .dw 100
 	Wall20: .db 3 \ .db 0 \ .db 1, 4 \ .db 0, 2 \ .dw 9
 	Wall21: .db 3 \ .db 128 \ .db 4, 1 \ .db 2, 0 \ .dw 9
-	Wall22: .db 3 \ .db 0 \ .db 9, 12 \ .db 0, 2 \ .dw 9
-	Wall23: .db 3 \ .db 128 \ .db 12, 9 \ .db 2, 0 \ .dw 9
+	Wall22: .db 3 \ .db 0 \ .db 9, 12 \ .db 0, 38 \ .dw 9
+	Wall23: .db 3 \ .db 128 \ .db 12, 9 \ .db 38, 0 \ .dw 9
 	Wall24: .db 3 \ .db 230 \ .db 0, 20 \ .db 1, 0 \ .dw 100
 	Wall25: .db 3 \ .db 26 \ .db 21, 13 \ .db 1, 0 \ .dw 100
 	Wall26: .db 3 \ .db 128 \ .db 21, 20 \ .db 0, 3 \ .dw 16
@@ -197,17 +197,17 @@ Walls:
 	Wall33: .db 7 \ .db 0 \ .db 26, 27 \ .db 5, 5 \ .dw 64
 	Wall34: .db 7 \ .db 192 \ .db 27, 28 \ .db 5, 5 \ .dw 4
 	Wall35: .db 7 \ .db 64 \ .db 29, 30 \ .db 5, 5 \ .dw 4
-	Wall36: .db 7 \ .db 0 \ .db 30, 31 \ .db 5, 5 \ .dw 64
+	Wall36: .db 7 \ .db 0 \ .db 30, 31 \ .db 40, 40 \ .dw 64
 	Wall37: .db 5 \ .db 192 \ .db 31, 32 \ .db 5, 5 \ .dw 25
 	Wall38: .db 4 \ .db 192 \ .db 32, 33 \ .db 5, 5 \ .dw 9
-	Wall39: .db 6 \ .db 192 \ .db 33, 34 \ .db 5, 5 \ .dw 1
+	Wall39: .db 6 \ .db 192 \ .db 33, 34 \ .db 40, 40 \ .dw 1
 	Wall40: .db 7 \ .db 160 \ .db 34, 35 \ .db 5, 5 \ .dw 18
 	Wall41: .db 7 \ .db 128 \ .db 35, 36 \ .db 5, 5 \ .dw 1
 	Wall42: .db 7 \ .db 192 \ .db 36, 37 \ .db 5, 5 \ .dw 1
 	Wall43: .db 7 \ .db 192 \ .db 37, 11 \ .db 9, 9 \ .dw 1
 	Wall44: .db 7 \ .db 64 \ .db 10, 38 \ .db 9, 9 \ .dw 1
 	Wall45: .db 7 \ .db 64 \ .db 38, 39 \ .db 5, 5 \ .dw 1
-	Wall46: .db 7 \ .db 128 \ .db 39, 40 \ .db 5, 5 \ .dw 1
+	Wall46: .db 7 \ .db 128 \ .db 39, 40 \ .db 39, 39 \ .dw 1
 	Wall47: .db 7 \ .db 160 \ .db 40, 41 \ .db 7, 7 \ .dw 8
 	Wall48: .db 7 \ .db 128 \ .db 41, 42 \ .db 7, 7 \ .dw 16
 	Wall49: .db 7 \ .db 96 \ .db 42, 43 \ .db 7, 7 \ .dw 8
@@ -227,7 +227,7 @@ Walls:
 	Wall63: .db 2 \ .db 0 \ .db 54, 55 \ .db 6, 5 \ .dw 36
 	Wall64: .db 3 \ .db 192 \ .db 55, 56 \ .db 6, 5 \ .dw 9
 	Wall65: .db 3 \ .db 160 \ .db 56, 57 \ .db 6, 5 \ .dw 8
-	Wall66: .db 1 \ .db 128 \ .db 57, 58 \ .db 6, 5 \ .dw 16
+	Wall66: .db 1 \ .db 128 \ .db 57, 58 \ .db 6, 39 \ .dw 16
 	Wall67: .db 0 \ .db 128 \ .db 58, 59 \ .db 6, 5 \ .dw 64
 	Wall68: .db 2 \ .db 128 \ .db 59, 60 \ .db 6, 5 \ .dw 16
 	Wall69: .db 3 \ .db 96 \ .db 60, 61 \ .db 6, 5 \ .dw 8
@@ -392,6 +392,9 @@ Sector34: .dw -104, 256
 Sector35: .dw -320, 256
 Sector36: .dw -352, 256
 Sector37: .dw -384, 256
+Sector38: .dw -128, 64
+Sector39: .dw -128, 64
+Sector40: .dw -128, 64
 
 SubSectors:
 SubSector0: .db 0
@@ -406,7 +409,7 @@ SubSector2: .db 0
 	.db 0
 	.db 4 \ .db 7, 8, 12, 22
 
-SubSector3: .db 2
+SubSector3: .db 38
 	.db 0
 	.db 4 \ .db 9, 10, 11, 23
 
@@ -482,7 +485,7 @@ SubSector21: .db 6
 	.db 0
 	.db 1 \ .db 68
 
-SubSector22: .db 5
+SubSector22: .db 40
 	.db 0
 	.db 2 \ .db 68, 51
 
@@ -506,7 +509,7 @@ SubSector27: .db 5
 	.db 0
 	.db 4 \ .db 65, 39, 40, 41
 
-SubSector28: .db 5
+SubSector28: .db 39
 	.db 0
 	.db 2 \ .db 66, 46
 
