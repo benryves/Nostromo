@@ -43,82 +43,6 @@ Main:
 
 Loop:
 
-	; Move moving sectors.
-	
-	ld ix,MovingSectors
-
-	ld l,(ix+4)
-	ld h,(ix+5)
-	ld a,l
-	or h
-	jr z,Sector.NotMoving
-
-	ld e,(ix+2)
-	ld d,(ix+3)
-	
-	add hl,de
-	
-	ex de,hl
-	
-	ld a,d
-	xor $80
-	ld d,a
-	
-	ld l,(ix+6)
-	ld a,(ix+7)
-	xor $80
-	ld h,a
-	
-	or a
-	sbc hl,de
-	
-	jr c,+
-	
-	add hl,de
-	ex de,hl
-	
-	xor a
-	ld (ix+4),a
-	ld (ix+5),a
-	
-+:
-	ld l,(ix+8)
-	ld a,(ix+9)
-	xor $80
-	ld h,a
-	or a
-	sbc hl,de
-
-	jr nc,+
-	
-	add hl,de
-	ex de,hl
-	
-	xor a
-	ld (ix+4),a
-	ld (ix+5),a
-
-+:
-	ld a,d
-	xor $80
-	ld d,a
-	
-	ld (ix+2),e
-	ld (ix+3),d
-
-	ld b,4
--:	sra d \ rr e
-	djnz -
-	
-	ld l,(ix+0)
-	ld h,(ix+1)
-	
-	ld (hl),e
-	inc hl
-	ld (hl),d
-
-Sector.NotMoving:
-
 ; --------------------------------------------------------------------------
 ; Remember which sector we used to be in.
 ; --------------------------------------------------------------------------
@@ -629,6 +553,87 @@ CollisionDetection.Skip:
 	ldi \ ldi
 
 ; --------------------------------------------------------------------------
+; Are any sectors moving?
+; --------------------------------------------------------------------------
+
+	ld ix,MovingSectors
+
+	ld e,(ix+4)
+	ld d,(ix+5)
+	ld a,e
+	or l
+	jr z,Sector.NotMoving
+	
+	ld bc,(MovementTicks)
+	call Nostromo.Maths.Mul.U16U16
+
+	ld e,(ix+2)
+	ld d,(ix+3)
+	
+	add hl,de
+	
+	ex de,hl
+	
+	ld a,d
+	xor $80
+	ld d,a
+	
+	ld l,(ix+6)
+	ld a,(ix+7)
+	xor $80
+	ld h,a
+	
+	or a
+	sbc hl,de
+	
+	jr c,+
+	
+	add hl,de
+	ex de,hl
+	
+	xor a
+	ld (ix+4),a
+	ld (ix+5),a
+	
++:
+	ld l,(ix+8)
+	ld a,(ix+9)
+	xor $80
+	ld h,a
+	or a
+	sbc hl,de
+
+	jr nc,+
+	
+	add hl,de
+	ex de,hl
+	
+	xor a
+	ld (ix+4),a
+	ld (ix+5),a
+
++:
+	ld a,d
+	xor $80
+	ld d,a
+	
+	ld (ix+2),e
+	ld (ix+3),d
+
+	ld b,4
+-:	sra d \ rr e
+	djnz -
+	
+	ld l,(ix+0)
+	ld h,(ix+1)
+	
+	ld (hl),e
+	inc hl
+	ld (hl),d
+
+Sector.NotMoving:
+
+; --------------------------------------------------------------------------
 ; Are we snapped to the floor?
 ; --------------------------------------------------------------------------
 
@@ -749,7 +754,7 @@ NotSnappedToFloor:
 	cp 36
 	jr nz,Sector.NotLowerAltar
 
-	ld hl,-100
+	ld hl,-4
 	ld (MovingSectors+4),hl	
 
 Sector.NotLowerAltar:
@@ -761,7 +766,7 @@ Sector.NotLowerAltar:
 	cp 35
 	jr nz,Sector.NotRaiseAltar
 
-	ld hl,+100
+	ld hl,+4
 	ld (MovingSectors+4),hl	
 
 Sector.NotRaiseAltar:
