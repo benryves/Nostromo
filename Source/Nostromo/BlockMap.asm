@@ -1,4 +1,5 @@
 .module BlockMap
+Code:
 
 ; ==========================================================================
 ; InitialiseFromLevel
@@ -117,4 +118,5 @@ GetBlockFromPoint:
 	or a
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("BlockMap module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

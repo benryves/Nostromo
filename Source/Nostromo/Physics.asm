@@ -1,4 +1,5 @@
 .module Physics
+Code:
 
 ; ==========================================================================
 ; MoveActor
@@ -443,4 +444,5 @@ CheckUpperLowerSectorHeights:
 	ccf
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Physics module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

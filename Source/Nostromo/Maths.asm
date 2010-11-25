@@ -1,5 +1,6 @@
 ; Maths module
 .module Maths
+Code:
 
 	.module Trig
 		Cos
@@ -230,4 +231,6 @@
 			ret
 			
 	.endmodule
+
+.if Options.ReportModuleSizes \ .echoln strformat("Maths module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

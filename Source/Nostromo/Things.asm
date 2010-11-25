@@ -1,4 +1,5 @@
 .module Things
+Code:
 
 ; ==========================================================================
 ; SubSectorStack.Push
@@ -577,4 +578,5 @@ AdvanceToNextSubsector:
 	ret
 +:	jp Draw.Loop
 
+.if Options.ReportModuleSizes \ .echoln strformat("Things module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

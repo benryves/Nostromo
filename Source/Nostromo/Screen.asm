@@ -1,4 +1,5 @@
 .module Screen
+Code:
 
 ; ==========================================================================
 ; Copy
@@ -34,4 +35,5 @@ fastCopyLoop:
 	jr nz,fastCopyAgain
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Screen module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

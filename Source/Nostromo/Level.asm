@@ -1,4 +1,5 @@
 .module Level
+Code:
 
 ; ==========================================================================
 ; Load
@@ -97,4 +98,5 @@ Unload:
 	.bcall _DelMem
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Level module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

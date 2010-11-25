@@ -1,4 +1,5 @@
 .module Wall
+Code:
 
 ; ==========================================================================
 ; ClipFlags
@@ -1544,7 +1545,7 @@ GetYIntercept:
 	neg_bc()
 +:	add hl,bc
 
-	ld a,$21 ; LC HL,nn
+	ld a,$21 ; LD HL,nn
 	ld (GetYIntercept+0),a
 	ld (GetYIntercept+1),hl
 	ret
@@ -1587,10 +1588,11 @@ GetXIntercept:
 	neg_bc()
 +:	add hl,bc
 	
-	ld a,$21 ; LC HL,nn
+	ld a,$21 ; LD HL,nn
 	ld (GetXIntercept+0),a
 	ld (GetXIntercept+1),hl
 	
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Wall module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

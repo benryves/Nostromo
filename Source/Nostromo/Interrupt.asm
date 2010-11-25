@@ -1,4 +1,5 @@
 .module Interrupt
+Code:
 
 .if outputwriteris('ti8x')
 Base = $98
@@ -65,4 +66,5 @@ $ = Location
 $ = @
 HandlerEnd:
 	
+.if Options.ReportModuleSizes \ .echoln strformat("Interrupt module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

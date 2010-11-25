@@ -1,4 +1,5 @@
 .module Subsector
+Code:
 
 ; ==========================================================================
 ; Draw
@@ -244,5 +245,5 @@ GetTransformedVertex:
 	
 	ret
 
-
+.if Options.ReportModuleSizes \ .echoln strformat("Subsector module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

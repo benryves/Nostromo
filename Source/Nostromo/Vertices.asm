@@ -1,4 +1,5 @@
 .module Vertices
+Code:
 
 ; ==========================================================================
 ; Transform.Begin
@@ -131,4 +132,5 @@ VertexCount = $+1
 	jp nz,TransformLoop	
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Vertices module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

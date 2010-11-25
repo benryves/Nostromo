@@ -1,4 +1,5 @@
 .module Tree
+Code:
 
 ; ==========================================================================
 ; Node offsets
@@ -173,4 +174,5 @@ Walk.BehindPartition:
 	pop ix
 	jp Walk.SkipInit
 	
+.if Options.ReportModuleSizes \ .echoln strformat("Tree module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

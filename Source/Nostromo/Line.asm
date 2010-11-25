@@ -1,4 +1,5 @@
 .module Line
+Code:
 
 LineFlags = asm_Flag1
 LineFlag.TopDown = 7
@@ -375,4 +376,5 @@ NoClip
 	or a
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Line module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

@@ -1,4 +1,9 @@
 .module Nostromo
+Code.Main:
+.echoln "Nostromo"
+.echoln "====================================="
+
+#include "Options.inc"
 
 #define neg_hl() ld a,h \ cpl \ ld h,a \ ld a,l \ cpl \ ld l,a \ inc hl
 #define neg_de() ld a,d \ cpl \ ld d,a \ ld a,e \ cpl \ ld e,a \ inc de
@@ -384,5 +389,7 @@ Render.RenderTreeNodeFunction:
 	push hl
 	pop ix
 	jp Subsector.Draw
+
+.if Options.ReportModuleSizes \ .echoln strformat("Total size: {0:N0}", $-Code.Main) \ .endif
 
 .endmodule

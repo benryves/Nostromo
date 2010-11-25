@@ -1,4 +1,5 @@
 .module Pixel
+Code:
 
 ;-----> Get pixel information
 ; input:	e=y coordinate
@@ -30,4 +31,5 @@ getPixelLoop:
 	djnz getPixelLoop
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Pixel module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

@@ -1,4 +1,5 @@
 .module Sprite
+Code:
 
 ; ==========================================================================
 ; DrawColumn
@@ -270,4 +271,5 @@ NoAdvanceRow:
 	
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Sprite module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule

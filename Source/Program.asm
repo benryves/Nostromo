@@ -3,7 +3,6 @@
 
 Engine:
 #include "Nostromo/Nostromo.asm"
-.echoln strformat("Engine size: {0} bytes.", $-Engine)
 
 Main:
 

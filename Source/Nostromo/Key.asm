@@ -1,4 +1,5 @@
 .module Key
+Code:
 
 ; ==========================================================================
 ; GetState
@@ -272,4 +273,5 @@ GetOneShot:
 	ld (PreviousScancode),a
 	ret
 
+.if Options.ReportModuleSizes \ .echoln strformat("Key module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule
