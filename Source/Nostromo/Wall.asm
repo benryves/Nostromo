@@ -69,7 +69,7 @@ ClipAndDraw:
 	or a
 	sbc hl,de
 	ld (Delta.X),hl
-	jp m,+
+	jp p,+
 	neg_hl()
 +:	ld (Delta.AbsX),hl
 	
@@ -78,7 +78,7 @@ ClipAndDraw:
 	or a
 	sbc hl,de
 	ld (Delta.Y),hl
-	jp m,+
+	jp p,+
 	neg_hl()
 +:	ld (Delta.AbsY),hl
 
@@ -226,15 +226,14 @@ ClippedToY:
 	
 	ld hl,(Delta.AbsX)
 	ld de,(Delta.AbsY)
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
 	or a
 	sbc hl,de
+	
 	
 	ld hl,(Delta.Y)
 	ld de,(Delta.X)
 	
-	jr c,IsShallow
+	jr nc,IsShallow
 
 IsSteep:
 	set ClipFlag.Steep,(iy+ClipFlags)
