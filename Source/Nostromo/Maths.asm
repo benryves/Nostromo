@@ -62,7 +62,6 @@ Code:
 		+	.loop
 			ret
 
-
 		S16S16 ; sDEHL = sDE*sBC
 			ld l,0
 			bit 7,d
@@ -89,10 +88,17 @@ Code:
 			and 1
 			ret z ; No need to flip sign of DEHL
 			ld a,h \ or l
-			dec hl
-			jp nz,{+}
-			dec de
-		+	
+			
+			; dec dehl
+			
+			dec l
+			jr nc,+
+			dec h
+			jr nc,+
+			dec e
+			jr nc,+
+			dec d
+		+:
 
 			ld a,d \ cpl \ ld d,a
 			ld a,e \ cpl \ ld e,a
@@ -139,7 +145,6 @@ Code:
 			ld a,h \ cpl \ ld h,a
 			ld a,l \ cpl \ ld l,a
 			ret
-			
 
 		U24U16 ; ABC rHL = ABC/DE (unsigned) (HL=0)
 			.rept 24
@@ -230,6 +235,24 @@ Code:
 			inc a
 			ret
 			
+		;Reciprocal16: ; BC = 65536 / DE.
+		;	xor a
+		;	ld h,a
+		;	ld c,a
+		;	ld l,a
+		;	inc l
+		;	.rept 16
+		;		sl1 c
+		;		rla
+		;		adc	hl,hl
+		;		sbc	hl,de
+		;		jr	nc,$+4
+		;		add	hl,de
+		;		dec	c
+		;	.loop
+		;	ld b,a
+		;	ret
+		
 	.endmodule
 
 	.module Compare

@@ -512,7 +512,7 @@ NoViewClippingRequired:
 	bit ClipFlag.EndOutsideLeft,(iy+ClipFlags)
 	jr nz,Project.End.X
 	
-	; If we clipped to the right , project to the right.
+	; If we clipped to the right, project to the right.
 	ld a,95
 	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
 	jr nz,Project.End.X
