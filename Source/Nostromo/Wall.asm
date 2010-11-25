@@ -69,8 +69,7 @@ ClipAndDraw:
 	or a
 	sbc hl,de
 	ld (Delta.X),hl
-	bit 7,h
-	jr nz,+
+	jp m,+
 	neg_hl()
 +:	ld (Delta.AbsX),hl
 	
@@ -79,8 +78,7 @@ ClipAndDraw:
 	or a
 	sbc hl,de
 	ld (Delta.Y),hl
-	bit 7,h
-	jr nz,+
+	jp m,+
 	neg_hl()
 +:	ld (Delta.AbsY),hl
 
@@ -162,10 +160,7 @@ ClippedToY:
 	ld hl,(Start.X)
 	ld de,(Start.Y)
 	
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
+	call Maths.Compare.HL.DE.Signed
 	
 	jr c,+
 	dec b
@@ -177,11 +172,8 @@ ClippedToY:
 
 	ld hl,(Start.X)
 	ld de,(Start.Y)
-	neg_de()
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
+	
+	call Maths.Compare.HL.NegDE.Signed
 	
 	jr nc,+
 	dec c
@@ -194,10 +186,7 @@ ClippedToY:
 	ld hl,(End.X)
 	ld de,(End.Y)
 	
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
+	call Maths.Compare.HL.DE.Signed
 	
 	jr c,+
 	dec b
@@ -210,11 +199,8 @@ ClippedToY:
 
 	ld hl,(End.X)
 	ld de,(End.Y)
-	neg_de()
-	ld a,h \ xor $80 \ ld h,a
-	ld a,d \ xor $80 \ ld d,a
-	or a
-	sbc hl,de
+	
+	call Maths.Compare.HL.NegDE.Signed
 	
 	jr nc,+
 	dec c

@@ -232,5 +232,36 @@ Code:
 			
 	.endmodule
 
+	.module Compare
+	
+		HL.NegDE.Signed:
+			
+			neg_de()
+			
+		HL.DE.Signed:
+			
+			ld a,d
+			xor $80
+			ld d,a
+			
+			ld a,h
+			xor $80
+			ld h,a
+			
+			or a
+			sbc hl,de
+			ret
+			
+			cp d
+			
+			ret nz
+			
+			ld a,l
+			cp e
+			
+			ret
+	
+	.endmodule
+
 .if Options.ReportModuleSizes \ .echoln strformat("Maths module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule
