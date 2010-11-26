@@ -11,6 +11,11 @@ Code:
 ; ==========================================================================
 Draw:
 
+	.if Options.KeepStatistics
+	ld hl,(Statistics.SubSectorsDrawn)
+	inc hl
+	ld (Statistics.SubSectorsDrawn),hl
+	.endif
 
 ; --------------------------------------------------------------------------
 ; Is there a thing to draw?

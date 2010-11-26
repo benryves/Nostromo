@@ -43,6 +43,12 @@ Walk:
 
 Walk.SkipInit:
 
+	.if Options.KeepStatistics
+	ld hl,(Statistics.TreeNodesVisited)
+	inc hl
+	ld (Statistics.TreeNodesVisited),hl
+	.endif
+
 ; --------------------------------------------------------------------------
 ; What type is the node?
 ; --------------------------------------------------------------------------

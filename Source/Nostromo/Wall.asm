@@ -36,6 +36,12 @@ Data.LengthSquared = 6
 ; ==========================================================================
 ClipAndDraw:
 
+	.if Options.KeepStatistics
+	ld hl,(Statistics.WallsPotentiallyDrawn)
+	inc hl
+	ld (Statistics.WallsPotentiallyDrawn),hl
+	.endif
+
 ; --------------------------------------------------------------------------
 ; Can we quickly backface cull the wall by its angle?
 ; --------------------------------------------------------------------------
@@ -599,6 +605,12 @@ Project.Start.X:
 ;            Sector.Back: Pointer to the sector behind the wall.
 ; ==========================================================================
 Draw:
+
+	.if Options.KeepStatistics
+	ld hl,(Statistics.WallsActuallyDrawn)
+	inc hl
+	ld (Statistics.WallsActuallyDrawn),hl
+	.endif
 
 ; --------------------------------------------------------------------------
 ; Are we looking at the back of the wall?

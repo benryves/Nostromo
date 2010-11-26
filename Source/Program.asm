@@ -534,16 +534,27 @@ Sector.NotMoving:
 	bit DemoFlag.FlyMode,(iy+DemoFlags)
 	jp nz,NotSnappedToFloor
 
+	.if Nostromo.Options.KeepStatistics
+	ld hl,(Nostromo.Statistics.TreeNodesVisited)
+	ld (plotSScreen),hl
+	.endif
+
 	ld (FindFloorHeightFunction.SP),sp
 	ld ix,(Nostromo.Level.Tree)
 	ld hl,(Nostromo.Camera.X)
 	ld de,(Nostromo.Camera.Y)
 	ld bc,FindFloorHeightFunction
+	
 	call Nostromo.Tree.Walk
 
 FindFloorHeightFunction:
 FindFloorHeightFunction.SP = $+1
 	ld sp,0
+
+	.if Nostromo.Options.KeepStatistics
+	ld hl,(plotSScreen)
+	ld (Nostromo.Statistics.TreeNodesVisited),hl
+	.endif
 	
 	; Leaf offset.
 	ld l,(ix+Nostromo.Tree.Node.Leaf+0)
@@ -743,60 +754,7 @@ Menu:
 
 Menu.InputLoop:
 
-; --------------------------------------------------------------------------
-; Clear the graph buffer.
-; --------------------------------------------------------------------------
-
-	.bcall _GrBufClr
-	
-; --------------------------------------------------------------------------
-; Draw the horizontal lines.
-; --------------------------------------------------------------------------
-
-	ld hl,plotSScreen+12*0
-	call Menu.DrawHorizontalLine
-	ld hl,plotSScreen+12*13
-	call Menu.DrawHorizontalLine
-	ld hl,plotSScreen+12*63
-	call Menu.DrawHorizontalLine
-	
-; --------------------------------------------------------------------------
-; Draw the vertical lines
-; --------------------------------------------------------------------------
-
-	ld hl,plotSScreen+0
-	ld bc,64*256+%10000000
-	call Menu.DrawVerticalLine
-	
-	ld hl,plotSScreen+11
-	ld bc,64*256+%00000001
-	call Menu.DrawVerticalLine
-
-; --------------------------------------------------------------------------
-; Draw the caption.
-; --------------------------------------------------------------------------
-
-	ld hl,Menu.Header
-	ld de,plotSScreen+12*2
-	ld bc,Menu.Header.Size
-	ldir
-
-; --------------------------------------------------------------------------
-; Draw the scroll bar.	
-; --------------------------------------------------------------------------
-	
-	ld hl,plotSScreen+(14*12)+11
-	ld de,12
-	ld bc,49*256+%00010101
-	
--:	ld a,(hl)
-	or c
-	ld (hl),a
-	ld a,c
-	xor %00001110
-	ld c,a
-	add hl,de
-	djnz -
+	call Menu.RenderFrame
 
 ; --------------------------------------------------------------------------
 ; Render the menu items.
@@ -982,14 +940,74 @@ Menu.DrawVerticalLine:
 Menu.CallHL:
 	jp (hl)
 
+Menu.RenderFrame:
+; --------------------------------------------------------------------------
+; Clear the graph buffer.
+; --------------------------------------------------------------------------
+
+	.bcall _GrBufClr
+	
+; --------------------------------------------------------------------------
+; Draw the horizontal lines.
+; --------------------------------------------------------------------------
+
+	ld hl,plotSScreen+12*0
+	call Menu.DrawHorizontalLine
+	ld hl,plotSScreen+12*13
+	call Menu.DrawHorizontalLine
+	ld hl,plotSScreen+12*63
+	call Menu.DrawHorizontalLine
+	
+; --------------------------------------------------------------------------
+; Draw the vertical lines
+; --------------------------------------------------------------------------
+
+	ld hl,plotSScreen+0
+	ld bc,64*256+%10000000
+	call Menu.DrawVerticalLine
+	
+	ld hl,plotSScreen+11
+	ld bc,64*256+%00000001
+	call Menu.DrawVerticalLine
+
+; --------------------------------------------------------------------------
+; Draw the caption.
+; --------------------------------------------------------------------------
+
+	ld hl,Menu.Header
+	ld de,plotSScreen+12*2
+	ld bc,Menu.Header.Size
+	ldir
+
+; --------------------------------------------------------------------------
+; Draw the scroll bar.	
+; --------------------------------------------------------------------------
+	
+	ld hl,plotSScreen+(14*12)+11
+	ld de,12
+	ld bc,49*256+%00010101
+	
+-:	ld a,(hl)
+	or c
+	ld (hl),a
+	ld a,c
+	xor %00001110
+	ld c,a
+	add hl,de
+	djnz -
+	ret
+
 Menu.Items:
 .db "Show FPS counter",0 \ .dw Menu.FPSCounter.Render \ .dw Menu.FPSCounter.Interact
 .db "CPU speed",0 \ .dw Menu.CPUSpeed.Render \ .dw Menu.CPUSpeed.Interact
 .db "Fly mode",0 \ .dw Menu.FlyMode.Render \ .dw Menu.FlyMode.Interact
 .db "Collision detection",0 \ .dw Menu.CollisionDetection.Render \ .dw Menu.CollisionDetection.Interact
 .db "Render objects",0 \ .dw Menu.RenderThings.Render \ .dw Menu.RenderThings.Interact
+.if Nostromo.Options.KeepStatistics
+.db "View statistics",0 \ .dw Menu.More.Render \ .dw Menu.ViewStatistics.Interact
+.endif
 .db 0
-Menu.Items.Count = 5
+Menu.Items.Count = 5 + if(Nostromo.Options.KeepStatistics, 1, 0)
 
 Menu.SelectedItem.Index:
 	.db 0
@@ -1002,6 +1020,10 @@ Menu.Nothing.Render:
 
 Menu.Nothing.Interact:
 	ret
+	
+Menu.More.Render:
+	ld hl,Menu.More
+	jp Menu.Icon.Draw
 
 Menu.FPSCounter.Render:
 	bit DemoFlag.FPSCounter,(iy+DemoFlags)
@@ -1082,7 +1104,10 @@ Menu.CheckBox.Draw:
 	ld hl,Menu.CheckBox.Unchecked
 	jr z,+
 	ld hl,Menu.CheckBox.Checked
-+:	push hl
++:	
+
+Menu.Icon.Draw:
+	push hl
 
 	ld a,(penRow)
 	inc a
@@ -1120,6 +1145,118 @@ Menu.CheckBox.Draw:
 	
 	ret
 
+.if Nostromo.Options.KeepStatistics
+Menu.ViewStatistics.Interact:
+	call Menu.RenderFrame
+	
+	set textWrite,(iy+sGrFlags)
+	
+	ld hl,(0*7+14)*256+2
+	ld (penCol),hl
+	ld hl,StrPosition
+	.bcall _VPutS
+	
+	ld hl,(Nostromo.Camera.X)
+	call DispHLSmall.Signed
+	ld a,','
+	.bcall _VPutMap
+	ld hl,(Nostromo.Camera.Y)
+	call DispHLSmall.Signed
+	ld a,','
+	.bcall _VPutMap
+	ld hl,(Nostromo.Camera.Z)
+	call DispHLSmall.Signed
+
+	ld hl,(1*7+14)*256+2
+	ld (penCol),hl
+	ld hl,StrAngle
+	.bcall _VPutS
+	
+	ld a,(Nostromo.Camera.Angle)
+	call DispASmall
+	ld a,','
+	.bcall _VPutMap
+	ld a,(Nostromo.Camera.YShear)
+	call DispASmall.Signed
+	ld a,')'
+	.bcall _VPutMap
+	
+	ld hl,(2*7+14)*256+2
+	ld (penCol),hl
+	ld hl,StrNodesVisited
+	.bcall _VPutS
+	ld hl,(Nostromo.Statistics.TreeNodesVisited)
+	call DispHLSmall
+	
+	ld hl,(3*7+14)*256+2
+	ld (penCol),hl
+	ld hl,StrSubsectorsDrawn
+	.bcall _VPutS
+	ld hl,(Nostromo.Statistics.SubsectorsDrawn)
+	call DispHLSmall
+	
+	ld hl,(4*7+14)*256+2
+	ld (penCol),hl
+	ld hl,StrWallsDrawn
+	.bcall _VPutS
+	ld hl,(Nostromo.Statistics.WallsPotentiallyDrawn)
+	call DispHLSmall
+	ld a,'/'
+	.bcall _VPutMap
+	ld hl,(Nostromo.Statistics.WallsActuallyDrawn)
+	call DispHLSmall
+	
+	res textWrite,(iy+sGrFlags)
+	
+	call Nostromo.Screen.Copy
+	ei
+-:	halt
+	call Nostromo.Key.GetOneShot
+	jr z,-
+	ret
+
+DispASmall:
+	ld l,a
+	ld h,0
+	jr DispHLSmall
+
+DispASmall.Signed:
+	ld l,a
+	add a,a
+	sbc a,a
+	ld h,a
+
+DispHLSmall.Signed:
+	bit 7,h
+	jr z,DispHLSmall
+	push hl
+	ld a,'-'
+	.bcall _VPutMap
+	ld hl,0
+	pop de
+	or a
+	sbc hl,de
+	; deliberate run-on
+	
+DispHLSmall:
+	.bcall _SetXXXXOP2
+	.bcall _OP2ToOP1
+	ld a,5
+	.bcall _DispOP1A
+	ld hl,penCol
+	dec (hl)
+	dec (hl)
+	ret
+
+StrPosition: .db "P: ", 0
+StrAngle: .db "Angle: (", 0
+StrNodesVisited: .db "BSP nodes visited: ",0
+StrSubsectorsDrawn: .db "Sub-sectors drawn: ",0
+StrWallsDrawn: .db "Walls drawn: ",0
+
+
+.endif
+
 .if $ > $C000
 .echoln strformat("PC > $C000 (${0:X4})", $)
 .endif
@@ -1137,6 +1274,13 @@ Menu.CheckBox.Checked:
 	.db %10101000
 	.db %11011000
 	.db %11111000
+
+Menu.More:
+	.db %00000000
+	.db %00000000
+	.db %00000000
+	.db %00000000
+	.db %10101000
 
 Level:
 #include "Level.inc"

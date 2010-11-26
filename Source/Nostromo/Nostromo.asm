@@ -355,6 +355,20 @@ SkipTransformVertices:
 	ld (Things.SubSectorStack.EntriesFree),a
 
 ; --------------------------------------------------------------------------
+; Reset statistics.
+; --------------------------------------------------------------------------
+	
+	.if Options.KeepStatistics
+	
+	ld hl,Statistics.Variables
+	ld de,Statistics.Variables+1
+	ld (hl),0
+	ld bc,Statistics.Variables.Length-1
+	ldir
+
+	.endif
+
+; --------------------------------------------------------------------------
 ; Walk the BSP tree to render the level.
 ; --------------------------------------------------------------------------
 

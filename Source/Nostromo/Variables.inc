@@ -199,3 +199,16 @@ Grid = AllocateVariable(2)
 PreviousScancode = AllocateVariable(1)
 
 .endmodule
+
+.if Options.KeepStatistics
+.module Statistics
+
+Variables = AllocateVariable(0)
+TreeNodesVisited = AllocateVariable(2)
+SubSectorsDrawn = AllocateVariable(2)
+WallsPotentiallyDrawn = AllocateVariable(2)
+WallsActuallyDrawn = AllocateVariable(2)
+Variables.Length = AllocateVariable(0) - Variables
+
+.endmodule
+.endif
