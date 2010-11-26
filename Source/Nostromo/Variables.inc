@@ -78,6 +78,9 @@ HorizontalEdge.End.Y = AllocateVariable(2)
 Angle = AllocateVariable(1)
 Angle.Transformed = AllocateVariable(1)
 
+VerticalEdge.Floor = AllocateVariable(2)
+VerticalEdge.Column = AllocateVariable(1)
+
 .endmodule
 
 .module Tree

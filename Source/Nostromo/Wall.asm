@@ -1186,85 +1186,61 @@ HorizontalEdge.Done:
 ; DrawVerticalEdges
 ; --------------------------------------------------------------------------
 ; Draws the vertical edges of a wall.
+; --------------------------------------------------------------------------
+; Destroyed: AF, BC, DE, HL.
 ; ==========================================================================
 DrawVerticalEdges:
 
 ; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the start.
 ; --------------------------------------------------------------------------
-
+	
 	bit DrawFlag.StrokeStart,(iy+DrawFlags)
-	jr z,WallPart.SkipStrokeStart
+	jr z,+
 	
-	ld de,(Trapezium.Start.Column)
-	ld d,TopEdgeClip >> 8
-	ld a,(de)
-	or a
-	jp m,WallPart.SkipStrokeStart
-
-	ld hl,(Trapezium.Start.Ceiling)
-	call Clip16ToRow
-	inc a
-	ld b,a
-	
-	ld a,(de)
-	cp b
-	jr c,+
-	ld b,a
-+:	
-	
-	ld hl,(Trapezium.Start.Floor)
-	call Clip16ToRow
-	inc a
-	ld c,a
-	
-	inc d
-	ld a,(de)
-	cp c
-	jr c,+
-	ld a,c
-+:
-	
-	sub b
-	jr c,WallPart.SkipStrokeStart
-	jr z,WallPart.SkipStrokeStart
-	
-	ld e,b
-	ld b,a
-	inc b
-
 	ld a,(Trapezium.Start.Column)
+	ld hl,(Trapezium.Start.Ceiling)
+	ld de,(Trapezium.Start.Floor)
 	
-	push bc
-	dec e
-	call Pixel.GetInformation
-	pop bc
+	call DrawVerticalEdge
 	
-	ld de,12
-	ld c,a
-	
--:	ld a,(hl)
-	or c
-	ld (hl),a
-	add hl,de
-	djnz -
-	
-WallPart.SkipStrokeStart:
++:
 
 ; --------------------------------------------------------------------------
 ; Draw the lines between the floor and ceiling at the end.
 ; --------------------------------------------------------------------------
 
 	bit DrawFlag.StrokeEnd,(iy+DrawFlags)
-	jr z,WallPart.SkipStrokeEnd
+	ret z
+
+	ld a,(Trapezium.End.Column)
+	ld hl,(Trapezium.End.Ceiling)
+	ld de,(Trapezium.End.Floor)
 	
-	ld de,(Trapezium.End.Column)
+	; Deliberate run-on.
+
+; ==========================================================================
+; DrawVerticalEdge
+; --------------------------------------------------------------------------
+; Draws a vertical edge.
+; --------------------------------------------------------------------------
+; Inputs:    A: Column.
+;            HL: Projected ceiling height.
+;            DE: Projected floor height.
+; Destroyed: AF, BC, DE, HL.
+; ==========================================================================
+DrawVerticalEdge:
+
+	ld (VerticalEdge.Column),a
+	ld (VerticalEdge.Floor),de
+	
 	ld d,TopEdgeClip >> 8
+	ld e,a
 	ld a,(de)
 	or a
-	jp m,WallPart.SkipStrokeEnd
+	ret m
 
-	ld hl,(Trapezium.End.Ceiling)
+	
 	inc hl
 	call Clip16ToRow
 	inc a
@@ -1276,7 +1252,7 @@ WallPart.SkipStrokeStart:
 	ld b,a
 +:	
 	
-	ld hl,(Trapezium.End.Floor)
+	ld hl,(VerticalEdge.Floor)
 	dec hl
 	call Clip16ToRow
 	inc a
@@ -1290,14 +1266,14 @@ WallPart.SkipStrokeStart:
 +:
 	
 	sub b
-	jr c,WallPart.SkipStrokeEnd
-	jr z,WallPart.SkipStrokeEnd	
+	ret c
+	ret z
 	
 	ld e,b
 	ld b,a
 	inc b
 
-	ld a,(Trapezium.End.Column)
+	ld a,(VerticalEdge.Column)
 	
 	push bc
 	dec e
@@ -1312,9 +1288,6 @@ WallPart.SkipStrokeStart:
 	ld (hl),a
 	add hl,de
 	djnz -
-
-WallPart.SkipStrokeEnd:
-
 	ret
 
 ; ==========================================================================
