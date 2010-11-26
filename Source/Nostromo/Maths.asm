@@ -52,13 +52,13 @@ Code:
 		U16U16 ; DEHL = sDE*sBC
 			ld hl,0
 			.rept 16
-			add hl,hl
-			rl e
-			rl d
-			jp nc,{+}
-			add hl,bc
-			jp nc,{+}
-			inc de
+				add hl,hl
+				rl e
+				rl d
+				jp nc,+
+				add hl,bc
+				jp nc,+
+				inc de
 		+	.loop
 			ret
 
@@ -131,15 +131,7 @@ Code:
 			neg
 			ld c,a
 		
-			xor a
-			.rept 16
-				add hl,hl
-				rla
-				cp c
-				jr c,$+4
-				sub c
-				inc l
-			.loop
+			call U16U8
 			
 			dec hl
 			ld a,h \ cpl \ ld h,a
@@ -178,16 +170,7 @@ Code:
 
 			jp z,U24U16
 			
-			.rept 24
-				sll c
-				rl b
-				rl a
-				adc hl,hl
-				sbc hl,de
-				jr nc,$+4
-				add hl,de
-				dec c
-			.loop
+			call U24U16
 			
 			ld l,a
 			cpl_bc()
@@ -214,16 +197,7 @@ Code:
 			
 			jp z,U24U16
 			
-			.rept 24
-				sll c
-				rl b
-				rl a
-				adc hl,hl
-				sbc hl,de
-				jr nc,$+4
-				add hl,de
-				dec c
-			.loop
+			call U24U16
 			
 			; Now, negate abc
 			ld l,a
@@ -234,24 +208,6 @@ Code:
 			inc b \ ret nz
 			inc a
 			ret
-			
-		;Reciprocal16: ; BC = 65536 / DE.
-		;	xor a
-		;	ld h,a
-		;	ld c,a
-		;	ld l,a
-		;	inc l
-		;	.rept 16
-		;		sl1 c
-		;		rla
-		;		adc	hl,hl
-		;		sbc	hl,de
-		;		jr	nc,$+4
-		;		add	hl,de
-		;		dec	c
-		;	.loop
-		;	ld b,a
-		;	ret
 		
 	.endmodule
 
