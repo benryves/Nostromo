@@ -209,6 +209,14 @@ SortNextThing:
 	ld (Transformed.Y),de
 
 ; --------------------------------------------------------------------------
+; Fudge the distance factor to allow the centre of the sprite object to
+; appear beyond the left or right edge of the display rather than vanish
+; when there's still half of it to display.
+; --------------------------------------------------------------------------
+
+	inc d
+
+; --------------------------------------------------------------------------
 ; Is it outside Y=+X?
 ; --------------------------------------------------------------------------
 
@@ -393,14 +401,6 @@ DrawSortedSprite.Loop:
 	; Offset by the centre of the screen.
 	ld a,c
 	add a,48
-	
-	; Clip to the bounds of the screen.
-	jp p,+
-	xor a
-+:	cp 96
-	jr c,+
-	ld a,95
-+:
 
 	ld (Projected.X),a
 	
