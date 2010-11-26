@@ -110,10 +110,9 @@ SkipFPSCounter:
 ; Calculate the FPSCounter.
 ; --------------------------------------------------------------------------
 
-	ld b,0
-	ld c,e
+	ld a,e
 	ld hl,335
-	call Nostromo.Maths.Div.U16U8	
+	.bcall _DivHLByA
 	ld a,l
 	ld (FPSCounter),a
 

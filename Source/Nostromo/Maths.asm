@@ -110,33 +110,6 @@ Code:
 	.endmodule
 	
 	.module Div
-		U16U8 ; HL rA = uHL / uC
-			xor a
-			.rept 16
-				add hl,hl
-				rla
-				cp c
-				jr c,$+4
-				sub c
-				inc l
-			.loop
-			ret
-	
-
-		U16S8 ; HL = uHL / sC
-			bit 7,c
-			jp z,U16U8
-			
-			ld a,c
-			neg
-			ld c,a
-		
-			call U16U8
-			
-			dec hl
-			ld a,h \ cpl \ ld h,a
-			ld a,l \ cpl \ ld l,a
-			ret
 
 		U24U16 ; ABC rHL = ABC/DE (unsigned) (HL=0)
 			.rept 24
