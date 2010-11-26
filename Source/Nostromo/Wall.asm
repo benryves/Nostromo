@@ -58,7 +58,7 @@ ClipAndDraw:
 	ld b,a
 	ld a,(End.Y+1)
 	and b
-	jp m,SkipWall
+	ret m
 
 ; --------------------------------------------------------------------------
 ; Calculate the wall delta values.
@@ -190,7 +190,7 @@ ClippedToY:
 	
 	jr c,+
 	dec b
-	jp z,SkipWall ; Both ends are outside the right - bail out.
+	ret z ; Both ends are outside the right - bail out.
 	set ClipFlag.EndOutsideRight,(iy+ClipFlags)
 	res DrawFlag.StrokeEnd,(iy+DrawFlags)
 +:
@@ -204,7 +204,7 @@ ClippedToY:
 	
 	jr nc,+
 	dec c
-	jp z,SkipWall ; Both ends are outside the left - bail out.
+	ret z ; Both ends are outside the left - bail out.
 	set ClipFlag.EndOutsideLeft,(iy+ClipFlags)
 	res DrawFlag.StrokeEnd,(iy+DrawFlags)
 +:
@@ -492,7 +492,7 @@ NoViewClippingRequired:
 	ld hl,(Start.Y)
 	ld a,h
 	or l
-	jp z,SkipWall
+	ret z
 
 ; --------------------------------------------------------------------------
 ; If the wall ends on Y=0, skip it.
@@ -501,7 +501,7 @@ NoViewClippingRequired:
 	ld hl,(End.Y)
 	ld a,h
 	or l
-	jp z,SkipWall
+	ret z
 
 ; --------------------------------------------------------------------------
 ; Project the end X of the wall.
@@ -614,7 +614,7 @@ Draw:
 ; --------------------------------------------------------------------------
 
 	bit DrawFlag.FillMiddle,(iy+DrawFlags)
-	jp nz,SkipWall
+	ret nz
 
 ; --------------------------------------------------------------------------
 ; It's a middle wall. Swap over the ends before rendering.
@@ -881,7 +881,7 @@ Lower.Done:
 +:	inc l
 	djnz -
 
-	jr Wall.Drawn
+	ret
 
 ; --------------------------------------------------------------------------
 ; Draw a "middle" wall.
@@ -977,10 +977,6 @@ Wall.DrawMiddle:
 	ld (ColumnsToDraw),a
 +:	inc l
 	djnz -
-
-Wall.Drawn
-
-SkipWall:
 
 	ret
 
