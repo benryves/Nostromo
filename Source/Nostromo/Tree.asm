@@ -6,17 +6,18 @@ Code:
 ; --------------------------------------------------------------------------
 ; These refer to offsets to fields within a tree node.
 ; ==========================================================================
-Node.Type = 0
-Node.Leaf = 1
-Node.FrontNode = 1
-Node.BackNode = 3
-Node.PartitionPosition = 5
-Node.PartitionGradient = 7
+Node.BoundingCircle.X = 0
+Node.BoundingCircle.Y = 2
+Node.BoundingCircle.Radius = 4
+Node.Type = 6
+Node.Leaf = 7
+Node.FrontNode = 7
+Node.BackNode = 9
+Node.PartitionPosition = 11
+Node.PartitionGradient = 13
 
 ; ==========================================================================
-; Node offsets
-; --------------------------------------------------------------------------
-; These refer to offsets to fields within a tree node.
+; Node types
 ; ==========================================================================
 Node.Type.Leaf = 0
 Node.Type.VerticalPartition = 1
@@ -39,7 +40,7 @@ Walk:
 
 	ld (Walker.X),hl
 	ld (Walker.Y),de
-	ld (Walker.Function),bc
+	ld (Walker.Leaf.Function),bc
 
 Walk.SkipInit:
 
@@ -48,6 +49,11 @@ Walk.SkipInit:
 	inc hl
 	ld (Statistics.TreeNodesVisited),hl
 	.endif
+
+Walker.Cull.Function = $+1
+	call 0
+
+	ret c
 
 ; --------------------------------------------------------------------------
 ; What type is the node?
@@ -62,7 +68,7 @@ Walk.SkipInit:
 ; --------------------------------------------------------------------------
 Walk.Leaf:
 
-Walker.Function = $+1
+Walker.Leaf.Function = $+1
 	jp 0
 
 ; --------------------------------------------------------------------------
@@ -179,6 +185,15 @@ Walk.BehindPartition:
 	push hl
 	pop ix
 	jp Walk.SkipInit
-	
+
+; ==========================================================================
+; Walk.DoNotCull
+; --------------------------------------------------------------------------
+; Stub function to load into Walker.Cull.Function to never cull nodes.
+; ==========================================================================
+Walk.DoNotCull:
+	or a
+	ret
+
 .if Options.ReportModuleSizes \ .echoln strformat("Tree module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule
