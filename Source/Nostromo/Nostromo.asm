@@ -398,10 +398,7 @@ Render.Finish:
 ; Renders a tree node.
 ; ==========================================================================
 Render.RenderTreeNodeFunction:
-	ld l,(ix+Tree.Node.Leaf+0)
-	ld h,(ix+Tree.Node.Leaf+1)
-	push hl
-	pop ix
+	inc ix
 	jp Subsector.Draw
 
 .if Options.ReportModuleSizes \ .echoln strformat("Total size: {0:N0}", $-Code.Main) \ .endif

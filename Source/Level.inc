@@ -1,6 +1,5 @@
 	.dw Vertices, Vertices.Count
 	.dw Walls, Walls.Count
-	.dw SubSectors
 	.dw Sectors
 	.dw Tree
 	.dw Things
@@ -396,324 +395,6 @@ Sector38: .dw -128, 64
 Sector39: .dw -128, 64
 Sector40: .dw -128, 64
 
-SubSectors:
-SubSector0: .db 0
-	.db 0
-	.db 4 \ .db 5, 0, 4, 20
-
-SubSector1: .db 2
-	.db 0
-	.db 4 \ .db 1, 2, 3, 21
-
-SubSector2: .db 0
-	.db 0
-	.db 4 \ .db 7, 8, 12, 22
-
-SubSector3: .db 38
-	.db 0
-	.db 4 \ .db 9, 10, 11, 23
-
-SubSector4: .db 0
-	.db 0
-	.db 1 \ .db 24
-
-SubSector5: .db 1
-	.db 1
-	.db 6 \ .db 29, 30, 19, 17, 24, 18
-
-SubSector6: .db 0
-	.db 0
-	.db 1 \ .db 25
-
-SubSector7: .db 1
-	.db 0
-	.db 6 \ .db 13, 31, 32, 15, 25, 14
-
-SubSector8: .db 0
-	.db 0
-	.db 2 \ .db 26, 6
-
-SubSector9: .db 3
-	.db 0
-	.db 4 \ .db 26, 27, 30, 31
-
-SubSector10: .db 4
-	.db 3
-	.db 4 \ .db 27, 28, 29, 32
-
-SubSector11: .db 1
-	.db 0
-	.db 2 \ .db 28, 16
-
-SubSector12: .db 5
-	.db 0
-	.db 4 \ .db 62, 96, 107, 108
-
-SubSector13: .db 6
-	.db 0
-	.db 2 \ .db 62, 67
-
-SubSector14: .db 5
-	.db 0
-	.db 2 \ .db 67, 50
-
-SubSector15: .db 7
-	.db 2
-	.db 4 \ .db 50, 47, 48, 49
-
-SubSector16: .db 5
-	.db 0
-	.db 4 \ .db 61, 33, 34, 60
-
-SubSector17: .db 5
-	.db 0
-	.db 2 \ .db 59, 70
-
-SubSector18: .db 6
-	.db 4
-	.db 2 \ .db 61, 70
-
-SubSector19: .db 6
-	.db 0
-	.db 1 \ .db 69
-
-SubSector20: .db 5
-	.db 0
-	.db 4 \ .db 56, 57, 58, 69
-
-SubSector21: .db 6
-	.db 0
-	.db 1 \ .db 68
-
-SubSector22: .db 40
-	.db 0
-	.db 2 \ .db 68, 51
-
-SubSector23: .db 6
-	.db 5
-	.db 2 \ .db 63, 64
-
-SubSector24: .db 5
-	.db 0
-	.db 2 \ .db 64, 38
-
-SubSector25: .db 6
-	.db 0
-	.db 1 \ .db 66
-
-SubSector26: .db 6
-	.db 0
-	.db 1 \ .db 65
-
-SubSector27: .db 5
-	.db 0
-	.db 4 \ .db 65, 39, 40, 41
-
-SubSector28: .db 39
-	.db 0
-	.db 2 \ .db 66, 46
-
-SubSector29: .db 5
-	.db 0
-	.db 4 \ .db 63, 35, 36, 37
-
-SubSector30: .db 5
-	.db 0
-	.db 3 \ .db 71, 42, 45
-
-SubSector31: .db 5
-	.db 0
-	.db 3 \ .db 72, 52, 55
-
-SubSector32: .db 8
-	.db 0
-	.db 4 \ .db 2, 72, 53, 54
-
-SubSector33: .db 9
-	.db 0
-	.db 4 \ .db 10, 43, 44, 71
-
-SubSector34: .db 10
-	.db 0
-	.db 4 \ .db 96, 97, 73, 95
-
-SubSector35: .db 11
-	.db 0
-	.db 4 \ .db 97, 98, 74, 94
-
-SubSector36: .db 12
-	.db 0
-	.db 4 \ .db 98, 99, 92, 93
-
-SubSector37: .db 13
-	.db 0
-	.db 4 \ .db 99, 100, 75, 91
-
-SubSector38: .db 14
-	.db 0
-	.db 4 \ .db 100, 101, 76, 90
-
-SubSector39: .db 15
-	.db 0
-	.db 4 \ .db 101, 102, 77, 89
-
-SubSector40: .db 16
-	.db 0
-	.db 4 \ .db 102, 103, 78, 88
-
-SubSector41: .db 17
-	.db 7
-	.db 4 \ .db 103, 104, 79, 80
-
-SubSector42: .db 18
-	.db 0
-	.db 4 \ .db 104, 105, 81, 87
-
-SubSector43: .db 19
-	.db 0
-	.db 4 \ .db 105, 106, 82, 86
-
-SubSector44: .db 20
-	.db 0
-	.db 4 \ .db 106, 84, 83, 85
-
-SubSector45: .db 21
-	.db 0
-	.db 3 \ .db 84, 109, 110
-
-SubSector46: .db 21
-	.db 0
-	.db 2 \ .db 111, 127
-
-SubSector47: .db 21
-	.db 0
-	.db 3 \ .db 112, 126, 125
-
-SubSector48: .db 21
-	.db 0
-	.db 5 \ .db 128, 114, 118, 122, 123
-
-SubSector49: .db 21
-	.db 6
-	.db 3 \ .db 115, 116, 117
-
-SubSector50: .db 22
-	.db 0
-	.db 4 \ .db 128, 119, 120, 121
-
-SubSector51: .db 21
-	.db 0
-	.db 2 \ .db 113, 124
-
-SubSector52: .db 22
-	.db 0
-	.db 3 \ .db 152, 129, 151
-
-SubSector53: .db 23
-	.db 0
-	.db 4 \ .db 152, 153, 130, 150
-
-SubSector54: .db 24
-	.db 0
-	.db 3 \ .db 153, 154, 131
-
-SubSector55: .db 25
-	.db 0
-	.db 3 \ .db 154, 155, 132
-
-SubSector56: .db 26
-	.db 0
-	.db 4 \ .db 155, 156, 133, 149
-
-SubSector57: .db 27
-	.db 0
-	.db 4 \ .db 156, 157, 134, 148
-
-SubSector58: .db 28
-	.db 0
-	.db 4 \ .db 157, 158, 135, 147
-
-SubSector59: .db 29
-	.db 0
-	.db 3 \ .db 158, 159, 136
-
-SubSector60: .db 30
-	.db 0
-	.db 3 \ .db 159, 160, 137
-
-SubSector61: .db 31
-	.db 0
-	.db 4 \ .db 160, 161, 138, 146
-
-SubSector62: .db 32
-	.db 0
-	.db 4 \ .db 161, 162, 139, 145
-
-SubSector63: .db 33
-	.db 8
-	.db 4 \ .db 162, 144, 143, 140
-
-SubSector64: .db 33
-	.db 0
-	.db 3 \ .db 141, 142, 163
-
-SubSector65: .db 36
-	.db 0
-	.db 3 \ .db 177, 176, 164
-
-SubSector66: .db 35
-	.db 0
-	.db 3 \ .db 177, 182, 165
-
-SubSector67: .db 34
-	.db 9
-	.db 6 \ .db 141, 182, 183, 184, 185, 186
-
-SubSector68: .db 35
-	.db 0
-	.db 1 \ .db 183
-
-SubSector69: .db 35
-	.db 0
-	.db 1 \ .db 185
-
-SubSector70: .db 35
-	.db 0
-	.db 4 \ .db 186, 185, 181, 166
-
-SubSector71: .db 36
-	.db 0
-	.db 3 \ .db 181, 167, 168
-
-SubSector72: .db 36
-	.db 0
-	.db 2 \ .db 178, 175
-
-SubSector73: .db 35
-	.db 0
-	.db 4 \ .db 178, 179, 184, 180
-
-SubSector74: .db 36
-	.db 0
-	.db 2 \ .db 180, 169
-
-SubSector75: .db 37
-	.db 0
-	.db 2 \ .db 187, 174
-
-SubSector76: .db 36
-	.db 0
-	.db 4 \ .db 187, 179, 188, 189
-
-SubSector77: .db 37
-	.db 0
-	.db 2 \ .db 170, 189
-
-SubSector78: .db 37
-	.db 0
-	.db 4 \ .db 188, 171, 172, 173
-
-
 Things = $-8
 Thing0: .db 0, Thing.Stand, 0, 0 \ .dw 1024, -1280
 Thing1: .db 0, Thing.Stand, 0, 0 \ .dw 2560, -4352
@@ -751,7 +432,9 @@ Tree.F.F.F:
 
 Tree.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector78
+	.db 37
+	.db 0
+	.db 4 \ .db 188, 171, 172, 173
 
 Tree.F.F.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -762,7 +445,9 @@ Tree.F.F.F.B:
 
 Tree.F.F.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector75
+	.db 37
+	.db 0
+	.db 2 \ .db 187, 174
 
 Tree.F.F.F.B.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -773,11 +458,15 @@ Tree.F.F.F.B.B:
 
 Tree.F.F.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector77
+	.db 37
+	.db 0
+	.db 2 \ .db 170, 189
 
 Tree.F.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector76
+	.db 36
+	.db 0
+	.db 4 \ .db 187, 179, 188, 189
 
 Tree.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -794,7 +483,9 @@ Tree.F.F.B.F:
 
 Tree.F.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector72
+	.db 36
+	.db 0
+	.db 2 \ .db 178, 175
 
 Tree.F.F.B.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -805,11 +496,15 @@ Tree.F.F.B.F.B:
 
 Tree.F.F.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector74
+	.db 36
+	.db 0
+	.db 2 \ .db 180, 169
 
 Tree.F.F.B.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector73
+	.db 35
+	.db 0
+	.db 4 \ .db 178, 179, 184, 180
 
 Tree.F.F.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -831,11 +526,15 @@ Tree.F.F.B.B.F.F:
 
 Tree.F.F.B.B.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector71
+	.db 36
+	.db 0
+	.db 3 \ .db 181, 167, 168
 
 Tree.F.F.B.B.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector70
+	.db 35
+	.db 0
+	.db 4 \ .db 186, 185, 181, 166
 
 Tree.F.F.B.B.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -846,7 +545,9 @@ Tree.F.F.B.B.F.B:
 
 Tree.F.F.B.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector68
+	.db 35
+	.db 0
+	.db 1 \ .db 183
 
 Tree.F.F.B.B.F.B.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -857,11 +558,15 @@ Tree.F.F.B.B.F.B.B:
 
 Tree.F.F.B.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector69
+	.db 35
+	.db 0
+	.db 1 \ .db 185
 
 Tree.F.F.B.B.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector67
+	.db 34
+	.db 9
+	.db 6 \ .db 141, 182, 183, 184, 185, 186
 
 Tree.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -871,11 +576,15 @@ Tree.F.F.B.B.B:
 
 Tree.F.F.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector66
+	.db 35
+	.db 0
+	.db 3 \ .db 177, 182, 165
 
 Tree.F.F.B.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector65
+	.db 36
+	.db 0
+	.db 3 \ .db 177, 176, 164
 
 Tree.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -909,15 +618,21 @@ Tree.F.B.F.F.F.F:
 
 Tree.F.B.F.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector64
+	.db 33
+	.db 0
+	.db 3 \ .db 141, 142, 163
 
 Tree.F.B.F.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector63
+	.db 33
+	.db 8
+	.db 4 \ .db 162, 144, 143, 140
 
 Tree.F.B.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector62
+	.db 32
+	.db 0
+	.db 4 \ .db 161, 162, 139, 145
 
 Tree.F.B.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -927,7 +642,9 @@ Tree.F.B.F.F.B:
 
 Tree.F.B.F.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector61
+	.db 31
+	.db 0
+	.db 4 \ .db 160, 161, 138, 146
 
 Tree.F.B.F.F.B.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -938,11 +655,15 @@ Tree.F.B.F.F.B.B:
 
 Tree.F.B.F.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector60
+	.db 30
+	.db 0
+	.db 3 \ .db 159, 160, 137
 
 Tree.F.B.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector59
+	.db 29
+	.db 0
+	.db 3 \ .db 158, 159, 136
 
 Tree.F.B.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -952,7 +673,9 @@ Tree.F.B.F.B:
 
 Tree.F.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector58
+	.db 28
+	.db 0
+	.db 4 \ .db 157, 158, 135, 147
 
 Tree.F.B.F.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -962,11 +685,15 @@ Tree.F.B.F.B.B:
 
 Tree.F.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector57
+	.db 27
+	.db 0
+	.db 4 \ .db 156, 157, 134, 148
 
 Tree.F.B.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector56
+	.db 26
+	.db 0
+	.db 4 \ .db 155, 156, 133, 149
 
 Tree.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -982,11 +709,15 @@ Tree.F.B.B.F:
 
 Tree.F.B.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector50
+	.db 22
+	.db 0
+	.db 4 \ .db 128, 119, 120, 121
 
 Tree.F.B.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector52
+	.db 22
+	.db 0
+	.db 3 \ .db 152, 129, 151
 
 Tree.F.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -996,7 +727,9 @@ Tree.F.B.B.B:
 
 Tree.F.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector53
+	.db 23
+	.db 0
+	.db 4 \ .db 152, 153, 130, 150
 
 Tree.F.B.B.B.B:
 .db Nostromo.Tree.Node.Type.SteepSlopePartition
@@ -1007,11 +740,15 @@ Tree.F.B.B.B.B:
 
 Tree.F.B.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector55
+	.db 25
+	.db 0
+	.db 3 \ .db 154, 155, 132
 
 Tree.F.B.B.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector54
+	.db 24
+	.db 0
+	.db 3 \ .db 153, 154, 131
 
 Tree.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1052,11 +789,15 @@ Tree.B.F.F.F.F.F:
 
 Tree.B.F.F.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector7
+	.db 1
+	.db 0
+	.db 6 \ .db 13, 31, 32, 15, 25, 14
 
 Tree.B.F.F.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector6
+	.db 0
+	.db 0
+	.db 1 \ .db 25
 
 Tree.B.F.F.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1072,11 +813,15 @@ Tree.B.F.F.F.F.B.F:
 
 Tree.B.F.F.F.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector11
+	.db 1
+	.db 0
+	.db 2 \ .db 28, 16
 
 Tree.B.F.F.F.F.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector10
+	.db 4
+	.db 3
+	.db 4 \ .db 27, 28, 29, 32
 
 Tree.B.F.F.F.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1086,11 +831,15 @@ Tree.B.F.F.F.F.B.B:
 
 Tree.B.F.F.F.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector9
+	.db 3
+	.db 0
+	.db 4 \ .db 26, 27, 30, 31
 
 Tree.B.F.F.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector8
+	.db 0
+	.db 0
+	.db 2 \ .db 26, 6
 
 Tree.B.F.F.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -1101,11 +850,15 @@ Tree.B.F.F.F.B:
 
 Tree.B.F.F.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector5
+	.db 1
+	.db 1
+	.db 6 \ .db 29, 30, 19, 17, 24, 18
 
 Tree.B.F.F.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector4
+	.db 0
+	.db 0
+	.db 1 \ .db 24
 
 Tree.B.F.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -1121,11 +874,15 @@ Tree.B.F.F.B.F:
 
 Tree.B.F.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector2
+	.db 0
+	.db 0
+	.db 4 \ .db 7, 8, 12, 22
 
 Tree.B.F.F.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector3
+	.db 38
+	.db 0
+	.db 4 \ .db 9, 10, 11, 23
 
 Tree.B.F.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1135,11 +892,15 @@ Tree.B.F.F.B.B:
 
 Tree.B.F.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector0
+	.db 0
+	.db 0
+	.db 4 \ .db 5, 0, 4, 20
 
 Tree.B.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector1
+	.db 2
+	.db 0
+	.db 4 \ .db 1, 2, 3, 21
 
 Tree.B.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -1174,11 +935,15 @@ Tree.B.F.B.F.F.F.F:
 
 Tree.B.F.B.F.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector27
+	.db 5
+	.db 0
+	.db 4 \ .db 65, 39, 40, 41
 
 Tree.B.F.B.F.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector26
+	.db 6
+	.db 0
+	.db 1 \ .db 65
 
 Tree.B.F.B.F.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1194,11 +959,15 @@ Tree.B.F.B.F.F.F.B.F:
 
 Tree.B.F.B.F.F.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector33
+	.db 9
+	.db 0
+	.db 4 \ .db 10, 43, 44, 71
 
 Tree.B.F.B.F.F.F.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector30
+	.db 5
+	.db 0
+	.db 3 \ .db 71, 42, 45
 
 Tree.B.F.B.F.F.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1208,11 +977,15 @@ Tree.B.F.B.F.F.F.B.B:
 
 Tree.B.F.B.F.F.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector28
+	.db 39
+	.db 0
+	.db 2 \ .db 66, 46
 
 Tree.B.F.B.F.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector25
+	.db 6
+	.db 0
+	.db 1 \ .db 66
 
 Tree.B.F.B.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1228,15 +1001,21 @@ Tree.B.F.B.F.F.B.F:
 
 Tree.B.F.B.F.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector24
+	.db 5
+	.db 0
+	.db 2 \ .db 64, 38
 
 Tree.B.F.B.F.F.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector23
+	.db 6
+	.db 5
+	.db 2 \ .db 63, 64
 
 Tree.B.F.B.F.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector29
+	.db 5
+	.db 0
+	.db 4 \ .db 63, 35, 36, 37
 
 Tree.B.F.B.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1252,11 +1031,15 @@ Tree.B.F.B.F.B.F:
 
 Tree.B.F.B.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector15
+	.db 7
+	.db 2
+	.db 4 \ .db 50, 47, 48, 49
 
 Tree.B.F.B.F.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector14
+	.db 5
+	.db 0
+	.db 2 \ .db 67, 50
 
 Tree.B.F.B.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1266,7 +1049,9 @@ Tree.B.F.B.F.B.B:
 
 Tree.B.F.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector13
+	.db 6
+	.db 0
+	.db 2 \ .db 62, 67
 
 Tree.B.F.B.F.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1276,11 +1061,15 @@ Tree.B.F.B.F.B.B.B:
 
 Tree.B.F.B.F.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector12
+	.db 5
+	.db 0
+	.db 4 \ .db 62, 96, 107, 108
 
 Tree.B.F.B.F.B.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector34
+	.db 10
+	.db 0
+	.db 4 \ .db 96, 97, 73, 95
 
 Tree.B.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1308,11 +1097,15 @@ Tree.B.F.B.B.F.F.F:
 
 Tree.B.F.B.B.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector32
+	.db 8
+	.db 0
+	.db 4 \ .db 2, 72, 53, 54
 
 Tree.B.F.B.B.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector31
+	.db 5
+	.db 0
+	.db 3 \ .db 72, 52, 55
 
 Tree.B.F.B.B.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1322,11 +1115,15 @@ Tree.B.F.B.B.F.F.B:
 
 Tree.B.F.B.B.F.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector22
+	.db 40
+	.db 0
+	.db 2 \ .db 68, 51
 
 Tree.B.F.B.B.F.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector21
+	.db 6
+	.db 0
+	.db 1 \ .db 68
 
 Tree.B.F.B.B.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
@@ -1337,11 +1134,15 @@ Tree.B.F.B.B.F.B:
 
 Tree.B.F.B.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector20
+	.db 5
+	.db 0
+	.db 4 \ .db 56, 57, 58, 69
 
 Tree.B.F.B.B.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector19
+	.db 6
+	.db 0
+	.db 1 \ .db 69
 
 Tree.B.F.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1357,15 +1158,21 @@ Tree.B.F.B.B.B.F:
 
 Tree.B.F.B.B.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector18
+	.db 6
+	.db 4
+	.db 2 \ .db 61, 70
 
 Tree.B.F.B.B.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector17
+	.db 5
+	.db 0
+	.db 2 \ .db 59, 70
 
 Tree.B.F.B.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector16
+	.db 5
+	.db 0
+	.db 4 \ .db 61, 33, 34, 60
 
 Tree.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -1387,11 +1194,15 @@ Tree.B.B.F.F:
 
 Tree.B.B.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector48
+	.db 21
+	.db 0
+	.db 5 \ .db 128, 114, 118, 122, 123
 
 Tree.B.B.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector49
+	.db 21
+	.db 6
+	.db 3 \ .db 115, 116, 117
 
 Tree.B.B.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1401,7 +1212,9 @@ Tree.B.B.F.B:
 
 Tree.B.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector35
+	.db 11
+	.db 0
+	.db 4 \ .db 97, 98, 74, 94
 
 Tree.B.B.F.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1411,11 +1224,15 @@ Tree.B.B.F.B.B:
 
 Tree.B.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector36
+	.db 12
+	.db 0
+	.db 4 \ .db 98, 99, 92, 93
 
 Tree.B.B.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector51
+	.db 21
+	.db 0
+	.db 2 \ .db 113, 124
 
 Tree.B.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -1443,11 +1260,15 @@ Tree.B.B.B.F.F.F:
 
 Tree.B.B.B.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector37
+	.db 13
+	.db 0
+	.db 4 \ .db 99, 100, 75, 91
 
 Tree.B.B.B.F.F.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector38
+	.db 14
+	.db 0
+	.db 4 \ .db 100, 101, 76, 90
 
 Tree.B.B.B.F.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -1457,11 +1278,15 @@ Tree.B.B.B.F.F.B:
 
 Tree.B.B.B.F.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector39
+	.db 15
+	.db 0
+	.db 4 \ .db 101, 102, 77, 89
 
 Tree.B.B.B.F.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector40
+	.db 16
+	.db 0
+	.db 4 \ .db 102, 103, 78, 88
 
 Tree.B.B.B.F.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -1471,11 +1296,15 @@ Tree.B.B.B.F.B:
 
 Tree.B.B.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector47
+	.db 21
+	.db 0
+	.db 3 \ .db 112, 126, 125
 
 Tree.B.B.B.F.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector46
+	.db 21
+	.db 0
+	.db 2 \ .db 111, 127
 
 Tree.B.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1491,11 +1320,15 @@ Tree.B.B.B.B.F:
 
 Tree.B.B.B.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector41
+	.db 17
+	.db 7
+	.db 4 \ .db 103, 104, 79, 80
 
 Tree.B.B.B.B.F.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector42
+	.db 18
+	.db 0
+	.db 4 \ .db 104, 105, 81, 87
 
 Tree.B.B.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1505,7 +1338,9 @@ Tree.B.B.B.B.B:
 
 Tree.B.B.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector43
+	.db 19
+	.db 0
+	.db 4 \ .db 105, 106, 82, 86
 
 Tree.B.B.B.B.B.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1515,11 +1350,15 @@ Tree.B.B.B.B.B.B:
 
 Tree.B.B.B.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector44
+	.db 20
+	.db 0
+	.db 4 \ .db 106, 84, 83, 85
 
 Tree.B.B.B.B.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
-.dw SubSector45
+	.db 21
+	.db 0
+	.db 3 \ .db 84, 109, 110
 
 BlockMap:
 .dw -1280, -12800 \ .db 14, 13

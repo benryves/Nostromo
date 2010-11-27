@@ -557,11 +557,10 @@ FindFloorHeightFunction.SP = $+1
 	.endif
 	
 	; Leaf offset.
-	ld l,(ix+Nostromo.Tree.Node.Leaf+0)
-	ld h,(ix+Nostromo.Tree.Node.Leaf+1)
+	inc ix
 	
 	; Sector address.
-	ld a,(hl)
+	ld a,(ix)
 	
 	ld (Sector.Current),a
 	
