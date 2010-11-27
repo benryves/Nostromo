@@ -161,13 +161,6 @@ Initialise:
 	ld (iy+RenderFlags),a
 
 ; --------------------------------------------------------------------------
-; We don't want to cull any nodes by default.
-; --------------------------------------------------------------------------
-
-	ld hl,Tree.Walk.DoNotCull
-	ld (Tree.Walker.Cull.Function),hl
-
-; --------------------------------------------------------------------------
 ; All is well, so return safely.
 ; --------------------------------------------------------------------------
 
@@ -376,13 +369,6 @@ SkipTransformVertices:
 	.endif
 
 ; --------------------------------------------------------------------------
-; We want to cull tree nodes outside the view.
-; --------------------------------------------------------------------------
-
-	ld hl,Render.CullFunction
-	ld (Tree.Walker.Cull.Function),hl
-
-; --------------------------------------------------------------------------
 ; Walk the BSP tree to render the level.
 ; --------------------------------------------------------------------------
 
@@ -396,13 +382,6 @@ SkipTransformVertices:
 
 Render.Finish:
 	ld sp,0
-
-; --------------------------------------------------------------------------
-; Do not cull tree nodes when walking the tree any more.
-; --------------------------------------------------------------------------
-
-	ld hl,Tree.Walk.DoNotCull
-	ld (Tree.Walker.Cull.Function),hl
 
 ; --------------------------------------------------------------------------
 ; Draw all things.
@@ -424,64 +403,6 @@ Render.RenderTreeNodeFunction:
 	push hl
 	pop ix
 	jp Subsector.Draw
-
-Render.CullFunction:
-	ld c,(ix+Tree.Node.BoundingCircle.X+0)
-	ld b,(ix+Tree.Node.BoundingCircle.X+1)
-	ld e,(ix+Tree.Node.BoundingCircle.Y+0)
-	ld d,(ix+Tree.Node.BoundingCircle.Y+1)
-	call Vertices.Transform
-	ld l,(ix+Tree.Node.BoundingCircle.Radius+0)
-	ld a,(ix+Tree.Node.BoundingCircle.Radius+1)
-	xor $80
-	ld h,a
-	ld a,d
-	xor $80
-	ld d,a
-	add hl,de
-	ccf
-	ret c
-
-	ld a,d
-	xor $80
-	ld d,a
-	
-	ld h,(ix+Tree.Node.BoundingCircle.Radius+1)
-	
-	push de
-	push bc
-	
-	ex de,hl
-	ld bc,250*sqrt(2)
-	call Maths.Mul.U16U16
-	
-	ld l,h
-	ld h,e
-	
-	pop bc
-	pop de
-	
-	add hl,de
-	
-	ld a,h
-	xor $80
-	ld h,a
-	
-	ld a,b
-	xor $80
-	ld b,a
-	
-	push hl
-	sbc hl,bc
-	pop hl
-	
-	ret c
-	
-	neg_hl()
-	
-	sbc hl,bc
-	ccf
-	ret
 
 .if Options.ReportModuleSizes \ .echoln strformat("Total size: {0:N0}", $-Code.Main) \ .endif
 

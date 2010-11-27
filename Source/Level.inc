@@ -726,40 +726,34 @@ Thing7: .db 0, Thing.Lamp, 0, 0 \ .dw 8960, -8704
 Thing8: .db 0, Thing.MaxCoderz, 0, 0 \ .dw 9856, -6784
 
 Tree:
-.dw 4748, -6651, 8124
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F
 .dw Tree.B
 .dw 5888
 
 Tree.F:
-.dw 8960, -7168, 5120
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F
 .dw Tree.F.B
 .dw -7936
 
 Tree.F.F:
-.dw 9856, -5504, 3192
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.F
 .dw Tree.F.F.B
 .dw -5632
 
 Tree.F.F.F:
-.dw 9856, -4352, 2377
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.F.F
 .dw Tree.F.F.F.B
 .dw -4864
 
 Tree.F.F.F.F:
-.dw 9856, -3968, 2183
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector78
 
 Tree.F.F.F.B:
-.dw 9856, -5248, 2017
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.F.B.F
 .dw Tree.F.F.F.B.B
@@ -767,12 +761,10 @@ Tree.F.F.F.B:
 .dw 256
 
 Tree.F.F.F.B.F:
-.dw 8320, -5248, 560
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector75
 
 Tree.F.F.F.B.B:
-.dw 9856, -5248, 2017
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.F.B.B.F
 .dw Tree.F.F.F.B.B.B
@@ -780,24 +772,20 @@ Tree.F.F.F.B.B:
 .dw -256
 
 Tree.F.F.F.B.B.F:
-.dw 11392, -5248, 560
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector77
 
 Tree.F.F.F.B.B.B:
-.dw 9856, -5632, 1978
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector76
 
 Tree.F.F.B:
-.dw 9856, -6784, 2307
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.F
 .dw Tree.F.F.B.B
 .dw -6400
 
 Tree.F.F.B.F:
-.dw 9856, -6016, 2017
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.B.F.F
 .dw Tree.F.F.B.F.B
@@ -805,12 +793,10 @@ Tree.F.F.B.F:
 .dw 256
 
 Tree.F.F.B.F.F:
-.dw 8704, -6016, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector72
 
 Tree.F.F.B.F.B:
-.dw 10240, -6016, 1631
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.B.F.B.F
 .dw Tree.F.F.B.F.B.B
@@ -818,48 +804,40 @@ Tree.F.F.B.F.B:
 .dw -256
 
 Tree.F.F.B.F.B.F:
-.dw 11008, -6016, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector74
 
 Tree.F.F.B.F.B.B:
-.dw 9856, -6400, 1187
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector73
 
 Tree.F.F.B.B:
-.dw 9856, -7168, 2130
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.B.B.F
 .dw Tree.F.F.B.B.B
 .dw 9472
 
 Tree.F.F.B.B.F:
-.dw 10624, -7168, 1427
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.B.B.F.F
 .dw Tree.F.F.B.B.F.B
 .dw 10240
 
 Tree.F.F.B.B.F.F:
-.dw 10880, -7168, 1216
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.B.B.F.F.F
 .dw Tree.F.F.B.B.F.F.B
 .dw 11008
 
 Tree.F.F.B.B.F.F.F:
-.dw 11392, -7168, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector71
 
 Tree.F.F.B.B.F.F.B:
-.dw 10496, -7168, 951
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector70
 
 Tree.F.F.B.B.F.B:
-.dw 9856, -7210, 846
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.B.B.F.B.F
 .dw Tree.F.F.B.B.F.B.B
@@ -867,12 +845,10 @@ Tree.F.F.B.B.F.B:
 .dw 256
 
 Tree.F.F.B.B.F.B.F:
-.dw 9600, -6528, 187
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector68
 
 Tree.F.F.B.B.F.B.B:
-.dw 9856, -7210, 846
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.B.B.F.B.B.F
 .dw Tree.F.F.B.B.F.B.B.B
@@ -880,96 +856,80 @@ Tree.F.F.B.B.F.B.B:
 .dw -256
 
 Tree.F.F.B.B.F.B.B.F:
-.dw 10112, -6528, 187
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector69
 
 Tree.F.F.B.B.F.B.B.B:
-.dw 9856, -7210, 846
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector67
 
 Tree.F.F.B.B.B:
-.dw 8704, -7168, 1119
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.B.B.B.F
 .dw Tree.F.F.B.B.B.B
 .dw 8704
 
 Tree.F.F.B.B.B.F:
-.dw 9088, -7168, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector66
 
 Tree.F.F.B.B.B.B:
-.dw 8320, -7168, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector65
 
 Tree.F.B:
-.dw 8064, -9600, 2822
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.B.F
 .dw Tree.F.B.B
 .dw 7168
 
 Tree.F.B.F:
-.dw 8704, -9600, 2333
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.B.F.F
 .dw Tree.F.B.F.B
 .dw 8704
 
 Tree.F.B.F.F:
-.dw 9472, -9600, 1888
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.F.F.F
 .dw Tree.F.B.F.F.B
 .dw -9472
 
 Tree.F.B.F.F.F:
-.dw 9472, -8704, 1119
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.F.F.F.F
 .dw Tree.F.B.F.F.F.B
 .dw -8960
 
 Tree.F.B.F.F.F.F:
-.dw 9472, -8448, 951
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.F.F.F.F.F
 .dw Tree.F.B.F.F.F.F.B
 .dw -8448
 
 Tree.F.B.F.F.F.F.F:
-.dw 9856, -8192, 476
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector64
 
 Tree.F.B.F.F.F.F.B:
-.dw 9472, -8704, 834
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector63
 
 Tree.F.B.F.F.F.B:
-.dw 9472, -9216, 834
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector62
 
 Tree.F.B.F.F.B:
-.dw 9472, -10368, 1216
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.F.F.B.F
 .dw Tree.F.B.F.F.B.B
 .dw -9984
 
 Tree.F.B.F.F.B.F:
-.dw 9472, -9728, 834
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector61
 
 Tree.F.B.F.F.B.B:
-.dw 9472, -10624, 1030
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.B.F.F.B.B.F
 .dw Tree.F.B.F.F.B.B.B
@@ -977,82 +937,68 @@ Tree.F.B.F.F.B.B:
 .dw -213
 
 Tree.F.B.F.F.B.B.F:
-.dw 9472, -10624, 1030
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector60
 
 Tree.F.B.F.F.B.B.B:
-.dw 9472, -10624, 1030
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector59
 
 Tree.F.B.F.B:
-.dw 7936, -10624, 1030
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.B.F.B.F
 .dw Tree.F.B.F.B.B
 .dw 8192
 
 Tree.F.B.F.B.F:
-.dw 8448, -10624, 710
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector58
 
 Tree.F.B.F.B.B:
-.dw 7680, -10624, 845
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.B.F.B.B.F
 .dw Tree.F.B.F.B.B.B
 .dw 7680
 
 Tree.F.B.F.B.B.F:
-.dw 7936, -10624, 710
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector57
 
 Tree.F.B.F.B.B.B:
-.dw 7424, -10624, 710
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector56
 
 Tree.F.B.B:
-.dw 6528, -9600, 1837
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.B.F
 .dw Tree.F.B.B.B
 .dw -9472
 
 Tree.F.B.B.F:
-.dw 6528, -8704, 1030
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.B.F.F
 .dw Tree.F.B.B.F.B
 .dw -8960
 
 Tree.F.B.B.F.F:
-.dw 6528, -8448, 845
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector50
 
 Tree.F.B.B.F.B:
-.dw 6656, -9216, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector52
 
 Tree.F.B.B.B:
-.dw 6656, -10368, 1063
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.B.B.B.F
 .dw Tree.F.B.B.B.B
 .dw -9984
 
 Tree.F.B.B.B.F:
-.dw 6656, -9728, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector53
 
 Tree.F.B.B.B.B:
-.dw 6656, -10624, 845
 .db Nostromo.Tree.Node.Type.SteepSlopePartition
 .dw Tree.F.B.B.B.B.F
 .dw Tree.F.B.B.B.B.B
@@ -1060,52 +1006,44 @@ Tree.F.B.B.B.B:
 .dw 320
 
 Tree.F.B.B.B.B.F:
-.dw 6656, -10624, 845
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector55
 
 Tree.F.B.B.B.B.B:
-.dw 6656, -10624, 845
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector54
 
 Tree.B:
-.dw 1920, -6144, 6908
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F
 .dw Tree.B.B
 .dw -7680
 
 Tree.B.F:
-.dw 2560, -4181, 4796
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F
 .dw Tree.B.F.B
 .dw -4096
 
 Tree.B.F.F:
-.dw 2560, -1974, 3037
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F.F
 .dw Tree.B.F.F.B
 .dw -3072
 
 Tree.B.F.F.F:
-.dw 2560, -1792, 2949
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.F.F.F
 .dw Tree.B.F.F.F.B
 .dw 2048
 
 Tree.B.F.F.F.F:
-.dw 3584, -1536, 2238
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.F.F.F.F
 .dw Tree.B.F.F.F.F.B
 .dw 3072
 
 Tree.B.F.F.F.F.F:
-.dw 4096, -1536, 1902
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.B.F.F.F.F.F.F
 .dw Tree.B.F.F.F.F.F.B
@@ -1113,58 +1051,48 @@ Tree.B.F.F.F.F.F:
 .dw -192
 
 Tree.B.F.F.F.F.F.F:
-.dw 4096, -1536, 1902
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector7
 
 Tree.B.F.F.F.F.F.B:
-.dw 4096, -2304, 1319
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector6
 
 Tree.B.F.F.F.F.B:
-.dw 2560, -1536, 1668
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F.F.F.B.F
 .dw Tree.B.F.F.F.F.B.B
 .dw -1024
 
 Tree.B.F.F.F.F.B.F:
-.dw 2560, -512, 746
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F.F.F.B.F.F
 .dw Tree.B.F.F.F.F.B.F.B
 .dw -512
 
 Tree.B.F.F.F.F.B.F.F:
-.dw 2560, -256, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector11
 
 Tree.B.F.F.F.F.B.F.B:
-.dw 2560, -768, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector10
 
 Tree.B.F.F.F.F.B.B:
-.dw 2560, -2048, 1180
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F.F.F.B.B.F
 .dw Tree.B.F.F.F.F.B.B.B
 .dw -1536
 
 Tree.B.F.F.F.F.B.B.F:
-.dw 2560, -1280, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector9
 
 Tree.B.F.F.F.F.B.B.B:
-.dw 2560, -2304, 951
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector8
 
 Tree.B.F.F.F.B:
-.dw 1024, -1536, 1902
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.B.F.F.F.B.F
 .dw Tree.B.F.F.F.B.B
@@ -1172,86 +1100,72 @@ Tree.B.F.F.F.B:
 .dw 192
 
 Tree.B.F.F.F.B.F:
-.dw 1024, -1536, 1902
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector5
 
 Tree.B.F.F.F.B.B:
-.dw 1024, -2304, 1319
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector4
 
 Tree.B.F.F.B:
-.dw 2560, -3072, 2637
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.F.B.F
 .dw Tree.B.F.F.B.B
 .dw 2560
 
 Tree.B.F.F.B.F:
-.dw 4096, -3200, 1063
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F.B.F.F
 .dw Tree.B.F.F.B.F.B
 .dw -3584
 
 Tree.B.F.F.B.F.F:
-.dw 4096, -3072, 1055
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector2
 
 Tree.B.F.F.B.F.B:
-.dw 4224, -3840, 476
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector3
 
 Tree.B.F.F.B.B:
-.dw 1024, -3200, 1063
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.F.B.B.F
 .dw Tree.B.F.F.B.B.B
 .dw -3584
 
 Tree.B.F.F.B.B.F:
-.dw 1024, -3072, 1055
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector0
 
 Tree.B.F.F.B.B.B:
-.dw 896, -3840, 476
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector1
 
 Tree.B.F.B:
-.dw 2560, -6528, 3380
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.B.F
 .dw Tree.B.F.B.B
 .dw 1536
 
 Tree.B.F.B.F:
-.dw 3584, -6144, 2637
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.B.F.F
 .dw Tree.B.F.B.F.B
 .dw 3584
 
 Tree.B.F.B.F.F:
-.dw 4608, -5952, 2069
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.F.F
 .dw Tree.B.F.B.F.F.B
 .dw -5632
 
 Tree.B.F.B.F.F.F:
-.dw 4736, -4864, 1216
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.B.F.F.F.F
 .dw Tree.B.F.B.F.F.F.B
 .dw 4608
 
 Tree.B.F.B.F.F.F.F:
-.dw 5120, -5120, 746
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.B.F.B.F.F.F.F.F
 .dw Tree.B.F.B.F.F.F.F.B
@@ -1259,195 +1173,162 @@ Tree.B.F.B.F.F.F.F:
 .dw -256
 
 Tree.B.F.B.F.F.F.F.F:
-.dw 5120, -5120, 746
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector27
 
 Tree.B.F.B.F.F.F.F.B:
-.dw 4864, -5376, 373
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector26
 
 Tree.B.F.B.F.F.F.B:
-.dw 4096, -4608, 746
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.F.F.B.F
 .dw Tree.B.F.B.F.F.F.B.B
 .dw -4608
 
 Tree.B.F.B.F.F.F.B.F:
-.dw 4224, -4352, 476
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.F.F.B.F.F
 .dw Tree.B.F.B.F.F.F.B.F.B
 .dw -4352
 
 Tree.B.F.B.F.F.F.B.F.F:
-.dw 4224, -4224, 417
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector33
 
 Tree.B.F.B.F.F.F.B.F.B:
-.dw 4224, -4480, 417
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector30
 
 Tree.B.F.B.F.F.F.B.B:
-.dw 4096, -4864, 590
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.F.F.B.B.F
 .dw Tree.B.F.B.F.F.F.B.B.B
 .dw -5120
 
 Tree.B.F.B.F.F.F.B.B.F:
-.dw 4096, -4864, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector28
 
 Tree.B.F.B.F.F.F.B.B.B:
-.dw 4096, -5120, 528
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector25
 
 Tree.B.F.B.F.F.B:
-.dw 4608, -6656, 1492
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.F.B.F
 .dw Tree.B.F.B.F.F.B.B
 .dw -6400
 
 Tree.B.F.B.F.F.B.F:
-.dw 4608, -6016, 1127
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.B.F.F.B.F.F
 .dw Tree.B.F.B.F.F.B.F.B
 .dw 5120
 
 Tree.B.F.B.F.F.B.F.F:
-.dw 5376, -6016, 476
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector24
 
 Tree.B.F.B.F.F.B.F.B:
-.dw 4352, -6016, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector23
 
 Tree.B.F.B.F.F.B.B:
-.dw 4608, -7040, 1244
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector29
 
 Tree.B.F.B.F.B:
-.dw 2688, -5888, 1960
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.B.F
 .dw Tree.B.F.B.F.B.B
 .dw -5120
 
 Tree.B.F.B.F.B.F:
-.dw 2560, -4864, 1088
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.B.F.F
 .dw Tree.B.F.B.F.B.F.B
 .dw -4608
 
 Tree.B.F.B.F.B.F.F:
-.dw 2560, -4608, 1055
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector15
 
 Tree.B.F.B.F.B.F.B:
-.dw 2560, -4864, 1088
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector14
 
 Tree.B.F.B.F.B.B:
-.dw 2560, -6310, 1618
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.B.B.F
 .dw Tree.B.F.B.F.B.B.B
 .dw -6400
 
 Tree.B.F.B.F.B.B.F:
-.dw 2560, -5760, 1244
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector13
 
 Tree.B.F.B.F.B.B.B:
-.dw 2560, -6860, 1157
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.F.B.B.B.F
 .dw Tree.B.F.B.F.B.B.B.B
 .dw -7168
 
 Tree.B.F.B.F.B.B.B.F:
-.dw 2560, -6784, 1127
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector12
 
 Tree.B.F.B.F.B.B.B.B:
-.dw 2816, -7424, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector34
 
 Tree.B.F.B.B:
-.dw 512, -5952, 2069
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.B.F
 .dw Tree.B.F.B.B.B
 .dw -5632
 
 Tree.B.F.B.B.F:
-.dw 384, -4864, 1216
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.B.B.F.F
 .dw Tree.B.F.B.B.F.B
 .dw 512
 
 Tree.B.F.B.B.F.F:
-.dw 1024, -4608, 746
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.B.F.F.F
 .dw Tree.B.F.B.B.F.F.B
 .dw -4608
 
 Tree.B.F.B.B.F.F.F:
-.dw 896, -4352, 476
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.B.F.F.F.F
 .dw Tree.B.F.B.B.F.F.F.B
 .dw -4352
 
 Tree.B.F.B.B.F.F.F.F:
-.dw 896, -4224, 417
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector32
 
 Tree.B.F.B.B.F.F.F.B:
-.dw 896, -4480, 417
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector31
 
 Tree.B.F.B.B.F.F.B:
-.dw 1024, -4864, 590
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.B.F.F.B.F
 .dw Tree.B.F.B.B.F.F.B.B
 .dw -5120
 
 Tree.B.F.B.B.F.F.B.F:
-.dw 1024, -4864, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector22
 
 Tree.B.F.B.B.F.F.B.B:
-.dw 1024, -5120, 528
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector21
 
 Tree.B.F.B.B.F.B:
-.dw 0, -5120, 746
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.B.F.B.B.F.B.F
 .dw Tree.B.F.B.B.F.B.B
@@ -1455,226 +1336,188 @@ Tree.B.F.B.B.F.B:
 .dw 256
 
 Tree.B.F.B.B.F.B.F:
-.dw 0, -5120, 746
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector20
 
 Tree.B.F.B.B.F.B.B:
-.dw 256, -5376, 373
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector19
 
 Tree.B.F.B.B.B:
-.dw 512, -6656, 1492
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.F.B.B.B.F
 .dw Tree.B.F.B.B.B.B
 .dw -6400
 
 Tree.B.F.B.B.B.F:
-.dw 512, -6016, 1127
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.F.B.B.B.F.F
 .dw Tree.B.F.B.B.B.F.B
 .dw 0
 
 Tree.B.F.B.B.B.F.F:
-.dw 768, -6016, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector18
 
 Tree.B.F.B.B.B.F.B:
-.dw -256, -6016, 476
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector17
 
 Tree.B.F.B.B.B.B:
-.dw 512, -7040, 1244
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector16
 
 Tree.B.B:
-.dw 2560, -10112, 4096
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.F
 .dw Tree.B.B.B
 .dw 2304
 
 Tree.B.B.F:
-.dw 4096, -9472, 2611
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.F.F
 .dw Tree.B.B.F.B
 .dw 3584
 
 Tree.B.B.F.F:
-.dw 4736, -9600, 2085
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.F.F.F
 .dw Tree.B.B.F.F.B
 .dw -10496
 
 Tree.B.B.F.F.F:
-.dw 4736, -9216, 1774
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector48
 
 Tree.B.B.F.F.B:
-.dw 5120, -10880, 885
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector49
 
 Tree.B.B.F.B:
-.dw 2944, -9088, 1594
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.F.B.F
 .dw Tree.B.B.F.B.B
 .dw -8192
 
 Tree.B.B.F.B.F:
-.dw 2816, -7936, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector35
 
 Tree.B.B.F.B.B:
-.dw 2944, -9344, 1358
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.F.B.B.F
 .dw Tree.B.B.F.B.B.B
 .dw -9344
 
 Tree.B.B.F.B.B.F:
-.dw 2816, -8704, 746
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector36
 
 Tree.B.B.F.B.B.B:
-.dw 2944, -9984, 845
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector51
 
 Tree.B.B.B:
-.dw 768, -10240, 2637
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.B.F
 .dw Tree.B.B.B.B
 .dw 256
 
 Tree.B.B.B.F:
-.dw 1280, -10240, 2359
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.B.F.F
 .dw Tree.B.B.B.F.B
 .dw -9344
 
 Tree.B.B.B.F.F:
-.dw 1280, -8704, 1180
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.B.F.F.F
 .dw Tree.B.B.B.F.F.B
 .dw 1280
 
 Tree.B.B.B.F.F.F:
-.dw 1792, -8704, 746
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.B.F.F.F.F
 .dw Tree.B.B.B.F.F.F.B
 .dw 1792
 
 Tree.B.B.B.F.F.F.F:
-.dw 2048, -8704, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector37
 
 Tree.B.B.B.F.F.F.B:
-.dw 1536, -8704, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector38
 
 Tree.B.B.B.F.F.B:
-.dw 768, -8704, 746
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.B.F.F.B.F
 .dw Tree.B.B.B.F.F.B.B
 .dw 768
 
 Tree.B.B.B.F.F.B.F:
-.dw 1024, -8704, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector39
 
 Tree.B.B.B.F.F.B.B:
-.dw 512, -8704, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector40
 
 Tree.B.B.B.F.B:
-.dw 1280, -10880, 1794
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.B.B.B.F.B.F
 .dw Tree.B.B.B.F.B.B
 .dw 768
 
 Tree.B.B.B.F.B.F:
-.dw 1536, -10880, 1652
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector47
 
 Tree.B.B.B.F.B.B:
-.dw 512, -11776, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector46
 
 Tree.B.B.B.B:
-.dw -256, -10240, 2175
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.B.B.F
 .dw Tree.B.B.B.B.B
 .dw -9728
 
 Tree.B.B.B.B.F:
-.dw -256, -8960, 951
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.B.B.F.F
 .dw Tree.B.B.B.B.F.B
 .dw -9216
 
 Tree.B.B.B.B.F.F:
-.dw -256, -8704, 746
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector41
 
 Tree.B.B.B.B.F.B:
-.dw -256, -9472, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector42
 
 Tree.B.B.B.B.B:
-.dw -256, -11008, 1420
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.B.B.B.F
 .dw Tree.B.B.B.B.B.B
 .dw -10240
 
 Tree.B.B.B.B.B.F:
-.dw -256, -9984, 590
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector43
 
 Tree.B.B.B.B.B.B:
-.dw -256, -11264, 1180
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.B.B.B.B.B.B.F
 .dw Tree.B.B.B.B.B.B.B
 .dw -11264
 
 Tree.B.B.B.B.B.B.F:
-.dw -256, -10752, 746
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector44
 
 Tree.B.B.B.B.B.B.B:
-.dw -256, -11776, 746
 .db Nostromo.Tree.Node.Type.Leaf
 .dw SubSector45
 
