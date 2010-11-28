@@ -113,7 +113,9 @@ Draw.Loop:
 ; --------------------------------------------------------------------------
 	
 	push hl
-	
+
+	ld a,(hl)
+	ld (Wall.Start.VertexIndex),a
 	call GetTransformedVertex
 	ld de,Wall.Start.X
 	ldi
@@ -130,6 +132,8 @@ Draw.Loop:
 
 	push hl
 
+	ld a,(hl)
+	ld (Wall.End.VertexIndex),a
 	call GetTransformedVertex
 	ld de,Wall.End.X
 	ldi
@@ -194,8 +198,9 @@ Draw.Loop:
 ; Advance to the next wall.
 ; --------------------------------------------------------------------------
 AlreadyDrawnWall:
-	djnz Draw.Loop	
+	djnz +
 	ret
++:	jp Draw.Loop
 
 ; ==========================================================================
 ; GetTransformedVertex

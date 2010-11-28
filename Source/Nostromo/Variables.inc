@@ -59,6 +59,9 @@ Start.Y = AllocateVariable(2)
 End.X = AllocateVariable(2)
 End.Y = AllocateVariable(2)
 
+Start.VertexIndex = AllocateVariable(1)
+End.VertexIndex = AllocateVariable(1)
+
 Delta.X = AllocateVariable(2)
 Delta.AbsX = AllocateVariable(2)
 

@@ -522,6 +522,14 @@ NoViewClippingRequired:
 	ld a,95
 	bit ClipFlag.EndOutsideRight,(iy+ClipFlags)
 	jr nz,Project.End.X
+	
+	ld hl,(End.VertexIndex)
+	ld h,Vertices.AlreadyTransformed >> 8
+	ld a,(hl)
+	inc a
+	jr nz,End.AlreadyProjected
+
+	push hl
 
 	; 48 * X / Y
 	ld de,(End.X)
@@ -545,6 +553,17 @@ NoViewClippingRequired:
 	ld a,95
 +:
 
+	pop hl
+
+	or $80
+	ld (hl),a
+	and $7F
+	jr Project.End.X
+
+End.AlreadyProjected:
+	dec a
+	and $7F
+
 Project.End.X:
 	ld (Trapezium.End.Column),a
 
@@ -561,6 +580,14 @@ Project.End.X:
 	ld a,95
 	bit ClipFlag.StartOutsideRight,(iy+ClipFlags)
 	jr nz,Project.Start.X
+
+	ld hl,(Start.VertexIndex)
+	ld h,Vertices.AlreadyTransformed >> 8
+	ld a,(hl)
+	inc a
+	jr nz,Start.AlreadyProjected
+
+	push hl
 
 	; 48 * X / Y
 	ld de,(Start.X)
@@ -583,6 +610,18 @@ Project.End.X:
 	jr c,+
 	ld a,95
 +:
+
+	pop hl
+
+	or $80
+	ld (hl),a
+	and $7F
+	jr Project.Start.X
+
+Start.AlreadyProjected:
+	dec a
+	and $7F
+
 
 Project.Start.X:
 	ld (Trapezium.Start.Column),a
