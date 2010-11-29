@@ -774,7 +774,7 @@ Tree.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.F
 .dw Tree.F.F.B.B
-.dw -4864
+.dw -5632
 
 Tree.F.F.B.F:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
@@ -1135,8 +1135,8 @@ Tree.F.B.B.B.B:
 .db Nostromo.Tree.Node.Type.SteepSlopePartition
 .dw Tree.F.B.B.B.B.F
 .dw Tree.F.B.B.B.B.B
-.dw 20224
-.dw 320
+.dw 15120
+.dw 204
 
 Tree.F.B.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
@@ -1529,7 +1529,7 @@ Tree.B.F.B.B.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.B.F.B.B.F.B.F
 .dw Tree.B.F.B.B.F.B.B
-.dw 0
+.dw -5632
 .dw 256
 
 Tree.B.F.B.B.F.B.F:
