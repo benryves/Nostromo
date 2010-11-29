@@ -333,16 +333,11 @@ SkipTransformVertices:
 
 	ld hl,(Level.Walls)
 	ld de,Wall.DataSize ; size of a wall.
-	ld bc,(Level.Walls.Count)
-	ld a,b
-	ld b,c
-	ld c,a
-	inc c
+	ld a,(Level.Walls.Count)
+	ld b,a
 -:	res Wall.DrawFlag.DrawnThisFrame,(hl)
 	add hl,de
 	djnz -
-	dec c
-	jr nz,-
 
 ; --------------------------------------------------------------------------
 ; Reset the thing subsector stack.

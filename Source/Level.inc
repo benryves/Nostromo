@@ -157,6 +157,64 @@ Vertices:
 	.dw 10240, -6656
 	.dw 8704, -4864
 	.dw 11008, -4864
+	.dw 7424, -4864
+	.dw 7424, -4352
+	.dw 7936, -4352
+	.dw 7936, -3584
+	.dw 7424, -3584
+	.dw 7424, -2560
+	.dw 9472, -2560
+	.dw 9472, -3072
+	.dw 10240, -3072
+	.dw 10240, -2560
+	.dw 12032, -2560
+	.dw 12544, -3072
+	.dw 13056, -3072
+	.dw 13056, -3328
+	.dw 13824, -3328
+	.dw 13824, -3072
+	.dw 14336, -3072
+	.dw 14848, -2560
+	.dw 14848, -1280
+	.dw 14336, -768
+	.dw 13824, -768
+	.dw 13056, -768
+	.dw 12544, -768
+	.dw 12032, -1280
+	.dw 7424, -1280
+	.dw 6144, -1280
+	.dw 6144, -4864
+	.dw 13056, -2304
+	.dw 13824, -2304
+	.dw 13824, -1536
+	.dw 13056, -1536
+	.dw 9728, -1280
+	.dw 13056, -3584
+	.dw 13056, -3840
+	.dw 12032, -3840
+	.dw 12032, -5888
+	.dw 12032, -7936
+	.dw 13568, -7936
+	.dw 14848, -7936
+	.dw 15360, -7936
+	.dw 16128, -7936
+	.dw 16640, -7424
+	.dw 16640, -6912
+	.dw 16128, -6144
+	.dw 16128, -5632
+	.dw 16640, -4864
+	.dw 16640, -4352
+	.dw 16128, -3840
+	.dw 15360, -3840
+	.dw 14848, -3840
+	.dw 13824, -3840
+	.dw 13824, -3584
+	.dw 13568, -6400
+	.dw 14848, -6400
+	.dw 15360, -6144
+	.dw 15360, -5632
+	.dw 14848, -5376
+	.dw 13568, -5376
 Vertices.Count = ($ - Vertices) / 4
 
 Walls:
@@ -332,8 +390,8 @@ Walls:
 	Wall169: .db 4 \ .db 192 \ .db 130, 131 \ .db 36, 36 \ .dw 9
 	Wall170: .db 4 \ .db 192 \ .db 131, 132 \ .db 37, 37 \ .dw 9
 	Wall171: .db 6 \ .db 192 \ .db 132, 133 \ .db 37, 37 \ .dw 49
-	Wall172: .db 7 \ .db 128 \ .db 133, 134 \ .db 37, 37 \ .dw 225
-	Wall173: .db 5 \ .db 64 \ .db 134, 135 \ .db 37, 37 \ .dw 49
+	Wall172: .db 7 \ .db 128 \ .db 133, 158 \ .db 37, 37 \ .dw 36
+	Wall173: .db 0 \ .db 64 \ .db 153, 152 \ .db 37, 43 \ .dw 9
 	Wall174: .db 4 \ .db 64 \ .db 135, 136 \ .db 37, 37 \ .dw 9
 	Wall175: .db 4 \ .db 64 \ .db 136, 137 \ .db 36, 36 \ .dw 9
 	Wall176: .db 6 \ .db 64 \ .db 137, 138 \ .db 36, 36 \ .dw 36
@@ -350,6 +408,72 @@ Walls:
 	Wall187: .db 3 \ .db 224 \ .db 136, 148 \ .db 37, 36 \ .dw 18
 	Wall188: .db 3 \ .db 0 \ .db 148, 149 \ .db 37, 36 \ .dw 81
 	Wall189: .db 3 \ .db 32 \ .db 149, 131 \ .db 37, 36 \ .dw 18
+	Wall190: .db 0 \ .db 128 \ .db 158, 157 \ .db 37, 43 \ .dw 9
+	Wall191: .db 7 \ .db 128 \ .db 157, 134 \ .db 37, 37 \ .dw 36
+	Wall192: .db 7 \ .db 64 \ .db 134, 153 \ .db 37, 37 \ .dw 4
+	Wall193: .db 5 \ .db 64 \ .db 152, 135 \ .db 37, 37 \ .dw 4
+	Wall194: .db 7 \ .db 0 \ .db 151, 152 \ .db 43, 43 \ .dw 4
+	Wall195: .db 7 \ .db 128 \ .db 153, 154 \ .db 43, 43 \ .dw 4
+	Wall196: .db 3 \ .db 192 \ .db 151, 154 \ .db 41, 43 \ .dw 9
+	Wall197: .db 7 \ .db 192 \ .db 154, 155 \ .db 41, 41 \ .dw 16
+	Wall198: .db 7 \ .db 0 \ .db 155, 156 \ .db 41, 41 \ .dw 64
+	Wall199: .db 7 \ .db 64 \ .db 156, 157 \ .db 43, 43 \ .dw 4
+	Wall200: .db 7 \ .db 192 \ .db 158, 159 \ .db 43, 43 \ .dw 4
+	Wall201: .db 3 \ .db 0 \ .db 156, 159 \ .db 41, 43 \ .dw 9
+	Wall202: .db 7 \ .db 0 \ .db 159, 160 \ .db 41, 41 \ .dw 49
+	Wall203: .db 7 \ .db 32 \ .db 160, 161 \ .db 41, 41 \ .dw 8
+	Wall204: .db 7 \ .db 0 \ .db 161, 162 \ .db 41, 41 \ .dw 4
+	Wall205: .db 5 \ .db 64 \ .db 162, 163 \ .db 41, 41 \ .dw 1
+	Wall206: .db 3 \ .db 0 \ .db 163, 164 \ .db 41, 44 \ .dw 9
+	Wall207: .db 6 \ .db 192 \ .db 164, 165 \ .db 41, 41 \ .dw 1
+	Wall208: .db 7 \ .db 0 \ .db 165, 166 \ .db 41, 41 \ .dw 4
+	Wall209: .db 7 \ .db 224 \ .db 166, 167 \ .db 41, 41 \ .dw 8
+	Wall210: .db 7 \ .db 192 \ .db 167, 168 \ .db 41, 41 \ .dw 25
+	Wall211: .db 7 \ .db 160 \ .db 168, 169 \ .db 41, 41 \ .dw 8
+	Wall212: .db 5 \ .db 128 \ .db 169, 170 \ .db 41, 41 \ .dw 4
+	Wall213: .db 4 \ .db 128 \ .db 170, 171 \ .db 41, 41 \ .dw 9
+	Wall214: .db 6 \ .db 128 \ .db 171, 172 \ .db 41, 41 \ .dw 4
+	Wall215: .db 7 \ .db 96 \ .db 172, 173 \ .db 41, 41 \ .dw 8
+	Wall216: .db 5 \ .db 128 \ .db 173, 181 \ .db 41, 41 \ .dw 81
+	Wall217: .db 6 \ .db 128 \ .db 174, 175 \ .db 41, 41 \ .dw 25
+	Wall218: .db 7 \ .db 64 \ .db 175, 176 \ .db 41, 41 \ .dw 196
+	Wall219: .db 7 \ .db 0 \ .db 176, 150 \ .db 41, 41 \ .dw 25
+	Wall220: .db 7 \ .db 192 \ .db 150, 151 \ .db 41, 41 \ .dw 4
+	Wall221: .db 3 \ .db 0 \ .db 177, 178 \ .db 42, 41 \ .dw 9
+	Wall222: .db 3 \ .db 192 \ .db 178, 179 \ .db 42, 41 \ .dw 9
+	Wall223: .db 3 \ .db 128 \ .db 179, 180 \ .db 42, 41 \ .dw 9
+	Wall224: .db 3 \ .db 64 \ .db 180, 177 \ .db 42, 41 \ .dw 9
+	Wall225: .db 4 \ .db 128 \ .db 181, 174 \ .db 41, 41 \ .dw 81
+	Wall226: .db 4 \ .db 64 \ .db 163, 182 \ .db 44, 44 \ .dw 1
+	Wall227: .db 4 \ .db 192 \ .db 201, 164 \ .db 44, 44 \ .dw 1
+	Wall228: .db 6 \ .db 64 \ .db 182, 183 \ .db 45, 45 \ .dw 1
+	Wall229: .db 5 \ .db 192 \ .db 200, 201 \ .db 45, 45 \ .dw 1
+	Wall230: .db 7 \ .db 128 \ .db 183, 184 \ .db 45, 45 \ .dw 16
+	Wall231: .db 5 \ .db 64 \ .db 184, 185 \ .db 45, 45 \ .dw 64
+	Wall232: .db 6 \ .db 64 \ .db 185, 186 \ .db 45, 45 \ .dw 64
+	Wall233: .db 5 \ .db 0 \ .db 186, 187 \ .db 45, 45 \ .dw 36
+	Wall234: .db 4 \ .db 0 \ .db 187, 188 \ .db 45, 45 \ .dw 25
+	Wall235: .db 4 \ .db 0 \ .db 188, 189 \ .db 45, 45 \ .dw 4
+	Wall236: .db 6 \ .db 0 \ .db 189, 190 \ .db 45, 45 \ .dw 9
+	Wall237: .db 7 \ .db 224 \ .db 190, 191 \ .db 45, 45 \ .dw 8
+	Wall238: .db 7 \ .db 192 \ .db 191, 192 \ .db 45, 45 \ .dw 4
+	Wall239: .db 7 \ .db 169 \ .db 192, 193 \ .db 45, 45 \ .dw 13
+	Wall240: .db 7 \ .db 192 \ .db 193, 194 \ .db 46, 46 \ .dw 4
+	Wall241: .db 7 \ .db 216 \ .db 194, 195 \ .db 45, 45 \ .dw 13
+	Wall242: .db 7 \ .db 192 \ .db 195, 196 \ .db 45, 45 \ .dw 4
+	Wall243: .db 7 \ .db 160 \ .db 196, 197 \ .db 45, 45 \ .dw 8
+	Wall244: .db 5 \ .db 128 \ .db 197, 198 \ .db 45, 45 \ .dw 9
+	Wall245: .db 4 \ .db 128 \ .db 198, 199 \ .db 45, 45 \ .dw 4
+	Wall246: .db 6 \ .db 128 \ .db 199, 200 \ .db 45, 45 \ .dw 16
+	Wall247: .db 7 \ .db 128 \ .db 203, 202 \ .db 45, 45 \ .dw 25
+	Wall248: .db 7 \ .db 109 \ .db 204, 203 \ .db 45, 45 \ .dw 5
+	Wall249: .db 3 \ .db 0 \ .db 204, 193 \ .db 46, 45 \ .dw 9
+	Wall250: .db 3 \ .db 128 \ .db 194, 205 \ .db 46, 45 \ .dw 9
+	Wall251: .db 7 \ .db 18 \ .db 206, 205 \ .db 45, 45 \ .dw 5
+	Wall252: .db 7 \ .db 0 \ .db 207, 206 \ .db 45, 45 \ .dw 25
+	Wall253: .db 7 \ .db 192 \ .db 202, 207 \ .db 45, 45 \ .dw 16
+	Wall254: .db 3 \ .db 0 \ .db 182, 201 \ .db 44, 45 \ .dw 9
+	Wall255: .db 7 \ .db 64 \ .db 205, 204 \ .db 46, 46 \ .dw 4
 Walls.Count = ($ - Walls) / 8
 
 Sectors:
@@ -394,6 +518,12 @@ Sector37: .dw -384, 256
 Sector38: .dw -128, 64
 Sector39: .dw -128, 64
 Sector40: .dw -128, 64
+Sector41: .dw -320, -128
+Sector42: .dw -320, -96
+Sector43: .dw -352, -128
+Sector44: .dw -352, -112
+Sector45: .dw -384, -96
+Sector46: .dw -334, -256
 
 Things = $-8
 Thing0: .db 0, Thing.Stand, 0, 0 \ .dw 1024, -1280
@@ -405,6 +535,12 @@ Thing5: .db 0, Thing.Stand, 0, 0 \ .dw 5376, -10880
 Thing6: .db 0, Thing.Lamp, 0, 0 \ .dw -512, -8448
 Thing7: .db 0, Thing.Lamp, 0, 0 \ .dw 8960, -8704
 Thing8: .db 0, Thing.MaxCoderz, 0, 0 \ .dw 9856, -6784
+Thing9: .db 11, Thing.MaxCoderz, 0, 0 \ .dw 15744, -6528
+Thing10: .db 0, Thing.Lamp, 0, 0 \ .dw 16128, -7168
+Thing11: .db 0, Thing.Lamp, 0, 0 \ .dw 16128, -4608
+Thing12: .db 0, Thing.Stand, 0, 0 \ .dw 13440, -1920
+Thing13: .db 15, Thing.Lamp, 0, 0 \ .dw 6400, -4608
+Thing14: .db 0, Thing.Lamp, 0, 0 \ .dw 6400, -1536
 
 Tree:
 .db Nostromo.Tree.Node.Type.VerticalPartition
@@ -419,168 +555,432 @@ Tree.F:
 .dw -7936
 
 Tree.F.F:
-.db Nostromo.Tree.Node.Type.HorizontalPartition
+.db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.F
 .dw Tree.F.F.B
-.dw -5632
+.dw 12032
 
 Tree.F.F.F:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.F.F
 .dw Tree.F.F.F.B
-.dw -4864
+.dw -3328
 
 Tree.F.F.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.F.F.F
+.dw Tree.F.F.F.F.B
+.dw 13056
+
+Tree.F.F.F.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.F.F.F.F
+.dw Tree.F.F.F.F.F.B
+.dw 13824
+
+Tree.F.F.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 37
+	.db 41
 	.db 0
-	.db 4 \ .db 188, 171, 172, 173
+	.db 6 \ .db 222, 208, 209, 210, 211, 212
+
+Tree.F.F.F.F.F.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.F.F.B.F
+.dw Tree.F.F.F.F.F.B.B
+.dw -2304
+
+Tree.F.F.F.F.F.B.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.F.F.B.F.F
+.dw Tree.F.F.F.F.F.B.F.B
+.dw -1536
+
+Tree.F.F.F.F.F.B.F.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 41
+	.db 0
+	.db 2 \ .db 223, 213
+
+Tree.F.F.F.F.F.B.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 42
+	.db 13
+	.db 4 \ .db 221, 222, 223, 224
+
+Tree.F.F.F.F.F.B.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.F.F.B.B.F
+.dw Tree.F.F.F.F.F.B.B.B
+.dw -3072
+
+Tree.F.F.F.F.F.B.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 41
+	.db 0
+	.db 1 \ .db 221
+
+Tree.F.F.F.F.F.B.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 41
+	.db 0
+	.db 3 \ .db 206, 205, 207
+
+Tree.F.F.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 41
+	.db 0
+	.db 5 \ .db 224, 203, 204, 215, 214
 
 Tree.F.F.F.B:
-.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.F.B.F
 .dw Tree.F.F.F.B.B
-.dw -13568
-.dw 256
+.dw -3840
 
 Tree.F.F.F.B.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.B.F.F
+.dw Tree.F.F.F.B.F.B
+.dw -3584
+
+Tree.F.F.F.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 37
+	.db 44
 	.db 0
-	.db 2 \ .db 187, 174
+	.db 4 \ .db 206, 254, 226, 227
+
+Tree.F.F.F.B.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 0
+	.db 3 \ .db 254, 228, 229
 
 Tree.F.F.F.B.B:
-.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.F.B.B.F
 .dw Tree.F.F.F.B.B.B
-.dw 6144
-.dw -256
+.dw 15360
 
 Tree.F.F.F.B.B.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.B.B.F.F
+.dw Tree.F.F.F.B.B.F.B
+.dw -6144
+
+Tree.F.F.F.B.B.F.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.B.B.F.F.F
+.dw Tree.F.F.F.B.B.F.F.B
+.dw -5632
+
+Tree.F.F.F.B.B.F.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.F.B.B.F.F.F.F
+.dw Tree.F.F.F.B.B.F.F.F.B
+.dw 16128
+
+Tree.F.F.F.B.B.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 37
+	.db 45
 	.db 0
-	.db 2 \ .db 170, 189
+	.db 3 \ .db 241, 242, 243
+
+Tree.F.F.F.B.B.F.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 12
+	.db 2 \ .db 244, 250
+
+Tree.F.F.F.B.B.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 46
+	.db 0
+	.db 4 \ .db 249, 250, 255, 240
+
+Tree.F.F.F.B.B.F.B:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.F.B.B.F.B.F
+.dw Tree.F.F.F.B.B.F.B.B
+.dw 16128
+
+Tree.F.F.F.B.B.F.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 0
+	.db 3 \ .db 237, 238, 239
+
+Tree.F.F.F.B.B.F.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 10
+	.db 2 \ .db 249, 236
 
 Tree.F.F.F.B.B.B:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.F.B.B.B.F
+.dw Tree.F.F.F.B.B.B.B
+.dw 13568
+
+Tree.F.F.F.B.B.B.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.F.B.B.B.F.F
+.dw Tree.F.F.F.B.B.B.F.B
+.dw 14848
+
+Tree.F.F.F.B.B.B.F.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.B.B.B.F.F.F
+.dw Tree.F.F.F.B.B.B.F.F.B
+.dw -5888
+
+Tree.F.F.F.B.B.B.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 36
+	.db 45
 	.db 0
-	.db 4 \ .db 187, 179, 188, 189
+	.db 2 \ .db 251, 245
+
+Tree.F.F.F.B.B.B.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 0
+	.db 2 \ .db 235, 248
+
+Tree.F.F.F.B.B.B.F.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.F.B.B.B.F.B.F
+.dw Tree.F.F.F.B.B.B.F.B.B
+.dw -5888
+
+Tree.F.F.F.B.B.B.F.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 0
+	.db 2 \ .db 252, 246
+
+Tree.F.F.F.B.B.B.F.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 0
+	.db 2 \ .db 234, 247
+
+Tree.F.F.F.B.B.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 45
+	.db 0
+	.db 5 \ .db 253, 230, 231, 232, 233
 
 Tree.F.F.B:
 .db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.F
 .dw Tree.F.F.B.B
-.dw -6400
+.dw -4864
 
 Tree.F.F.B.F:
-.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.db Nostromo.Tree.Node.Type.HorizontalPartition
 .dw Tree.F.F.B.F.F
 .dw Tree.F.F.B.F.B
-.dw -15104
-.dw 256
+.dw -4864
 
 Tree.F.F.B.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.B.F.F.F
+.dw Tree.F.F.B.F.F.B
+.dw 7424
+
+Tree.F.F.B.F.F.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.B.F.F.F.F
+.dw Tree.F.F.B.F.F.F.B
+.dw -3072
+
+Tree.F.F.B.F.F.F.F:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.B.F.F.F.F.F
+.dw Tree.F.F.B.F.F.F.F.B
+.dw -2560
+
+Tree.F.F.B.F.F.F.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 36
+	.db 41
 	.db 0
-	.db 2 \ .db 178, 175
+	.db 5 \ .db 201, 198, 202, 216, 225
+
+Tree.F.F.B.F.F.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 43
+	.db 0
+	.db 4 \ .db 190, 201, 199, 200
+
+Tree.F.F.B.F.F.F.B:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.B.F.F.F.B.F
+.dw Tree.F.F.B.F.F.F.B.B
+.dw 7936
+
+Tree.F.F.B.F.F.F.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 37
+	.db 0
+	.db 8 \ .db 188, 190, 173, 171, 172, 191, 192, 193
+
+Tree.F.F.B.F.F.F.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 43
+	.db 0
+	.db 4 \ .db 173, 196, 194, 195
+
+Tree.F.F.B.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 41
+	.db 14
+	.db 6 \ .db 196, 219, 218, 217, 197, 220
 
 Tree.F.F.B.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.B.F.B.F
 .dw Tree.F.F.B.F.B.B
-.dw 4608
-.dw -256
+.dw -13568
+.dw 256
 
 Tree.F.F.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 36
+	.db 37
 	.db 0
-	.db 2 \ .db 180, 169
+	.db 2 \ .db 187, 174
 
 Tree.F.F.B.F.B.B:
+.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.dw Tree.F.F.B.F.B.B.F
+.dw Tree.F.F.B.F.B.B.B
+.dw 6144
+.dw -256
+
+Tree.F.F.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 35
+	.db 37
 	.db 0
-	.db 4 \ .db 178, 179, 184, 180
+	.db 2 \ .db 170, 189
 
-Tree.F.F.B.B:
-.db Nostromo.Tree.Node.Type.VerticalPartition
-.dw Tree.F.F.B.B.F
-.dw Tree.F.F.B.B.B
-.dw 9472
-
-Tree.F.F.B.B.F:
-.db Nostromo.Tree.Node.Type.VerticalPartition
-.dw Tree.F.F.B.B.F.F
-.dw Tree.F.F.B.B.F.B
-.dw 10240
-
-Tree.F.F.B.B.F.F:
-.db Nostromo.Tree.Node.Type.VerticalPartition
-.dw Tree.F.F.B.B.F.F.F
-.dw Tree.F.F.B.B.F.F.B
-.dw 11008
-
-Tree.F.F.B.B.F.F.F:
+Tree.F.F.B.F.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
 	.db 36
 	.db 0
-	.db 3 \ .db 181, 167, 168
+	.db 4 \ .db 187, 179, 188, 189
 
-Tree.F.F.B.B.F.F.B:
+Tree.F.F.B.B:
+.db Nostromo.Tree.Node.Type.HorizontalPartition
+.dw Tree.F.F.B.B.F
+.dw Tree.F.F.B.B.B
+.dw -6400
+
+Tree.F.F.B.B.F:
+.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.dw Tree.F.F.B.B.F.F
+.dw Tree.F.F.B.B.F.B
+.dw -15104
+.dw 256
+
+Tree.F.F.B.B.F.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 35
+	.db 36
 	.db 0
-	.db 4 \ .db 186, 185, 181, 166
+	.db 2 \ .db 178, 175
 
 Tree.F.F.B.B.F.B:
 .db Nostromo.Tree.Node.Type.ShallowSlopePartition
 .dw Tree.F.F.B.B.F.B.F
 .dw Tree.F.F.B.B.F.B.B
-.dw -16128
-.dw 256
+.dw 4608
+.dw -256
 
 Tree.F.F.B.B.F.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
-	.db 35
+	.db 36
 	.db 0
-	.db 1 \ .db 183
+	.db 2 \ .db 180, 169
 
 Tree.F.F.B.B.F.B.B:
-.db Nostromo.Tree.Node.Type.ShallowSlopePartition
-.dw Tree.F.F.B.B.F.B.B.F
-.dw Tree.F.F.B.B.F.B.B.B
-.dw 3584
-.dw -256
-
-Tree.F.F.B.B.F.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
 	.db 35
 	.db 0
-	.db 1 \ .db 185
-
-Tree.F.F.B.B.F.B.B.B:
-.db Nostromo.Tree.Node.Type.Leaf
-	.db 34
-	.db 9
-	.db 6 \ .db 141, 182, 183, 184, 185, 186
+	.db 4 \ .db 178, 179, 184, 180
 
 Tree.F.F.B.B.B:
 .db Nostromo.Tree.Node.Type.VerticalPartition
 .dw Tree.F.F.B.B.B.F
 .dw Tree.F.F.B.B.B.B
-.dw 8704
+.dw 9472
 
 Tree.F.F.B.B.B.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.B.B.B.F.F
+.dw Tree.F.F.B.B.B.F.B
+.dw 10240
+
+Tree.F.F.B.B.B.F.F:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.B.B.B.F.F.F
+.dw Tree.F.F.B.B.B.F.F.B
+.dw 11008
+
+Tree.F.F.B.B.B.F.F.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 36
+	.db 0
+	.db 3 \ .db 181, 167, 168
+
+Tree.F.F.B.B.B.F.F.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 35
+	.db 0
+	.db 4 \ .db 186, 185, 181, 166
+
+Tree.F.F.B.B.B.F.B:
+.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.dw Tree.F.F.B.B.B.F.B.F
+.dw Tree.F.F.B.B.B.F.B.B
+.dw -16128
+.dw 256
+
+Tree.F.F.B.B.B.F.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 35
+	.db 0
+	.db 1 \ .db 183
+
+Tree.F.F.B.B.B.F.B.B:
+.db Nostromo.Tree.Node.Type.ShallowSlopePartition
+.dw Tree.F.F.B.B.B.F.B.B.F
+.dw Tree.F.F.B.B.B.F.B.B.B
+.dw 3584
+.dw -256
+
+Tree.F.F.B.B.B.F.B.B.F:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 35
+	.db 0
+	.db 1 \ .db 185
+
+Tree.F.F.B.B.B.F.B.B.B:
+.db Nostromo.Tree.Node.Type.Leaf
+	.db 34
+	.db 9
+	.db 6 \ .db 141, 182, 183, 184, 185, 186
+
+Tree.F.F.B.B.B.B:
+.db Nostromo.Tree.Node.Type.VerticalPartition
+.dw Tree.F.F.B.B.B.B.F
+.dw Tree.F.F.B.B.B.B.B
+.dw 8704
+
+Tree.F.F.B.B.B.B.F:
 .db Nostromo.Tree.Node.Type.Leaf
 	.db 35
 	.db 0
 	.db 3 \ .db 177, 182, 165
 
-Tree.F.F.B.B.B.B:
+Tree.F.F.B.B.B.B.B:
 .db Nostromo.Tree.Node.Type.Leaf
 	.db 36
 	.db 0
@@ -1361,20 +1761,20 @@ Tree.B.B.B.B.B.B.B:
 	.db 3 \ .db 84, 109, 110
 
 BlockMap:
-.dw -1280, -12800 \ .db 14, 13
-.dw BlockMapList0, BlockMapList1, BlockMapList2, BlockMapList3, BlockMapList4, BlockMapList5, BlockMapList6, BlockMapList7, BlockMapList8, BlockMapList9, BlockMapList10, BlockMapList11, BlockMapList12, BlockMapList12
-.dw BlockMapList13, BlockMapList14, BlockMapList15, BlockMapList16, BlockMapList17, BlockMapList18, BlockMapList19, BlockMapList20, BlockMapList21, BlockMapList22, BlockMapList23, BlockMapList10, BlockMapList12, BlockMapList12
-.dw BlockMapList24, BlockMapList25, BlockMapList26, BlockMapList27, BlockMapList28, BlockMapList29, BlockMapList30, BlockMapList31, BlockMapList32, BlockMapList33, BlockMapList34, BlockMapList35, BlockMapList12, BlockMapList12
-.dw BlockMapList36, BlockMapList37, BlockMapList38, BlockMapList39, BlockMapList40, BlockMapList41, BlockMapList42, BlockMapList43, BlockMapList44, BlockMapList45, BlockMapList46, BlockMapList47, BlockMapList12, BlockMapList12
-.dw BlockMapList48, BlockMapList49, BlockMapList50, BlockMapList51, BlockMapList52, BlockMapList53, BlockMapList54, BlockMapList55, BlockMapList56, BlockMapList57, BlockMapList58, BlockMapList59, BlockMapList60, BlockMapList61
-.dw BlockMapList62, BlockMapList63, BlockMapList64, BlockMapList65, BlockMapList66, BlockMapList67, BlockMapList68, BlockMapList69, BlockMapList70, BlockMapList71, BlockMapList72, BlockMapList73, BlockMapList74, BlockMapList75
-.dw BlockMapList76, BlockMapList76, BlockMapList77, BlockMapList78, BlockMapList79, BlockMapList80, BlockMapList81, BlockMapList81, BlockMapList82, BlockMapList83, BlockMapList84, BlockMapList84, BlockMapList85, BlockMapList85
-.dw BlockMapList86, BlockMapList87, BlockMapList88, BlockMapList89, BlockMapList90, BlockMapList91, BlockMapList92, BlockMapList93, BlockMapList94, BlockMapList94, BlockMapList12, BlockMapList12, BlockMapList95, BlockMapList95
-.dw BlockMapList96, BlockMapList97, BlockMapList98, BlockMapList99, BlockMapList100, BlockMapList101, BlockMapList102, BlockMapList103, BlockMapList104, BlockMapList104, BlockMapList105, BlockMapList105, BlockMapList106, BlockMapList106
-.dw BlockMapList107, BlockMapList108, BlockMapList109, BlockMapList110, BlockMapList111, BlockMapList112, BlockMapList113, BlockMapList12, BlockMapList114, BlockMapList114, BlockMapList105, BlockMapList105, BlockMapList115, BlockMapList115
-.dw BlockMapList107, BlockMapList116, BlockMapList117, BlockMapList118, BlockMapList119, BlockMapList120, BlockMapList121, BlockMapList12, BlockMapList114, BlockMapList114, BlockMapList105, BlockMapList105, BlockMapList115, BlockMapList115
-.dw BlockMapList122, BlockMapList123, BlockMapList124, BlockMapList125, BlockMapList126, BlockMapList127, BlockMapList127, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12
-.dw BlockMapList128, BlockMapList129, BlockMapList130, BlockMapList131, BlockMapList132, BlockMapList133, BlockMapList133, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12
+.dw -1280, -12800 \ .db 18, 13
+.dw BlockMapList0, BlockMapList1, BlockMapList2, BlockMapList3, BlockMapList4, BlockMapList5, BlockMapList6, BlockMapList7, BlockMapList8, BlockMapList9, BlockMapList10, BlockMapList11, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12
+.dw BlockMapList13, BlockMapList14, BlockMapList15, BlockMapList16, BlockMapList17, BlockMapList18, BlockMapList19, BlockMapList20, BlockMapList21, BlockMapList22, BlockMapList23, BlockMapList10, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12
+.dw BlockMapList24, BlockMapList25, BlockMapList26, BlockMapList27, BlockMapList28, BlockMapList29, BlockMapList30, BlockMapList31, BlockMapList32, BlockMapList33, BlockMapList34, BlockMapList35, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12
+.dw BlockMapList36, BlockMapList37, BlockMapList38, BlockMapList39, BlockMapList40, BlockMapList41, BlockMapList42, BlockMapList43, BlockMapList44, BlockMapList45, BlockMapList46, BlockMapList47, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12
+.dw BlockMapList48, BlockMapList49, BlockMapList50, BlockMapList51, BlockMapList52, BlockMapList53, BlockMapList54, BlockMapList55, BlockMapList56, BlockMapList57, BlockMapList58, BlockMapList59, BlockMapList60, BlockMapList61, BlockMapList62, BlockMapList63, BlockMapList64, BlockMapList65
+.dw BlockMapList66, BlockMapList67, BlockMapList68, BlockMapList69, BlockMapList70, BlockMapList71, BlockMapList72, BlockMapList73, BlockMapList74, BlockMapList75, BlockMapList76, BlockMapList77, BlockMapList78, BlockMapList79, BlockMapList80, BlockMapList81, BlockMapList82, BlockMapList83
+.dw BlockMapList84, BlockMapList84, BlockMapList85, BlockMapList86, BlockMapList87, BlockMapList88, BlockMapList89, BlockMapList89, BlockMapList90, BlockMapList91, BlockMapList92, BlockMapList92, BlockMapList93, BlockMapList94, BlockMapList95, BlockMapList96, BlockMapList97, BlockMapList98
+.dw BlockMapList99, BlockMapList100, BlockMapList101, BlockMapList102, BlockMapList103, BlockMapList104, BlockMapList105, BlockMapList106, BlockMapList107, BlockMapList107, BlockMapList12, BlockMapList12, BlockMapList108, BlockMapList109, BlockMapList110, BlockMapList111, BlockMapList112, BlockMapList113
+.dw BlockMapList114, BlockMapList115, BlockMapList116, BlockMapList117, BlockMapList118, BlockMapList119, BlockMapList120, BlockMapList121, BlockMapList122, BlockMapList123, BlockMapList124, BlockMapList124, BlockMapList125, BlockMapList126, BlockMapList127, BlockMapList128, BlockMapList129, BlockMapList130
+.dw BlockMapList131, BlockMapList132, BlockMapList133, BlockMapList134, BlockMapList135, BlockMapList136, BlockMapList137, BlockMapList138, BlockMapList139, BlockMapList140, BlockMapList141, BlockMapList141, BlockMapList142, BlockMapList143, BlockMapList127, BlockMapList144, BlockMapList145, BlockMapList146
+.dw BlockMapList131, BlockMapList147, BlockMapList148, BlockMapList149, BlockMapList150, BlockMapList151, BlockMapList152, BlockMapList153, BlockMapList154, BlockMapList155, BlockMapList156, BlockMapList156, BlockMapList157, BlockMapList158, BlockMapList159, BlockMapList160, BlockMapList161, BlockMapList12
+.dw BlockMapList162, BlockMapList163, BlockMapList164, BlockMapList165, BlockMapList166, BlockMapList167, BlockMapList168, BlockMapList169, BlockMapList170, BlockMapList170, BlockMapList171, BlockMapList171, BlockMapList172, BlockMapList173, BlockMapList174, BlockMapList175, BlockMapList176, BlockMapList12
+.dw BlockMapList177, BlockMapList178, BlockMapList179, BlockMapList180, BlockMapList181, BlockMapList182, BlockMapList182, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList12, BlockMapList183, BlockMapList184, BlockMapList174, BlockMapList185, BlockMapList186, BlockMapList12
 BlockMapList0: .db 6 \ .db 83, 85, 109, 110, 111, 127
 BlockMapList1: .db 8 \ .db 83, 85, 109, 110, 111, 112, 126, 127
 BlockMapList2: .db 6 \ .db 85, 110, 111, 112, 126, 127
@@ -1435,77 +1835,130 @@ BlockMapList56: .db 5 \ .db 120, 121, 151, 164, 176
 BlockMapList57: .db 8 \ .db 142, 143, 144, 145, 164, 165, 176, 182
 BlockMapList58: .db 12 \ .db 139, 140, 142, 143, 144, 145, 163, 164, 165, 166, 182, 186
 BlockMapList59: .db 10 \ .db 139, 140, 142, 143, 163, 165, 166, 167, 182, 186
-BlockMapList60: .db 3 \ .db 166, 167, 168
-BlockMapList61: .db 2 \ .db 167, 168
-BlockMapList62: .db 6 \ .db 33, 59, 60, 78, 79, 80
-BlockMapList63: .db 8 \ .db 33, 59, 60, 76, 77, 78, 79, 80
-BlockMapList64: .db 10 \ .db 33, 34, 73, 74, 75, 76, 77, 78, 79, 107
-BlockMapList65: .db 12 \ .db 33, 34, 73, 74, 75, 76, 77, 93, 94, 95, 107, 108
-BlockMapList66: .db 12 \ .db 35, 36, 73, 74, 75, 93, 94, 95, 107, 108, 122, 123
-BlockMapList67: .db 8 \ .db 35, 36, 93, 94, 95, 108, 122, 123
-BlockMapList68: .db 5 \ .db 36, 37, 38, 121, 122
-BlockMapList69: .db 6 \ .db 36, 37, 38, 120, 121, 122
-BlockMapList70: .db 5 \ .db 120, 121, 164, 175, 176
-BlockMapList71: .db 7 \ .db 142, 164, 165, 175, 176, 182, 183
-BlockMapList72: .db 10 \ .db 142, 163, 164, 165, 166, 182, 183, 184, 185, 186
-BlockMapList73: .db 10 \ .db 142, 163, 165, 166, 167, 182, 183, 184, 185, 186
-BlockMapList74: .db 4 \ .db 166, 167, 168, 169
-BlockMapList75: .db 3 \ .db 167, 168, 169
-BlockMapList76: .db 4 \ .db 57, 58, 59, 60
-BlockMapList77: .db 4 \ .db 34, 57, 73, 107
-BlockMapList78: .db 5 \ .db 34, 73, 95, 107, 108
-BlockMapList79: .db 5 \ .db 35, 73, 95, 107, 108
-BlockMapList80: .db 4 \ .db 35, 40, 95, 108
-BlockMapList81: .db 4 \ .db 37, 38, 39, 40
-BlockMapList82: .db 3 \ .db 174, 175, 176
-BlockMapList83: .db 5 \ .db 174, 175, 176, 182, 183
-BlockMapList84: .db 5 \ .db 182, 183, 184, 185, 186
-BlockMapList85: .db 3 \ .db 168, 169, 170
-BlockMapList86: .db 4 \ .db 56, 57, 58, 59
-BlockMapList87: .db 13 \ .db 1, 2, 3, 51, 52, 53, 54, 55, 56, 57, 58, 59, 72
-BlockMapList88: .db 13 \ .db 1, 2, 3, 48, 49, 51, 52, 53, 54, 55, 56, 57, 72
-BlockMapList89: .db 8 \ .db 3, 47, 48, 49, 51, 52, 53, 72
-BlockMapList90: .db 8 \ .db 9, 10, 44, 45, 46, 47, 48, 71
-BlockMapList91: .db 12 \ .db 9, 10, 11, 40, 41, 42, 43, 44, 45, 46, 47, 71
-BlockMapList92: .db 8 \ .db 11, 38, 39, 40, 41, 42, 43, 71
-BlockMapList93: .db 3 \ .db 38, 39, 40
-BlockMapList94: .db 3 \ .db 173, 174, 175
-BlockMapList95: .db 3 \ .db 169, 170, 171
-BlockMapList96: .db 5 \ .db 0, 19, 24, 56, 57
-BlockMapList97: .db 15 \ .db 0, 1, 2, 3, 4, 19, 24, 51, 52, 53, 54, 55, 56, 57, 72
-BlockMapList98: .db 18 \ .db 0, 1, 2, 3, 4, 5, 6, 24, 48, 49, 51, 52, 53, 54, 55, 56, 57, 72
-BlockMapList99: .db 16 \ .db 2, 3, 4, 5, 6, 7, 8, 24, 25, 47, 48, 49, 51, 52, 53, 72
-BlockMapList100: .db 11 \ .db 7, 8, 9, 10, 25, 44, 45, 46, 47, 48, 71
-BlockMapList101: .db 16 \ .db 8, 9, 10, 11, 12, 13, 25, 40, 41, 42, 43, 44, 45, 46, 47, 71
-BlockMapList102: .db 10 \ .db 10, 11, 12, 13, 25, 40, 41, 42, 43, 71
-BlockMapList103: .db 1 \ .db 40
-BlockMapList104: .db 3 \ .db 172, 173, 174
-BlockMapList105: .db 1 \ .db 172
-BlockMapList106: .db 3 \ .db 170, 171, 172
-BlockMapList107: .db 3 \ .db 0, 19, 24
-BlockMapList108: .db 9 \ .db 0, 1, 2, 3, 4, 19, 24, 53, 54
-BlockMapList109: .db 12 \ .db 0, 1, 2, 3, 4, 5, 6, 24, 48, 49, 53, 54
-BlockMapList110: .db 13 \ .db 2, 3, 4, 5, 6, 7, 8, 24, 25, 47, 48, 49, 53
-BlockMapList111: .db 9 \ .db 6, 7, 8, 9, 10, 25, 44, 47, 48
-BlockMapList112: .db 11 \ .db 7, 8, 9, 10, 11, 12, 13, 25, 43, 44, 47
-BlockMapList113: .db 6 \ .db 10, 11, 12, 13, 25, 43
-BlockMapList114: .db 2 \ .db 172, 173
-BlockMapList115: .db 2 \ .db 171, 172
-BlockMapList116: .db 4 \ .db 0, 4, 19, 24
-BlockMapList117: .db 6 \ .db 0, 4, 5, 6, 24, 30
-BlockMapList118: .db 9 \ .db 4, 5, 6, 7, 8, 24, 25, 30, 31
-BlockMapList119: .db 5 \ .db 6, 7, 8, 25, 31
-BlockMapList120: .db 5 \ .db 7, 8, 12, 13, 25
-BlockMapList121: .db 3 \ .db 12, 13, 25
-BlockMapList122: .db 3 \ .db 18, 19, 24
-BlockMapList123: .db 4 \ .db 17, 18, 19, 24
-BlockMapList124: .db 5 \ .db 16, 17, 18, 24, 30
-BlockMapList125: .db 7 \ .db 15, 16, 17, 24, 25, 30, 31
-BlockMapList126: .db 4 \ .db 15, 16, 25, 31
-BlockMapList127: .db 4 \ .db 13, 14, 15, 25
-BlockMapList128: .db 2 \ .db 18, 19
-BlockMapList129: .db 3 \ .db 17, 18, 19
-BlockMapList130: .db 4 \ .db 16, 17, 18, 30
-BlockMapList131: .db 5 \ .db 15, 16, 17, 30, 31
-BlockMapList132: .db 3 \ .db 15, 16, 31
-BlockMapList133: .db 3 \ .db 13, 14, 15
+BlockMapList60: .db 5 \ .db 166, 167, 168, 232, 233
+BlockMapList61: .db 5 \ .db 167, 168, 232, 233, 234
+BlockMapList62: .db 2 \ .db 233, 234
+BlockMapList63: .db 4 \ .db 233, 234, 235, 236
+BlockMapList64: .db 5 \ .db 234, 235, 236, 237, 238
+BlockMapList65: .db 3 \ .db 236, 237, 238
+BlockMapList66: .db 6 \ .db 33, 59, 60, 78, 79, 80
+BlockMapList67: .db 8 \ .db 33, 59, 60, 76, 77, 78, 79, 80
+BlockMapList68: .db 10 \ .db 33, 34, 73, 74, 75, 76, 77, 78, 79, 107
+BlockMapList69: .db 12 \ .db 33, 34, 73, 74, 75, 76, 77, 93, 94, 95, 107, 108
+BlockMapList70: .db 12 \ .db 35, 36, 73, 74, 75, 93, 94, 95, 107, 108, 122, 123
+BlockMapList71: .db 8 \ .db 35, 36, 93, 94, 95, 108, 122, 123
+BlockMapList72: .db 5 \ .db 36, 37, 38, 121, 122
+BlockMapList73: .db 6 \ .db 36, 37, 38, 120, 121, 122
+BlockMapList74: .db 5 \ .db 120, 121, 164, 175, 176
+BlockMapList75: .db 7 \ .db 142, 164, 165, 175, 176, 182, 183
+BlockMapList76: .db 10 \ .db 142, 163, 164, 165, 166, 182, 183, 184, 185, 186
+BlockMapList77: .db 10 \ .db 142, 163, 165, 166, 167, 182, 183, 184, 185, 186
+BlockMapList78: .db 6 \ .db 166, 167, 168, 169, 232, 233
+BlockMapList79: .db 8 \ .db 167, 168, 169, 232, 233, 234, 247, 253
+BlockMapList80: .db 4 \ .db 233, 234, 247, 253
+BlockMapList81: .db 9 \ .db 233, 234, 235, 236, 247, 248, 249, 253, 255
+BlockMapList82: .db 11 \ .db 234, 235, 236, 237, 238, 239, 240, 247, 248, 249, 255
+BlockMapList83: .db 5 \ .db 236, 237, 238, 239, 240
+BlockMapList84: .db 4 \ .db 57, 58, 59, 60
+BlockMapList85: .db 4 \ .db 34, 57, 73, 107
+BlockMapList86: .db 5 \ .db 34, 73, 95, 107, 108
+BlockMapList87: .db 5 \ .db 35, 73, 95, 107, 108
+BlockMapList88: .db 4 \ .db 35, 40, 95, 108
+BlockMapList89: .db 4 \ .db 37, 38, 39, 40
+BlockMapList90: .db 3 \ .db 174, 175, 176
+BlockMapList91: .db 5 \ .db 174, 175, 176, 182, 183
+BlockMapList92: .db 5 \ .db 182, 183, 184, 185, 186
+BlockMapList93: .db 5 \ .db 168, 169, 170, 231, 232
+BlockMapList94: .db 8 \ .db 168, 169, 170, 231, 232, 247, 252, 253
+BlockMapList95: .db 3 \ .db 247, 252, 253
+BlockMapList96: .db 8 \ .db 247, 248, 249, 250, 251, 252, 253, 255
+BlockMapList97: .db 11 \ .db 238, 239, 240, 241, 247, 248, 249, 250, 251, 252, 255
+BlockMapList98: .db 6 \ .db 238, 239, 240, 241, 249, 250
+BlockMapList99: .db 4 \ .db 56, 57, 58, 59
+BlockMapList100: .db 13 \ .db 1, 2, 3, 51, 52, 53, 54, 55, 56, 57, 58, 59, 72
+BlockMapList101: .db 13 \ .db 1, 2, 3, 48, 49, 51, 52, 53, 54, 55, 56, 57, 72
+BlockMapList102: .db 8 \ .db 3, 47, 48, 49, 51, 52, 53, 72
+BlockMapList103: .db 8 \ .db 9, 10, 44, 45, 46, 47, 48, 71
+BlockMapList104: .db 12 \ .db 9, 10, 11, 40, 41, 42, 43, 44, 45, 46, 47, 71
+BlockMapList105: .db 10 \ .db 11, 38, 39, 40, 41, 42, 43, 71, 218, 219
+BlockMapList106: .db 7 \ .db 38, 39, 40, 194, 218, 219, 220
+BlockMapList107: .db 6 \ .db 174, 175, 193, 194, 219, 220
+BlockMapList108: .db 5 \ .db 169, 170, 171, 231, 232
+BlockMapList109: .db 7 \ .db 169, 170, 171, 231, 232, 252, 253
+BlockMapList110: .db 2 \ .db 252, 253
+BlockMapList111: .db 7 \ .db 248, 249, 250, 251, 252, 253, 255
+BlockMapList112: .db 11 \ .db 239, 240, 241, 242, 243, 248, 249, 250, 251, 252, 255
+BlockMapList113: .db 7 \ .db 239, 240, 241, 242, 243, 249, 250
+BlockMapList114: .db 5 \ .db 0, 19, 24, 56, 57
+BlockMapList115: .db 15 \ .db 0, 1, 2, 3, 4, 19, 24, 51, 52, 53, 54, 55, 56, 57, 72
+BlockMapList116: .db 18 \ .db 0, 1, 2, 3, 4, 5, 6, 24, 48, 49, 51, 52, 53, 54, 55, 56, 57, 72
+BlockMapList117: .db 16 \ .db 2, 3, 4, 5, 6, 7, 8, 24, 25, 47, 48, 49, 51, 52, 53, 72
+BlockMapList118: .db 11 \ .db 7, 8, 9, 10, 25, 44, 45, 46, 47, 48, 71
+BlockMapList119: .db 16 \ .db 8, 9, 10, 11, 12, 13, 25, 40, 41, 42, 43, 44, 45, 46, 47, 71
+BlockMapList120: .db 12 \ .db 10, 11, 12, 13, 25, 40, 41, 42, 43, 71, 218, 219
+BlockMapList121: .db 7 \ .db 40, 194, 195, 197, 218, 219, 220
+BlockMapList122: .db 9 \ .db 174, 191, 192, 193, 194, 195, 197, 219, 220
+BlockMapList123: .db 10 \ .db 174, 191, 192, 193, 194, 195, 197, 199, 219, 220
+BlockMapList124: .db 4 \ .db 172, 191, 199, 200
+BlockMapList125: .db 7 \ .db 170, 171, 172, 203, 204, 230, 231
+BlockMapList126: .db 10 \ .db 170, 171, 172, 203, 204, 205, 226, 228, 230, 231
+BlockMapList127: .db 12 \ .db 203, 204, 205, 207, 208, 209, 226, 227, 228, 229, 230, 246
+BlockMapList128: .db 8 \ .db 207, 208, 209, 227, 229, 244, 245, 246
+BlockMapList129: .db 7 \ .db 209, 241, 242, 243, 244, 245, 246
+BlockMapList130: .db 4 \ .db 241, 242, 243, 244
+BlockMapList131: .db 3 \ .db 0, 19, 24
+BlockMapList132: .db 9 \ .db 0, 1, 2, 3, 4, 19, 24, 53, 54
+BlockMapList133: .db 12 \ .db 0, 1, 2, 3, 4, 5, 6, 24, 48, 49, 53, 54
+BlockMapList134: .db 13 \ .db 2, 3, 4, 5, 6, 7, 8, 24, 25, 47, 48, 49, 53
+BlockMapList135: .db 9 \ .db 6, 7, 8, 9, 10, 25, 44, 47, 48
+BlockMapList136: .db 11 \ .db 7, 8, 9, 10, 11, 12, 13, 25, 43, 44, 47
+BlockMapList137: .db 7 \ .db 10, 11, 12, 13, 25, 43, 218
+BlockMapList138: .db 4 \ .db 195, 197, 198, 218
+BlockMapList139: .db 5 \ .db 191, 192, 195, 197, 198
+BlockMapList140: .db 6 \ .db 191, 192, 195, 197, 198, 199
+BlockMapList141: .db 6 \ .db 172, 191, 198, 199, 200, 202
+BlockMapList142: .db 7 \ .db 171, 172, 202, 203, 204, 230, 231
+BlockMapList143: .db 10 \ .db 171, 172, 202, 203, 204, 205, 226, 228, 230, 231
+BlockMapList144: .db 9 \ .db 207, 208, 209, 210, 227, 229, 244, 245, 246
+BlockMapList145: .db 6 \ .db 209, 210, 243, 244, 245, 246
+BlockMapList146: .db 2 \ .db 243, 244
+BlockMapList147: .db 4 \ .db 0, 4, 19, 24
+BlockMapList148: .db 6 \ .db 0, 4, 5, 6, 24, 30
+BlockMapList149: .db 9 \ .db 4, 5, 6, 7, 8, 24, 25, 30, 31
+BlockMapList150: .db 5 \ .db 6, 7, 8, 25, 31
+BlockMapList151: .db 5 \ .db 7, 8, 12, 13, 25
+BlockMapList152: .db 5 \ .db 12, 13, 25, 217, 218
+BlockMapList153: .db 5 \ .db 197, 198, 217, 218, 225
+BlockMapList154: .db 6 \ .db 191, 192, 197, 198, 217, 225
+BlockMapList155: .db 7 \ .db 191, 192, 197, 198, 199, 217, 225
+BlockMapList156: .db 8 \ .db 172, 191, 198, 199, 200, 202, 216, 225
+BlockMapList157: .db 7 \ .db 171, 172, 202, 203, 204, 215, 216
+BlockMapList158: .db 8 \ .db 171, 172, 202, 203, 204, 205, 215, 216
+BlockMapList159: .db 8 \ .db 203, 204, 205, 207, 208, 209, 211, 215
+BlockMapList160: .db 5 \ .db 207, 208, 209, 210, 211
+BlockMapList161: .db 3 \ .db 209, 210, 211
+BlockMapList162: .db 3 \ .db 18, 19, 24
+BlockMapList163: .db 4 \ .db 17, 18, 19, 24
+BlockMapList164: .db 5 \ .db 16, 17, 18, 24, 30
+BlockMapList165: .db 7 \ .db 15, 16, 17, 24, 25, 30, 31
+BlockMapList166: .db 4 \ .db 15, 16, 25, 31
+BlockMapList167: .db 4 \ .db 13, 14, 15, 25
+BlockMapList168: .db 6 \ .db 13, 14, 15, 25, 217, 218
+BlockMapList169: .db 3 \ .db 217, 218, 225
+BlockMapList170: .db 2 \ .db 217, 225
+BlockMapList171: .db 2 \ .db 216, 225
+BlockMapList172: .db 3 \ .db 214, 215, 216
+BlockMapList173: .db 4 \ .db 213, 214, 215, 216
+BlockMapList174: .db 5 \ .db 211, 212, 213, 214, 215
+BlockMapList175: .db 4 \ .db 210, 211, 212, 213
+BlockMapList176: .db 2 \ .db 210, 211
+BlockMapList177: .db 2 \ .db 18, 19
+BlockMapList178: .db 3 \ .db 17, 18, 19
+BlockMapList179: .db 4 \ .db 16, 17, 18, 30
+BlockMapList180: .db 5 \ .db 15, 16, 17, 30, 31
+BlockMapList181: .db 3 \ .db 15, 16, 31
+BlockMapList182: .db 3 \ .db 13, 14, 15
+BlockMapList183: .db 2 \ .db 214, 215
+BlockMapList184: .db 3 \ .db 213, 214, 215
+BlockMapList185: .db 3 \ .db 211, 212, 213
+BlockMapList186: .db 1 \ .db 211
