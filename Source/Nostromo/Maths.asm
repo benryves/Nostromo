@@ -107,6 +107,28 @@ Code:
 	
 			ret		
 		
+
+		S48:
+			ld a,h
+			add a,a
+			sbc a,a
+			
+			add hl,hl \ rla
+			add hl,hl \ rla
+			add hl,hl \ rla
+			add hl,hl \ rla
+			
+			ld c,a
+			ld e,l
+			ld d,h
+			
+			add hl,hl \ rla
+			
+			add hl,de
+			adc a,c
+			
+			ret
+		
 	.endmodule
 	
 	.module Div

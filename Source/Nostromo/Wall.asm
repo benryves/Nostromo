@@ -532,12 +532,9 @@ NoViewClippingRequired:
 	push hl
 
 	; 48 * X / Y
-	ld de,(End.X)
-	ld bc,48
-	call Maths.Mul.S16S16
-	ld a,e
-	ld b,h
-	ld c,l
+	ld hl,(End.X)
+	call Maths.Mul.S48
+	ld b,h \ ld c,l
 	ld de,(End.Y)
 	call Maths.Div.S24S16
 	
@@ -590,12 +587,9 @@ Project.End.X:
 	push hl
 
 	; 48 * X / Y
-	ld de,(Start.X)
-	ld bc,48
-	call Maths.Mul.S16S16
-	ld a,e
-	ld b,h
-	ld c,l
+	ld hl,(Start.X)
+	call Maths.Mul.S48
+	ld b,h \ ld c,l
 	ld de,(Start.Y)
 	call Maths.Div.S24S16
 	

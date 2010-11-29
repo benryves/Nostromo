@@ -389,12 +389,9 @@ DrawSortedSprite.Loop:
 ; --------------------------------------------------------------------------
 
 	; 48 * X / Y
-	ld de,(Transformed.X)
-	ld bc,48
-	call Maths.Mul.S16S16
-	ld a,e
-	ld b,h
-	ld c,l
+	ld hl,(Transformed.X)
+	call Maths.Mul.S48
+	ld b,h \ ld c,l
 	ld de,(Transformed.Y)
 	call Maths.Div.S24S16
 	
