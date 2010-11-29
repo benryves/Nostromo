@@ -87,7 +87,7 @@
 			<p>A project by <a href="http://benryves.com/">Ben Ryves</a> for <a href="http://maxcoderz.org/">MaxCoderz</a>.</p>
 		</div>
 		<div id="content">
-			<h2>Demo 6</h2>
+			<h2>Demo 7</h2>
 			<p>This is an experimental 3D engine for the TI-83 and TI-83+ graphical calculators.</p>
 			<p>
 				As it is an experiment it is not desperately useful, and it is likely to contain bugs that may crash your calculator.
@@ -143,6 +143,7 @@
 				<li><strong>Fly mode</strong> &mdash; Enabling this mode allows you to freely move the camera up and down rather than walking around on the floor.</li>
 				<li><strong>Collision detection</strong> &mdash; Disabling this allows you to walk through walls.</li>
 				<li><strong>Render objects</strong> &mdash; When disabled, sprite objects are not drawn.</li>
+				<li><strong>View statistics</strong> &mdash; Shows the camera position, angle, how many BSP nodes were visited, how many sub-sectors were drawn and how many attempted/successful walls were drawn.</li>
 			</ul>
 			<h2>Known issues</h2>
 			<ul>
@@ -153,7 +154,24 @@
 				<li>If the camera is moved into a "solid" region it will be instantly pushed out into free space when near a wall. This can be triggered in normal usage (without disabling collision detection or enabling fly mode) by standing under an open door then closing it; you'll be forced into the room when the bottom edge of the door moves below your head height.</li>
 				<li>Collision detection is not properly handled around the very ends of walls, which may cause a sudden jump in player position when you "slide" around a corner.</li>
 				<li>The current floor height is calculated based on the point directly under the centre of the player and not taking the player's radius into consideration. This can cause an unnatural jump when you slowly walk off the edge of a raised portion of the level.</li>
+				<li>If the frame rate drops low enough it is possible to walk through walls. This is down to the way movement is scaled by frame time; the longer a frame takes to render, the further you move during that frame. If the frame rate drops low enough you move fast enough to outwit the collision detection routines.</li>
+				<li>Moving sectors are not reset when you restart the level. As an example, lower the platform in the middle of the map then exit and restart the program. When you walk to it you will notice that it is still lowered.</li>
 			</ul>
+			<p>If you would like to report an issue, please include the camera position and viewing angle in your report (accessible from the "View statistics" menu option).</p>
+			<h2>Map</h2>
+			<p>
+				The demo world is based on parts of E2M7 (Spawning Vats) from <em>DOOM</em>.
+				I chose this level as it has some interesting architecture without being too demanding as well as for historical reasons; as far as I am aware it was the first level created for <em>DOOM</em> that appeared in the final game.
+			</p>
+			<p style="text-align: center;"><img src="Map.png" width="600" height="420" alt="Map of the demo world" /></p>
+			<p>
+				The lines indicate walls. Each wall connects two vertices, indicated by the smaller black blobs.
+				Some walls are split into multiple segments; this is either a by-product of the need to break the level into convex sub-sectors for rendering purposes or to avoid a limitation with the clipping routines (long walls viewed at a steep angle can be clipped incorrectly).
+			</p>
+			<p>
+				The larger blue blobs indicate "things" &mdash; objects represented by a sprite in the world.
+				The single large red blob indicates the player's starting position.
+			</p>
 		</div>
 	</body>
 </html>
