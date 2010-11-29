@@ -186,10 +186,10 @@ SkipFPSCounter:
 	ld a,l
 	and 7
 	ld (CameraAngleTicksRemainder),a
+	sra h \ rr l
+	sra h \ rr l
+	sra h \ rr l
 	ld a,l
-	sra a
-	sra a
-	sra a
 	ld e,a
 	
 	ld hl,Nostromo.Camera.Angle
