@@ -93,6 +93,12 @@ Walker.Y = AllocateVariable(2)
 
 .endmodule
 
+.module SubSector
+
+Sector.Implicit = AllocateVariable(2)
+
+.endmodule
+
 .module Line
 
 Error = AllocateVariable(1)

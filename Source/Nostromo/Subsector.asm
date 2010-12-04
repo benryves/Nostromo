@@ -51,6 +51,24 @@ NoThings:
 	ret z
 	ld b,a
 	inc ix
+	
+; --------------------------------------------------------------------------
+; Get the implicit sector pointer.
+; --------------------------------------------------------------------------
+	
+	.if Sector.DataSize != 4
+		.echoln "Sectors are no longer 4 bytes (fix this)"
+	.endif
+
+
+	ld l,(ix-3)
+	ld h,0
+	add hl,hl
+	add hl,hl
+	ld de,(Level.Sectors)
+	add hl,de
+
+	ld (Sector.Implicit),hl
 
 Draw.Loop:
 ; --------------------------------------------------------------------------
@@ -152,6 +170,16 @@ Draw.Loop:
 		.echoln "Sectors are no longer 4 bytes (fix this)"
 	.endif
 
+	bit Wall.DrawFlag.FillMiddle,(iy+Wall.DrawFlags)
+	jr z,Sector.Wall.IsLowerUpper
+	
+	ld de,(Sector.Implicit)
+	ld (Sector.Front),de
+	
+	jr Sector.Wall.SetSectorPointers
+
+Sector.Wall.IsLowerUpper:
+
 	ld e,(hl)
 	inc hl
 	push hl
@@ -164,12 +192,9 @@ Draw.Loop:
 	ld bc,(Level.Sectors)
 	add hl,bc
 	ld (Sector.Front),hl
-	ld (Sector.Back),hl
 	
 	pop hl
 	
-	bit Wall.DrawFlag.FillMiddle,(iy+Wall.DrawFlags)
-	jr nz,+
 	
 	ld l,(hl)
 	ld h,0
@@ -181,7 +206,8 @@ Draw.Loop:
 	add hl,de
 	
 	ld (Sector.Back),hl
-+:
+
+Sector.Wall.SetSectorPointers:
 
 ; --------------------------------------------------------------------------
 ; Clip and draw the wall.
