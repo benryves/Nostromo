@@ -152,7 +152,15 @@ Appearance.SpriteHeight = AllocateVariable(1)
 Appearance.ColumnStride = AllocateVariable(2)
 Appearance.Size = AllocateVariable(0) - Appearance
 
-NextThing.Index =  AllocateVariable(1)
+NextThing.Index = AllocateVariable(1)
+
+Move.Index = AllocateVariable(1)
+Move.X = AllocateVariable(2)
+Move.Y = AllocateVariable(2)
+Move.Pointer = AllocateVariable(2)
+
+Move.SourceLeaf = AllocateVariable(2)
+Move.DestinationLeaf = AllocateVariable(2)
 
 .endmodule
 

@@ -139,6 +139,17 @@ SkipFPSCounter:
 	ei
 +:
 
+	ld a,skEnter
+	call Nostromo.Key.GetState
+	jr c,+
+	
+	ld hl,(Nostromo.Camera.X)
+	ld de,(Nostromo.Camera.Y)
+	ld a,9
+	call Nostromo.Things.SetPosition
+	
++:
+
 	ld hl,(MovementTicks)
 	ld de,8
 	or a

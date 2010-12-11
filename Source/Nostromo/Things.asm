@@ -575,5 +575,181 @@ AdvanceToNextSubsector:
 	ret
 +:	jp Draw.Loop
 
+
+; ==========================================================================
+; GetPointerFromIndex
+; --------------------------------------------------------------------------
+; Gets a pointer to the thing's data by its index.
+; --------------------------------------------------------------------------
+; Inputs:    A: Thing index.
+; Outputs:   HL: Pointer to the thing's data.
+; Destroyed: F, DE.
+; ==========================================================================
+GetPointerFromIndex:
+	ld l,a
+	ld h,0
+	add hl,hl
+	add hl,hl
+	add hl,hl
+	ld de,(Level.Things)
+	add hl,de
+	ret
+
+; ==========================================================================
+; SetPosition
+; --------------------------------------------------------------------------
+; Sets a thing's position.
+; --------------------------------------------------------------------------
+; Inputs:    A: Thing index.
+;            HL: X coordinate of the thing's position.
+;            DE: Y coordinate of the thing's position.
+; Destroyed: AF, BC, DE, HL, IX.
+; ==========================================================================
+SetPosition:
+
+; --------------------------------------------------------------------------
+; Store the index and destination position for later use.
+; --------------------------------------------------------------------------
+
+	ld (Move.Index),a
+	ld (Move.X),hl
+	ld (Move.Y),de
+
+; --------------------------------------------------------------------------
+; Get the pointer to the thing to move.
+; --------------------------------------------------------------------------
+
+	call GetPointerFromIndex
+	ld (Move.Pointer),hl
+
+; --------------------------------------------------------------------------
+; Get the current thing position.
+; --------------------------------------------------------------------------
+
+	ld de,4
+	add hl,de
+	
+	ld c,(hl) \ inc hl
+	ld b,(hl) \ inc hl
+	ld e,(hl) \ inc hl
+	ld d,(hl)
+	ld l,c \ ld h,b
+
+; --------------------------------------------------------------------------
+; Walk the BSP tree to determine which leaf the thing is currently in.
+; --------------------------------------------------------------------------
+
+	call SetPosition.FindLeaf	
+	ld (Move.SourceLeaf),ix
+
+; --------------------------------------------------------------------------
+; Walk the BSP tree to determine which leaf the thing is moving to.
+; --------------------------------------------------------------------------
+
+	ld hl,(Move.X)
+	ld de,(Move.Y)
+	call SetPosition.FindLeaf
+	
+	ld (Move.DestinationLeaf),ix
+
+; --------------------------------------------------------------------------
+; Have we moved from one leaf to another?
+; --------------------------------------------------------------------------
+
+	ld hl,(Move.DestinationLeaf)
+	ld de,(Move.SourceLeaf)
+	or a
+	sbc hl,de
+	
+	jr z,SetPosition.SkipMoveLeaf
+
+; --------------------------------------------------------------------------
+; Remove the thing from the old leaf.
+; --------------------------------------------------------------------------
+
+	ex de,hl
+	inc hl ; Node type.
+	inc hl ; Sector index.
+	
+-:	ld a,(Move.Index)
+	cp (hl)
+	
+	jr z,SetPosition.FoundOldLeafIndex
+	
+	ld a,(hl)
+	call GetPointerFromIndex
+	jr -
+
+SetPosition.FoundOldLeafIndex:
+
+; --------------------------------------------------------------------------
+; HL points to the index of the thing in the current subsector.
+; Replace this index with the index of the *next* thing.
+; --------------------------------------------------------------------------
+	
+	push hl
+	ld a,(hl)
+	call GetPointerFromIndex
+	ld a,(hl)	
+	pop hl
+	ld (hl),a
+
+; --------------------------------------------------------------------------
+; Insert the thing to the head of the list in the new leaf.
+; --------------------------------------------------------------------------
+
+	ld hl,(Move.DestinationLeaf)
+	inc hl ; Node type.
+	inc hl ; Sector index.
+	
+	ld a,(hl)
+	push af
+	
+	ld a,(Move.Index)
+	ld (hl),a
+
+	pop af
+	
+	ld hl,(Move.Pointer)
+	ld (hl),a
+	jr SetPosition.ChangedLeaf
+
+SetPosition.SkipMoveLeaf:
+
+; --------------------------------------------------------------------------
+; We didn't move the thing to a new leaf.
+; --------------------------------------------------------------------------
+
+	ld hl,(Move.Pointer)
+
+SetPosition.ChangedLeaf:
+
+	ld de,4
+	add hl,de
+
+; --------------------------------------------------------------------------
+; Write the new position to the thing.
+; --------------------------------------------------------------------------
+
+	ld de,(Move.X)
+	ld (hl),e \ inc hl
+	ld (hl),d \ inc hl
+
+	ld de,(Move.Y)
+	ld (hl),e \ inc hl
+	ld (hl),d
+
+	ret
+
+SetPosition.FindLeaf:
+	ld bc,SetPosition.FindLeafFunction
+	ld (SetPosition.FindLeafFunction.SP),sp
+	ld ix,(Level.Tree)
+	jp Tree.Walk
+SetPosition.FindLeafFunction:
+SetPosition.FindLeafFunction.SP = $+1
+	ld sp,0
+	ret
+
 .if Options.ReportModuleSizes \ .echoln strformat("Things module: {0:N0} bytes.", $-Code) \ .endif
 .endmodule
