@@ -39,6 +39,44 @@ Loop:
 	ld (Sector.Previous),a
 
 ; --------------------------------------------------------------------------
+; Are we moving the thing around?
+; --------------------------------------------------------------------------
+
+	ld a,skEnter
+	call Nostromo.Key.GetState
+	jr c,+
+	
+	ld a,(Nostromo.Camera.Angle)
+	call Nostromo.Maths.Trig.Cos
+	ld hl,(Nostromo.Camera.Y)
+	ld (Nostromo.Physics.Actor.StartPosition.Y),hl
+	add hl,bc
+	add hl,bc
+	ld (Nostromo.Physics.Actor.EndPosition.Y),hl
+	
+	ld a,(Nostromo.Camera.Angle)
+	call Nostromo.Maths.Trig.Sin
+	ld hl,(Nostromo.Camera.X)
+	ld (Nostromo.Physics.Actor.StartPosition.X),hl
+	add hl,bc
+	add hl,bc
+	ld (Nostromo.Physics.Actor.EndPosition.X),hl
+	
+	ld hl,(Nostromo.Camera.Z)
+	ld (Nostromo.Physics.Actor.Z.Head),hl
+	ld (Nostromo.Physics.Actor.Z.Feet),hl
+	ld (Nostromo.Physics.Actor.Z.Knees),hl
+	
+	call Nostromo.Physics.MoveActor
+	
+	ld a,9
+	ld hl,(Nostromo.Physics.Actor.EndPosition.X)
+	ld de,(Nostromo.Physics.Actor.EndPosition.Y)
+	call Nostromo.Things.SetPosition
+	
++:
+
+; --------------------------------------------------------------------------
 ; Render the world.
 ; --------------------------------------------------------------------------
 
@@ -137,17 +175,6 @@ SkipFPSCounter:
 	ld (MovementTicks),hl
 	ld (Nostromo.Interrupt.Ticks),hl
 	ei
-+:
-
-	ld a,skEnter
-	call Nostromo.Key.GetState
-	jr c,+
-	
-	ld hl,(Nostromo.Camera.X)
-	ld de,(Nostromo.Camera.Y)
-	ld a,9
-	call Nostromo.Things.SetPosition
-	
 +:
 
 	ld hl,(MovementTicks)
