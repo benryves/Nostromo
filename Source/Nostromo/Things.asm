@@ -450,6 +450,7 @@ DrawSortedSprite.Loop:
 	ld a,c
 	or a
 	jp m,Draw.Skip
+	jp z,Draw.Skip
 	ld (Projected.Height),a
 	
 	or a
@@ -475,6 +476,7 @@ DrawSortedSprite.Loop:
 	ld a,c
 	or a
 	jp m,Draw.Skip
+	jp z,Draw.Skip
 	ld (Projected.Width),a
 	
 ; --------------------------------------------------------------------------
