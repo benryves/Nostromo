@@ -1,6 +1,6 @@
 .module Options
 
-ReportModuleSizes = false()
+ReportModuleSizes = true()
 KeepStatistics = true()
 
 .endmodule
