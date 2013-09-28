@@ -1057,7 +1057,6 @@ ProjectHorizontalEdge:
 	ld hl,(Render.Camera.YShear)
 	or a
 	sbc hl,bc
-	ld (Clip.g_line16Y1),hl
 	ld (HorizontalEdge.Start.Y),hl
 	pop hl
 
