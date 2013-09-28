@@ -662,7 +662,7 @@ Draw:
 	ret nz
 
 ; --------------------------------------------------------------------------
-; It's a middle wall. Swap over the ends before rendering.
+; It's not a middle wall. Swap over the ends before rendering.
 ; --------------------------------------------------------------------------
 
 	ld hl,(Start.Y)
