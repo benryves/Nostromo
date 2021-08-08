@@ -16,7 +16,7 @@ Select the program from the list in your shell of choice and run it. The followi
 	* `Clear` Exit.
 * Movement
 	* `↑` / `↓` Move forwards/backwards.
-	* `Trace` / Graph Strafe left/right.
+	* `Trace` / `Graph` Strafe left/right.
 	* `Mode` / `X,T,Θ,n` Move up/down ("fly mode" only).
 * Looking
 	* `←` / `→` Look left/right.
